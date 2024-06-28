@@ -34,3 +34,26 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+
+BACKUP DATABASE [flow]
+TO DISK = N'/var/opt/mssql/backup/flow.bak'
+WITH NOFORMAT, NOINIT, NAME = 'Full Backup of MiBaseDeDatos', SKIP, NOREWIND, NOUNLOAD, STATS = 10;
+
+
+-- Obtener los nombres lógicos de los archivos de la base de datos
+RESTORE FILELISTONLY 
+FROM DISK = N'/var/opt/mssql/backup/flow.bak';
+
+
+-- Restaurar la base de datos
+USE master;
+RESTORE DATABASE [flow]
+FROM DISK = N'/var/opt/mssql/backup/flow.bak'
+WITH REPLACE,
+     MOVE 'flow' TO '/var/opt/mssql/data/flow.mdf',
+     MOVE 'flow_log' TO '/var/opt/mssql/data/flow.ldf';
+
+dotnet build
+dotnet run
+

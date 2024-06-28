@@ -34,3 +34,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+#elimino backups y package log json
+.bak
+/backups
+package-lock.json
