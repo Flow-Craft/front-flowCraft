@@ -46,6 +46,13 @@ RESTORE FILELISTONLY
 FROM DISK = N'/var/opt/mssql/backup/flow.bak';
 
 
+-- Carpertas necesarias dentro del front
+/database
+/backups
+
+una para poder tener la data de la base directamente en la pc 
+y la de abajo para poder restaurar backups directamente en el contenedor
+
 -- Restaurar la base de datos
 USE master;
 RESTORE DATABASE [flow]
