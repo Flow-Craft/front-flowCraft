@@ -6,19 +6,19 @@ import {Bars3Icon} from '@heroicons/react/24/outline';
 export default function SideNav() {
   return (
     <div className="flex h-full flex-col px-3 py-4 md:px-2">
-      <div className="mb-2 flex h-50 items-end justify-start text-white rounded-md bg-blue-600 p-4 md:h-20">
+      <div className="mb-2 flex w-full justify-between flex-row h-50 gap-2 text-white rounded-md bg-blue-600 p-4 md:h-60 md:flex-col">
           <Link
             href="/"
           >
-            <div className="w-32 text-white md:w-40">
+            <div className=" text-white md:w-40">
               <AcmeLogo />
             </div>
         </Link>
-        <div>
+        <div className='hidden md:block'>
           <div>Hola Mario!!!</div>
           <div className='font-bold'>Administrativo</div>
         </div>
-        <div className='md:hidden'>
+        <div className='w-10 md:hidden'>
             <Bars3Icon/>
         </div>
       </div>
