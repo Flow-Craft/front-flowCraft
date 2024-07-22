@@ -24,25 +24,25 @@ import { usePathname } from 'next/navigation';
 // Map of links to display in the side navigation.
 // Depending on the size of the application, this would be stored in a database.
 const links = [
-  { name: 'Noticias', href: '/dashboard', icon: NewspaperIcon },
+  { name: 'Noticias', href: '/v1/noticias', icon: NewspaperIcon },
   {
     name: 'Reservas',
-    href: '/dashboard/invoices',
+    href: '/inicio/reservas',
     icon: CalendarIcon,
   },
-  { name: 'Instalaciones', href: '/dashboard/customers', icon: BuildingOffice2Icon },
-  { name: 'Eventos', href: '/dashboard/customers', icon: CalendarDaysIcon },
-  { name: 'Torneos', href: '/dashboard/customers', icon: TableCellsIcon },
-  { name: 'Reportes', href: '/dashboard/customers', icon: DocumentIcon },
-  { name: 'Configuracion del sistema', href: '/dashboard/customers', icon: CogIcon },
-  { name: 'Lecciones', href: '/dashboard/customers', icon: AcademicCapIcon },
-  { name: 'Backup', href: '/dashboard/customers', icon: ServerStackIcon },
-  // { name: 'Estados', href: '/dashboard/customers', icon: ChatBubbleBottomCenterIcon },
-  // { name: 'Tipos', href: '/dashboard/customers', icon: ChatBubbleLeftIcon },
-  // { name: 'Mi Perfil', href: '/dashboard/customers', icon: UserCircleIcon },
-  // { name: 'Partidos', href: '/dashboard/customers', icon: MegaphoneIcon },
-  // { name: 'Disciplinas', href: '/dashboard/customers', icon: PaperAirplaneIcon },
-  // { name: 'Estadisticas', href: '/dashboard/customers', icon: ChartBarIcon },
+  { name: 'Instalaciones', href: '/inicio/instalaciones', icon: BuildingOffice2Icon },
+  { name: 'Eventos', href: '/inicio/eventos', icon: CalendarDaysIcon },
+  { name: 'Torneos', href: '/inicio/torneos', icon: TableCellsIcon },
+  { name: 'Reportes', href: '/inicio/reportes', icon: DocumentIcon },
+  { name: 'Configuracion del sistema', href: '/inicio/config_del_sistema', icon: CogIcon },
+  { name: 'Lecciones', href: '/inicio/lecciones', icon: AcademicCapIcon },
+  { name: 'Backup', href: '/inicio/backup', icon: ServerStackIcon },
+  { name: 'Estados', href: '/inicio/estados', icon: ChatBubbleBottomCenterIcon },
+  { name: 'Tipos', href: '/inicio/tipos', icon: ChatBubbleLeftIcon },
+  { name: 'Mi Perfil', href: '/inicio/perfil', icon: UserCircleIcon },
+  { name: 'Partidos', href: '/inicio/partido', icon: MegaphoneIcon },
+  { name: 'Disciplinas', href: '/inicio/disciplinas', icon: PaperAirplaneIcon },
+  { name: 'Estadisticas', href: '/inicio/estadisticas', icon: ChartBarIcon },
 ];
 
 export default function NavLinks() {
@@ -61,6 +61,7 @@ export default function NavLinks() {
             bg-gray-50 p-3 text-sm font-medium
             hover:bg-sky-100 hover:text-blue-600 
             md:flex-none md:justify-start md:p-2 md:px-3
+            ${pathname === link.href ? 'bg-sky-100 text-blue-600' : '' }
             `}
           >
             <LinkIcon className="w-6" />
