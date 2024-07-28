@@ -1,12 +1,13 @@
-import { lusitana } from '@/app/ui/fonts';
+
 import {
   AtSymbolIcon,
   KeyIcon,
-  ExclamationCircleIcon,
 } from '@heroicons/react/24/outline';
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
 import { Button } from './button';
 import { loginUser } from '../lib/actions';
+import { Toaster } from 'react-hot-toast';
+import { ToasterComponent } from './toaster/ToasterComponent';
 
 export default function LoginForm() {
   return (
@@ -60,6 +61,9 @@ export default function LoginForm() {
           {/* Add form errors here */}
         </div>
       </div>
+      <ToasterComponent
+        position='top-center'
+      />
     </form>
   );
 }

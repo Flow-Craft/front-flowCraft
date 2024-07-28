@@ -26,9 +26,14 @@ class FlowCraftAPIMethod {
 
     try {
       const response = await fetch(url, options);
-        console.log("AAaAAAAAAA",response)
+
+      // localhost manage
+      const jwtToken = response.headers.get("JWT");
+      if(jwtToken)localStorage.setItem("Autorization", jwtToken);
+
       if (!response.ok) {
-        throw new Error('Something went wrong');
+        const errorData = await response.json();
+        throw new Error(errorData.errors || 'Something went wrong');
       }
 
       if (response.status !== 204) {
