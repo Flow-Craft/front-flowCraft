@@ -3,8 +3,7 @@ import AcmeLogo from '@/app/ui/acme-logo';
 import Link from 'next/link';
 import { Button } from '../button';
 import { usePathname } from 'next/navigation';
-
-const LOGIN_HREF = "/login"
+import { LOGIN_HREF, SING_UP_HREF } from '@/app/lib/const';
 
 export default function MenuPrincipal() {
     const pathname = usePathname()
@@ -23,8 +22,8 @@ export default function MenuPrincipal() {
                     INICIAR SESIÓN
                 </Link>
             </Button>
-            <Button className='font-bold'>
-                <Link href={LOGIN_HREF}>
+            <Button className={`${pathname === SING_UP_HREF ? 'bg-blue-400' : '' } font-bold`}>
+                <Link href={SING_UP_HREF}>
                     REGISTRARME
                 </Link>
             </Button>
