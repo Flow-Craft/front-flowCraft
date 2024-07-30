@@ -5,13 +5,6 @@ import FlowCraftAPI from './request'
 import toast from 'react-hot-toast';
 import {LOCAL_STORAGE_NAME_KEY} from './const';
 
-const CreateInvoiceSchema = z.object({
-    id: z.string(),
-    customerId: z.string(),
-    amount: z.coerce.number(),
-    status:z.enum(['pending','paid']),
-    date:z.string()
-})
 
 const loginUserSchema = z.object({
     Email: z.string().email(),
