@@ -1,18 +1,18 @@
 'use client'
-
 import { LOCAL_STORAGE_NAME_KEY } from "@/app/lib/const";
-import { getItemInLocalStorage } from "@/app/lib/localStorageActions";
-import { useMemo } from "react";
+import { useEffect, useState } from "react";
 
 export default function UserName() {
+    const [name, setName] = useState("");
 
-    const userName = useMemo(()=>{
-        return getItemInLocalStorage(LOCAL_STORAGE_NAME_KEY)
-    },[])
+    useEffect(() => {
+      const storedName = window.localStorage.getItem(LOCAL_STORAGE_NAME_KEY) || "";
+      setName(storedName);
+    }, []);
 
     return (
         <>
-            <div>Hola {userName}!!!</div>
+            <div>{`Hola ${name}!!!`}</div>
             <div className='font-bold'>Administrativo</div>
         </>
     );
