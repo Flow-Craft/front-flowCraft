@@ -10,6 +10,13 @@ interface RequestOptions {
 class FlowCraftAPIMethod {
   private baseURL: string = "http://localhost:5148/api/";
 
+  private getJWT(response: Response){
+      const jwtToken = response.headers.get("JWT");
+      if(jwtToken)localStorage.setItem("Autorization", jwtToken);
+
+      //get first name and set in local host
+  }
+
   private async request<T>(method: HTTPMethod, endpoint: string, data: any = null, headers: HeadersInit = {}): Promise<T> {
     const url = `${this.baseURL}${endpoint}`;
     const options: RequestOptions = {
@@ -28,8 +35,7 @@ class FlowCraftAPIMethod {
       const response = await fetch(url, options);
 
       // localhost manage
-      const jwtToken = response.headers.get("JWT");
-      if(jwtToken)localStorage.setItem("Autorization", jwtToken);
+      this.getJWT(response)
 
       if (!response.ok) {
         const errorData = await response.json();

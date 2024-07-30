@@ -6,7 +6,6 @@ import {
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
 import { Button } from './button';
 import { loginUser } from '../lib/actions';
-import { Toaster } from 'react-hot-toast';
 import { ToasterComponent } from './toaster/ToasterComponent';
 
 export default function LoginForm() {
@@ -57,9 +56,6 @@ export default function LoginForm() {
         <Button className="mt-4 w-full text-lg bg-blue-600">
           Iniciar Sesion <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
         </Button>
-        <div className="flex h-8 items-end space-x-1">
-          {/* Add form errors here */}
-        </div>
       </div>
       <ToasterComponent
         position='top-center'

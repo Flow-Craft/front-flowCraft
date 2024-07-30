@@ -2,6 +2,7 @@ import Link from 'next/link';
 import NavLinks from '@/app/ui/dashboard/nav-links';
 import AcmeLogo from '@/app/ui/acme-logo';
 import {Bars3Icon} from '@heroicons/react/24/outline';
+import UserName from './userName';
 
 export default function SideNav() {
   return (
@@ -15,8 +16,7 @@ export default function SideNav() {
             </div>
         </Link>
         <div className='hidden md:block'>
-          <div>Hola Mario!!!</div>
-          <div className='font-bold'>Administrativo</div>
+          <UserName/>
         </div>
         <div className='w-10 md:hidden'>
             <Bars3Icon/>
