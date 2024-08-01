@@ -1,3 +1,4 @@
+import { AUTORIZATION_KEY } from "./const";
 
 type HTTPMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
 
@@ -12,7 +13,7 @@ class FlowCraftAPIMethod {
 
   private getJWT(response: Response){
       const jwtToken = response.headers.get("JWT");
-      if(jwtToken)localStorage.setItem("Autorization", jwtToken);
+      if(jwtToken)localStorage.setItem(AUTORIZATION_KEY, jwtToken);
 
       //get first name and set in local host
   }
@@ -38,6 +39,12 @@ class FlowCraftAPIMethod {
       this.getJWT(response)
 
       if (!response.ok) {
+        if (response.status === 401) {
+          const error = new Error('Unauthorized');
+          (error as any).status = 401;
+          throw error;
+        }
+        
         const errorData = await response.json();
         throw new Error(errorData.errors || 'Something went wrong');
       }

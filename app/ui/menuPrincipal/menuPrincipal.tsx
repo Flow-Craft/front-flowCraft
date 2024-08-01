@@ -3,7 +3,7 @@ import AcmeLogo from '@/app/ui/acme-logo';
 import Link from 'next/link';
 import { Button } from '../button';
 import { usePathname } from 'next/navigation';
-import { LOGIN_HREF, SING_UP_HREF } from '@/app/lib/const';
+import { LOGIN_HREF, QUIENES_SOMOS_HREF, SING_UP_HREF } from '@/app/lib/const';
 
 export default function MenuPrincipal() {
     const pathname = usePathname()
@@ -14,7 +14,11 @@ export default function MenuPrincipal() {
             <Button className='font-medium mx-3' >DISCIPLINAS</Button>
             <Button className='font-medium mx-3' >INSTALACIONES</Button>
             <Button className='font-medium mx-3' >NOTICIAS</Button>
-            <Button className='font-medium mx-3' >¿QUIENES SOMOS?</Button>
+            <Button className={` font-medium mx-3 ${pathname === QUIENES_SOMOS_HREF ? 'bg-blue-400' : '' } font-bold`} >
+                <Link href={QUIENES_SOMOS_HREF}>
+                    ¿QUIENES SOMOS?
+                </Link>
+            </Button>
         </div>
         <div className='flex flex-row'>
             <Button className={`${pathname === LOGIN_HREF ? 'bg-blue-400' : '' } font-bold`}>
