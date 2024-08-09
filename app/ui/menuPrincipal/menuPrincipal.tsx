@@ -6,7 +6,7 @@ import { Button } from '../button';
 import { usePathname } from 'next/navigation';
 import { LOGIN_HREF, QUIENES_SOMOS_HREF, SING_UP_HREF } from '@/app/lib/const';
 import { checkJWTSession } from '@/app/lib/actions';
-import { AquiVieneFlow } from '../components/AquiVieneFlow';
+import { AquiVieneFlow } from '../components/AquiVieneFlow/AquiVieneFlow';
 
 
 export default function MenuPrincipal() {
