@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import {
   UserGroupIcon,
   NewspaperIcon,
@@ -16,7 +16,7 @@ import {
   MegaphoneIcon,
   PaperAirplaneIcon,
   ChartBarIcon,
-  PowerIcon
+  PowerIcon,
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
@@ -30,7 +30,11 @@ const links = [
     href: '/inicio/reservas',
     icon: CalendarIcon,
   },
-  { name: 'Instalaciones', href: '/inicio/instalaciones', icon: BuildingOffice2Icon },
+  {
+    name: 'Instalaciones',
+    href: '/inicio/instalaciones',
+    icon: BuildingOffice2Icon,
+  },
   // { name: 'Eventos', href: '/inicio/eventos', icon: CalendarDaysIcon },
   // { name: 'Torneos', href: '/inicio/torneos', icon: TableCellsIcon },
   // { name: 'Reportes', href: '/inicio/reportes', icon: DocumentIcon },
@@ -46,12 +50,12 @@ const links = [
 ];
 
 export default function NavLinks() {
-  const pathname = usePathname()
+  const pathname = usePathname();
   const router = useRouter();
-  const logOut =()=> {
-    window.localStorage.clear()
+  const logOut = () => {
+    window.localStorage.clear();
     router.push('/');
-  }
+  };
 
   return (
     <>
@@ -66,7 +70,7 @@ export default function NavLinks() {
             bg-gray-50 p-3 text-sm font-medium
             hover:bg-sky-100 hover:text-blue-600 
             md:flex-none md:justify-start md:p-2 md:px-3
-            ${pathname === link.href ? 'bg-sky-100 text-blue-600' : '' }
+            ${pathname === link.href ? 'bg-sky-100 text-blue-600' : ''}
             `}
           >
             <LinkIcon className="w-6" />
@@ -75,7 +79,10 @@ export default function NavLinks() {
         );
       })}
       <form>
-        <button onClick={logOut} className="flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3">
+        <button
+          onClick={logOut}
+          className="flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3"
+        >
           <PowerIcon className="w-6" />
           <div className="hidden md:block">Sign Out</div>
         </button>

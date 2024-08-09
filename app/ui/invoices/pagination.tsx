@@ -10,19 +10,17 @@ export default function Pagination({ totalPages }: { totalPages: number }) {
   // NOTE: comment in this code when you get to this point in the course
 
   //obtengo la url y de ahi los parametros
-  const searchParams = useSearchParams()
+  const searchParams = useSearchParams();
   const pathname = usePathname();
-  const currentPage = Number(searchParams.get('page'))|| 1;
+  const currentPage = Number(searchParams.get('page')) || 1;
 
   const allPages = generatePagination(currentPage, totalPages);
 
-   
-
-  const createPageURL = (page: string|number) => {
-    const params = new URLSearchParams(searchParams)
-    params.set('page',page.toString())
-    return `${pathname}?${params.toString()}`
-  }
+  const createPageURL = (page: string | number) => {
+    const params = new URLSearchParams(searchParams);
+    params.set('page', page.toString());
+    return `${pathname}?${params.toString()}`;
+  };
 
   return (
     <>

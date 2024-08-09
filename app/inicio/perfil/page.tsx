@@ -1,3 +1,3 @@
-export default function Page(){
-    return <h1>perfil</h1>
+export default function Page() {
+  return <h1>perfil</h1>;
 }

@@ -35,22 +35,19 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
 
-
 BACKUP DATABASE [flow]
 TO DISK = N'/var/opt/mssql/backup/flow.bak'
 WITH NOFORMAT, NOINIT, NAME = 'Full Backup of MiBaseDeDatos', SKIP, NOREWIND, NOUNLOAD, STATS = 10;
 
-
 -- Obtener los nombres lógicos de los archivos de la base de datos
-RESTORE FILELISTONLY 
+RESTORE FILELISTONLY
 FROM DISK = N'/var/opt/mssql/backup/flow.bak';
-
 
 -- Carpertas necesarias dentro del front
 /database
 /backups
 
-una para poder tener la data de la base directamente en la pc 
+una para poder tener la data de la base directamente en la pc
 y la de abajo para poder restaurar backups directamente en el contenedor
 
 -- Restaurar la base de datos
@@ -58,23 +55,22 @@ USE master;
 RESTORE DATABASE [flow]
 FROM DISK = N'/var/opt/mssql/backup/flow.bak'
 WITH REPLACE,
-     MOVE 'flow' TO '/var/opt/mssql/data/flow.mdf',
-     MOVE 'flow_log' TO '/var/opt/mssql/data/flow.ldf';
+MOVE 'flow' TO '/var/opt/mssql/data/flow.mdf',
+MOVE 'flow_log' TO '/var/opt/mssql/data/flow.ldf';
 
 dotnet build
 dotnet run
 
 esto va en un archivo llamado appsettings.Development.json
-en la raiz del proyecto de backend solo para linux 
+en la raiz del proyecto de backend solo para linux
 {
-  "ConnectionStrings": {
-    "flowCraft": "Server=localhost,1433;Database=flowCraft;User Id=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=true;"
-  },
-  "Logging": {
-    "LogLevel": {
-      "Default": "Information",
-      "Microsoft.AspNetCore": "Warning"
-    }
-  }
+"ConnectionStrings": {
+"flowCraft": "Server=localhost,1433;Database=flowCraft;User Id=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=true;"
+},
+"Logging": {
+"LogLevel": {
+"Default": "Information",
+"Microsoft.AspNetCore": "Warning"
 }
-
+}
+}

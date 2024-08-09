@@ -1,4 +1,4 @@
-import { AUTORIZATION_KEY } from "./const";
+import { AUTORIZATION_KEY } from './const';
 
 type HTTPMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
 
@@ -9,16 +9,21 @@ interface RequestOptions {
 }
 
 class FlowCraftAPIMethod {
-  private baseURL: string = "http://localhost:5148/api/";
+  private baseURL: string = 'http://localhost:5148/api/';
 
-  private getJWT(response: Response){
-      const jwtToken = response.headers.get("JWT");
-      if(jwtToken)localStorage.setItem(AUTORIZATION_KEY, jwtToken);
+  private getJWT(response: Response) {
+    const jwtToken = response.headers.get('JWT');
+    if (jwtToken) localStorage.setItem(AUTORIZATION_KEY, jwtToken);
 
-      //get first name and set in local host
+    //get first name and set in local host
   }
 
-  private async request<T>(method: HTTPMethod, endpoint: string, data: any = null, headers: HeadersInit = {}): Promise<T> {
+  private async request<T>(
+    method: HTTPMethod,
+    endpoint: string,
+    data: any = null,
+    headers: HeadersInit = {},
+  ): Promise<T> {
     const url = `${this.baseURL}${endpoint}`;
     const options: RequestOptions = {
       method,
@@ -36,7 +41,7 @@ class FlowCraftAPIMethod {
       const response = await fetch(url, options);
 
       // localhost manage
-      this.getJWT(response)
+      this.getJWT(response);
 
       if (!response.ok) {
         if (response.status === 401) {
@@ -44,15 +49,15 @@ class FlowCraftAPIMethod {
           (error as any).status = 401;
           throw error;
         }
-        
+
         const errorData = await response.json();
         throw new Error(errorData.errors || 'Something went wrong');
       }
 
       if (response.status !== 204) {
-        try{
+        try {
           return await response.json();
-        }catch(e){
+        } catch (e) {
           return null as unknown as T;
         }
       }
@@ -64,23 +69,37 @@ class FlowCraftAPIMethod {
     }
   }
 
-  public get<T>(endpoint: string, headers: HeadersInit = {}): Promise<T> | void {
+  public get<T>(
+    endpoint: string,
+    headers: HeadersInit = {},
+  ): Promise<T> | void {
     return this.request<T>('GET', endpoint, null, headers);
   }
 
-  public post<T>(endpoint: string, data: any, headers: HeadersInit = {}): Promise<T> | void {
+  public post<T>(
+    endpoint: string,
+    data: any,
+    headers: HeadersInit = {},
+  ): Promise<T> | void {
     return this.request<T>('POST', endpoint, data, headers);
   }
 
-  public put<T>(endpoint: string, data: any, headers: HeadersInit = {}): Promise<T> | void   {
+  public put<T>(
+    endpoint: string,
+    data: any,
+    headers: HeadersInit = {},
+  ): Promise<T> | void {
     return this.request<T>('PUT', endpoint, data, headers);
   }
 
-  public delete<T>(endpoint: string, headers: HeadersInit = {}): Promise<T> | void  {
+  public delete<T>(
+    endpoint: string,
+    headers: HeadersInit = {},
+  ): Promise<T> | void {
     return this.request<T>('DELETE', endpoint, null, headers);
   }
 }
 
-const FlowCraftAPI = new FlowCraftAPIMethod()
+const FlowCraftAPI = new FlowCraftAPIMethod();
 
 export default FlowCraftAPI;

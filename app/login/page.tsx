@@ -1,12 +1,12 @@
-import LoginForm from "../ui/login-form";
+import LoginForm from '../ui/login-form';
 
-export default function Page(){
-    return(
-        <div className="flex flex-col justify-center items-center w-full mt-2">
-            <div className="self-start font-bold text-3xl px-9">BIENVENIDO!</div>
-            <div className=" w-[80%] md:w-[40%]">
-                <LoginForm/>
-            </div>
-        </div>
-    )
+export default function Page() {
+  return (
+    <div className="mt-2 flex w-full flex-col items-center justify-center">
+      <div className="self-start px-9 text-3xl font-bold">BIENVENIDO!</div>
+      <div className=" w-[80%] md:w-[40%]">
+        <LoginForm />
+      </div>
+    </div>
+  );
 }

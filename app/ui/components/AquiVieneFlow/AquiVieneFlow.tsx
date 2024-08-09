@@ -1,9 +1,9 @@
-import React from 'react'
+import React from 'react';
 
 export const AquiVieneFlow = () => {
   return (
-    <section className='fixed top-0 left-0 w-full h-full flex items-start justify-center bg-white text-zinc-500 font-bold text-8xl'>
-        Aqui viene FlowCraft
+    <section className="fixed left-0 top-0 flex h-full w-full items-start justify-center bg-white text-8xl font-bold text-zinc-500">
+      Aqui viene FlowCraft
     </section>
-  )
-}
+  );
+};
