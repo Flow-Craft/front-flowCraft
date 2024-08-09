@@ -39,7 +39,6 @@ export const InputWithLabel = ({
           type={type}
           name={name}
           placeholder={placeHolder}
-          required
         />
         {Icon && <Icon />}
       </div>
