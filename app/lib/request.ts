@@ -50,7 +50,11 @@ class FlowCraftAPIMethod {
       }
 
       if (response.status !== 204) {
-        return await response.json();
+        try{
+          return await response.json();
+        }catch(e){
+          return null as unknown as T;
+        }
       }
 
       return null as unknown as T; // If the response is 204 No Content
@@ -60,19 +64,19 @@ class FlowCraftAPIMethod {
     }
   }
 
-  public get<T>(endpoint: string, headers: HeadersInit = {}): Promise<T> {
+  public get<T>(endpoint: string, headers: HeadersInit = {}): Promise<T> | void {
     return this.request<T>('GET', endpoint, null, headers);
   }
 
-  public post<T>(endpoint: string, data: any, headers: HeadersInit = {}): Promise<T> {
+  public post<T>(endpoint: string, data: any, headers: HeadersInit = {}): Promise<T> | void {
     return this.request<T>('POST', endpoint, data, headers);
   }
 
-  public put<T>(endpoint: string, data: any, headers: HeadersInit = {}): Promise<T> {
+  public put<T>(endpoint: string, data: any, headers: HeadersInit = {}): Promise<T> | void   {
     return this.request<T>('PUT', endpoint, data, headers);
   }
 
-  public delete<T>(endpoint: string, headers: HeadersInit = {}): Promise<T> {
+  public delete<T>(endpoint: string, headers: HeadersInit = {}): Promise<T> | void  {
     return this.request<T>('DELETE', endpoint, null, headers);
   }
 }

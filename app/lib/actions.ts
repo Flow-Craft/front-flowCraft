@@ -26,6 +26,7 @@ export async function loginUser(formData: FormData){
 }
 
 export async function checkJWT(){
+    console.log("entreAca")
     try{
         const token = window.localStorage.getItem(AUTORIZATION_KEY)
         if(!token){
@@ -37,6 +38,22 @@ export async function checkJWT(){
         if(error.status === 401){
             window.localStorage.clear()
             window.location.href = '/';
+        }
+    }
+}
+
+export async function checkJWTSession(){
+    try{
+        const token = window.localStorage.getItem(AUTORIZATION_KEY)
+        if(token){
+            await FlowCraftAPI.get("Users/ComprobarJWT",{'Authorization': `Bearer ${token}`,})
+            window.location.href = '/inicio/noticias';
+        }
+        
+        return
+    }catch(error:any){
+        if(error.status === 401){
+            window.localStorage.clear()
         }
     }
 }

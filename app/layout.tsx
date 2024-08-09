@@ -1,6 +1,6 @@
-import AreYouLogued from './ui/areYouLoged/areYouLoged';
 import { monserrant  } from './ui/fonts'; // import fonts to use in all platform
 import './ui/global.css';
+
 export default function RootLayout({
   children,
 }: {
@@ -8,6 +8,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es">
+      <head>
+        <title>FlowCraft</title>
+      </head>
       <body className={`${monserrant.className} antialised`}>
         {children}
       </body>
