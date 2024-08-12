@@ -12,36 +12,42 @@ export default function Page() {
             name="nombre"
             type="text"
             placeHolder="Pepe"
+            required
           />
           <InputWithLabel
             label="Apellido"
             name="apellido"
             type="text"
             placeHolder="Argento"
+            required
           />
           <InputWithLabel
             label="Telefono"
             name="telefono"
             type="number"
             placeHolder="2616738554"
+            required
           />
           <InputWithLabel
             label="Direccion"
             name="direccion"
             type="string"
             placeHolder="Calle false 123"
+            required
           />
           <InputWithLabel
             label="MAIL"
             name="email"
             type="email"
             placeHolder="ejemplo@gmail.com"
+            required
           />
           <InputWithLabel
             label="DNI"
             name="dni"
             type="dni"
             placeHolder="123456789"
+            required
           />
         </div>
         <div className="w-full md:w-[40%]">
@@ -50,19 +56,22 @@ export default function Page() {
             name="date"
             type="date"
             placeHolder="18/08/1995"
+            required
           />
-          <InputWithLabel label="Contraseña" name="password" type="password" />
+          <InputWithLabel label="Contraseña" name="password" type="password"  required/>
           <InputWithLabel
             label=" Confirmar Contraseña"
             name="other-password"
             type="password"
+            required
           />
-          <InputWithLabel label="Foto" name="foto" type="file" />
+          <InputWithLabel label="Foto" name="foto" type="file" required />
           <InputWithLabel
             label="Sexo"
             name="date"
             type="date"
             placeHolder="18/08/1995"
+            required
           />
           <InputWithLabel
             label="Socio"

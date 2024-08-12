@@ -8,6 +8,7 @@ interface Props {
   type: string;
   placeHolder?: string;
   Icon?: React.ElementType;
+  required?:boolean
 }
 
 export const InputWithLabel = ({
@@ -18,6 +19,7 @@ export const InputWithLabel = ({
   type = 'text',
   placeHolder = '',
   Icon,
+  required=false,
 }: Props) => {
   return (
     <div>
@@ -27,7 +29,7 @@ export const InputWithLabel = ({
         }
         htmlFor={name}
       >
-        {label}
+        {label}{required && <label className='text-red-600'>{" "}*</label>}
       </label>
       <div className="relative">
         <input
