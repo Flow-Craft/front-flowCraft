@@ -1,6 +1,6 @@
 import React from 'react';
 
-interface Props {
+interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
   name: string;
   stylesLabel?: string;
@@ -8,7 +8,12 @@ interface Props {
   type: string;
   placeHolder?: string;
   Icon?: React.ElementType;
-  required?:boolean
+  required?: boolean;
+  defaultValue?: any;
+  wrong?: boolean;
+  value?: any;
+  iconClassName?: string;
+  onClickIcon?: any;
 }
 
 export const InputWithLabel = ({
@@ -19,7 +24,12 @@ export const InputWithLabel = ({
   type = 'text',
   placeHolder = '',
   Icon,
-  required=false,
+  required = false,
+  defaultValue = undefined,
+  wrong = false,
+  iconClassName = 'cursor-pointer absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900',
+  onClickIcon,
+  ...props
 }: Props) => {
   return (
     <div>
@@ -29,20 +39,25 @@ export const InputWithLabel = ({
         }
         htmlFor={name}
       >
-        {label}{required && <label className='text-red-600'>{" "}*</label>}
+        {label}
+        {required && <label className="text-red-600"> *</label>}
       </label>
       <div className="relative">
         <input
           className={
             stylesInput ||
-            'peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500'
+            `peer block w-full rounded-md border ${wrong ? 'border-red-600' : 'border-gray-200'} py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500`
           }
           id={name}
           type={type}
           name={name}
           placeholder={placeHolder}
+          defaultValue={defaultValue}
+          {...props}
         />
-        {Icon && <Icon />}
+        {Icon && (
+          <Icon className={iconClassName} onClick={onClickIcon || null} />
+        )}
       </div>
     </div>
   );
