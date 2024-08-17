@@ -14,15 +14,10 @@ import { ChakraProvider } from '@chakra-ui/react';
 
 export default function MenuPrincipal() {
   const [isLoading, setIsLoading] = useState(true);
-  const [burgerOpen, setBurgerOpen] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const verifySession = async () => {
     await checkJWTSession();
   };
-
-  const handleMenu = useCallback(() => {
-    setBurgerOpen(!burgerOpen);
-  }, [burgerOpen]);
 
   useEffect(() => {
     verifySession();

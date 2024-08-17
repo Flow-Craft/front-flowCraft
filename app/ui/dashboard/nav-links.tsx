@@ -35,21 +35,29 @@ const links = [
     href: '/inicio/instalaciones',
     icon: BuildingOffice2Icon,
   },
-  // { name: 'Eventos', href: '/inicio/eventos', icon: CalendarDaysIcon },
-  // { name: 'Torneos', href: '/inicio/torneos', icon: TableCellsIcon },
-  // { name: 'Reportes', href: '/inicio/reportes', icon: DocumentIcon },
-  // { name: 'Configuracion del sistema', href: '/inicio/config_del_sistema', icon: CogIcon },
-  // { name: 'Lecciones', href: '/inicio/lecciones', icon: AcademicCapIcon },
-  // { name: 'Backup', href: '/inicio/backup', icon: ServerStackIcon },
-  // { name: 'Estados', href: '/inicio/estados', icon: ChatBubbleBottomCenterIcon },
-  // { name: 'Tipos', href: '/inicio/tipos', icon: ChatBubbleLeftIcon },
-  // { name: 'Mi Perfil', href: '/inicio/perfil', icon: UserCircleIcon },
-  // { name: 'Partidos', href: '/inicio/partido', icon: MegaphoneIcon },
+  { name: 'Eventos', href: '/inicio/eventos', icon: CalendarDaysIcon },
+  { name: 'Torneos', href: '/inicio/torneos', icon: TableCellsIcon },
+  { name: 'Reportes', href: '/inicio/reportes', icon: DocumentIcon },
+  {
+    name: 'Configuracion del sistema',
+    href: '/inicio/config_del_sistema',
+    icon: CogIcon,
+  },
+  { name: 'Lecciones', href: '/inicio/lecciones', icon: AcademicCapIcon },
+  { name: 'Backup', href: '/inicio/backup', icon: ServerStackIcon },
+  {
+    name: 'Estados',
+    href: '/inicio/estados',
+    icon: ChatBubbleBottomCenterIcon,
+  },
+  { name: 'Tipos', href: '/inicio/tipos', icon: ChatBubbleLeftIcon },
+  { name: 'Mi Perfil', href: '/inicio/perfil', icon: UserCircleIcon },
+  { name: 'Partidos', href: '/inicio/partido', icon: MegaphoneIcon },
   { name: 'Disciplinas', href: '/inicio/disciplinas', icon: PaperAirplaneIcon },
   { name: 'Estadisticas', href: '/inicio/estadisticas', icon: ChartBarIcon },
 ];
 
-export default function NavLinks() {
+export default function NavLinks({ onClose = () => {} }) {
   const pathname = usePathname();
   const router = useRouter();
   const logOut = () => {
@@ -65,16 +73,17 @@ export default function NavLinks() {
           <Link
             key={link.name}
             href={link.href}
+            onClick={onClose}
             className={`
-            flex h-[48px] grow items-center justify-center gap-2 rounded-md
-            bg-gray-50 p-3 text-sm font-medium
-            hover:bg-sky-100 hover:text-blue-600 
-            md:flex-none md:justify-start md:p-2 md:px-3
+            flex h-[48px] grow items-center gap-2 rounded-md
+            p-3 text-sm font-medium hover:bg-sky-100
+            hover:text-blue-600 md:flex-none 
+            md:justify-start md:bg-gray-50 md:p-2 md:px-3
             ${pathname === link.href ? 'bg-sky-100 text-blue-600' : ''}
             `}
           >
             <LinkIcon className="w-6" />
-            <p className="hidden md:block">{link.name}</p>
+            <p>{link.name}</p>
           </Link>
         );
       })}
@@ -84,7 +93,7 @@ export default function NavLinks() {
           className="flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3"
         >
           <PowerIcon className="w-6" />
-          <div className="hidden md:block">Sign Out</div>
+          <div>Sign Out</div>
         </button>
       </form>
     </>
