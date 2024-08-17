@@ -29,7 +29,6 @@ export async function loginUser(formData: FormData) {
 }
 
 export async function checkJWT() {
-  console.log('entreAca');
   try {
     const token = window.localStorage.getItem(AUTORIZATION_KEY);
     if (!token) {
