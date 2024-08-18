@@ -3,16 +3,19 @@ export const handleFileConversion = (
 ): Promise<string | ArrayBuffer | null> => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
-    reader.onloadend = () => {
-      const base64 = reader.result;
-      resolve(base64);
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      const result = reader.result;
+      if (typeof result === 'string') {
+        const base64String = result.replace(/^data:[a-zA-Z]+\/[a-zA-Z]+;base64,/, '');
+        resolve(base64String);
+      } else {
+        reject(new Error('FileReader result is not a string'));
+      }
     };
-
     reader.onerror = (error) => {
       reject(error);
     };
-
-    reader.readAsDataURL(file);
   });
 };
 

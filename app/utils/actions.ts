@@ -70,14 +70,14 @@ export async function registryUser(RegistryUserSchema: any) {
     const fileType = user.FotoPerfilNo64.type;
     const finalUserToSend = JSON.parse(JSON.stringify(user));
     //convertir File to base 64
-    const file64 = await handleFileConversion(
+    let file64 = await handleFileConversion(
       new File(
-        [finalUserToSend.FotoPerfilNo64],
-        finalUserToSend.FotoPerfilNo64.name,
-        { type: finalUserToSend.FotoPerfilNo64.type },
+        [user.FotoPerfilNo64],
+        user.FotoPerfilNo64.name,
+        { type: user.FotoPerfilNo64.type },
       ),
     );
-    finalUserToSend.FotoPerfil = file64;
+    finalUserToSend.FotoPerfil = file64
     finalUserToSend.type = fileType;
     finalUserToSend.FechaNacimiento = parseDateWithOutTime(
       user.FechaNacimiento,
@@ -85,16 +85,16 @@ export async function registryUser(RegistryUserSchema: any) {
     delete finalUserToSend.FotoPerfilNo64;
     delete finalUserToSend.OtraContrasena;
     toast.loading('Loading...');
-    await createTimer(2000);
-    // await FlowCraftAPI.post('Users/Registro', finalUserToSend);
+    await FlowCraftAPI.post('Users/Registro', finalUserToSend);
     toast.dismiss();
     toast.success(
       'Usuario Creado con exito. Sera redirigido a la pantalla de login',
     );
     await createTimer(2000);
-    window.location.href = '/login';
+    // window.location.href = '/login';
   } catch (error: any) {
-    toast.error('Error al crear el usuario');
+    toast.dismiss();
+    toast.error(error.message);
   }
 }
 
