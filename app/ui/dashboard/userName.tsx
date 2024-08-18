@@ -1,5 +1,5 @@
 'use client';
-import { LOCAL_STORAGE_NAME_KEY } from '@/app/lib/const';
+import { LOCAL_STORAGE_NAME_KEY } from '@/app/utils/const';
 import { useEffect, useState } from 'react';
 
 export default function UserName() {

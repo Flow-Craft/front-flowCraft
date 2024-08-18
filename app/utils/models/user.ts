@@ -1,70 +1,11 @@
-'use client';
-
 import { z } from 'zod';
-import FlowCraftAPI from './request';
-import toast from 'react-hot-toast';
-import { AUTORIZATION_KEY, LOCAL_STORAGE_NAME_KEY } from './const';
 
-const loginUserSchema = z.object({
+export const loginUserSchema = z.object({
   Email: z.string().email(),
   Contrasena: z.string(),
 });
 
-export async function loginUser(formData: FormData) {
-  try {
-    const { Email, Contrasena } = loginUserSchema.parse({
-      Email: formData.get('email'),
-      Contrasena: formData.get('password'),
-    });
-    const response: any = await FlowCraftAPI.post('Users/Login', {
-      Email,
-      Contrasena,
-    });
-    if (response?.nombre)
-      window.localStorage.setItem(LOCAL_STORAGE_NAME_KEY, response?.nombre);
-    window.location.href = '/inicio/noticias';
-  } catch (error: any) {
-    toast.error(error.message);
-  }
-}
-
-export async function checkJWT() {
-  try {
-    const token = window.localStorage.getItem(AUTORIZATION_KEY);
-    if (!token) {
-      window.location.href = '/';
-    }
-    await FlowCraftAPI.get('Users/ComprobarJWT', {
-      Authorization: `Bearer ${token}`,
-    });
-    return;
-  } catch (error: any) {
-    if (error.status === 401) {
-      window.localStorage.clear();
-      window.location.href = '/';
-    }
-  }
-}
-
-export async function checkJWTSession() {
-  try {
-    const token = window.localStorage.getItem(AUTORIZATION_KEY);
-    if (token) {
-      await FlowCraftAPI.get('Users/ComprobarJWT', {
-        Authorization: `Bearer ${token}`,
-      });
-      window.location.href = '/inicio/noticias';
-    }
-
-    return;
-  } catch (error: any) {
-    if (error.status === 401) {
-      window.localStorage.clear();
-    }
-  }
-}
-
-const RegistrySchema = z
+export const RegistryUserSchemaZod = z
   .object({
     Nombre: z
       .string()
@@ -111,8 +52,9 @@ const RegistrySchema = z
       .refine((val) => val === '' || !isNaN(Date.parse(val)), {
         message: 'La fecha de nacimiento no es válida',
       }),
-    FotoPerfil: z
-      .instanceof(File)
+    Sexo: z.string().min(1, { message: "El campo 'Sexo' no fue enviado" }),
+    FotoPerfilNo64: z
+      .instanceof(File, { message: 'La imagen no fue enviada' })
       .refine(
         (file) =>
           file.size === 0 || ['image/jpeg', 'image/png'].includes(file.type),
@@ -124,17 +66,9 @@ const RegistrySchema = z
         message: 'La imagen no debe ser mayor a 3MB',
       }),
     Socio: z.boolean().optional().default(false),
+    FotoPerfil: z.any(),
   })
   .refine((data) => data.Contrasena === data.OtraContrasena, {
     message: 'Las contraseñas no coinciden',
     path: ['OtraContrasena'],
   });
-
-export async function registryUser(RegistryUserSchema: any) {
-  try {
-    const result = RegistrySchema.safeParse(RegistryUserSchema);
-    if (!result.success) {
-      return { error: true, errors: result.error.errors };
-    }
-  } catch (error: any) {}
-}

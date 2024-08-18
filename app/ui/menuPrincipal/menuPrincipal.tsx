@@ -4,8 +4,12 @@ import AcmeLogo from '@/app/ui/acme-logo';
 import Link from 'next/link';
 import { Button } from '../button';
 import { usePathname } from 'next/navigation';
-import { LOGIN_HREF, QUIENES_SOMOS_HREF, SING_UP_HREF } from '@/app/lib/const';
-import { checkJWTSession } from '@/app/lib/actions';
+import {
+  LOGIN_HREF,
+  QUIENES_SOMOS_HREF,
+  SING_UP_HREF,
+} from '@/app/utils/const';
+import { checkJWTSession } from '@/app/utils/actions';
 import { AquiVieneFlow } from '../components/AquiVieneFlow/AquiVieneFlow';
 import { XMarkIcon, Bars3Icon } from '@heroicons/react/24/outline';
 import MenuPrincipalMobile from './menuPrincipalMobile';

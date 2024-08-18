@@ -1,7 +1,7 @@
 import { AtSymbolIcon, KeyIcon } from '@heroicons/react/24/outline';
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
 import { Button } from './button';
-import { loginUser } from '../lib/actions';
+import { loginUser } from '../utils/actions';
 import { ToasterComponent } from './toaster/ToasterComponent';
 
 export default function LoginForm() {

@@ -1,11 +1,14 @@
 'use client';
 
 import { useState } from 'react';
-import { registryUser } from '../lib/actions';
+import { registryUser } from '../utils/actions';
 import { Button } from '../ui/button';
 import { InputWithLabel } from '../ui/components/InputWithLabel/InputWithLabel';
 import { ZodIssue } from 'zod';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
+import { SelectWithLabel } from '../ui/components/SelectWithLabel/SelectWithLabel';
+import { SEX_SELECT_OPTIONS } from '../utils/const';
+import { Toaster } from 'react-hot-toast';
 
 export default function Page() {
   const [errors, setErrors] = useState<ZodIssue[]>([]);
@@ -26,7 +29,8 @@ export default function Page() {
       Email: event.target.Email.value,
       FechaNacimiento: event.target.FechaNacimiento.value,
       Socio: socio,
-      FotoPerfil: event.target.FotoPerfil.files[0],
+      FotoPerfilNo64: event.target.FotoPerfilNo64.files[0],
+      Sexo: event.target.Sexo.value,
     });
     if (result?.error) {
       setErrors(result.errors);
@@ -126,18 +130,19 @@ export default function Page() {
           />
           <InputWithLabel
             label="Foto"
-            name="FotoPerfil"
+            name="FotoPerfilNo64"
             type="file"
             required
-            wrong={!!errors.find((e: ZodIssue) => e.path[0] === 'FotoPerfil')}
+            wrong={
+              !!errors.find((e: ZodIssue) => e.path[0] === 'FotoPerfilNo64')
+            }
           />
-          <InputWithLabel
-            label="Sexo"
+          <SelectWithLabel
             name="Sexo"
-            type="date"
-            placeHolder="18/08/1995"
-            wrong={!!errors.find((e: ZodIssue) => e.path[0] === 'Sexo')}
+            options={SEX_SELECT_OPTIONS}
+            label="Sexo"
             required
+            wrong={!!errors.find((e: ZodIssue) => e.path[0] === 'Sexo')}
           />
           <InputWithLabel
             label="Socio"
@@ -165,6 +170,7 @@ export default function Page() {
           </div>
         </div>
       </form>
+      <Toaster />
     </div>
   );
 }

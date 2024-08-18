@@ -71,32 +71,60 @@ class FlowCraftAPIMethod {
 
   public get<T>(
     endpoint: string,
-    headers: HeadersInit = {},
+    requireAuth: boolean = true,
   ): Promise<T> | void {
-    return this.request<T>('GET', endpoint, null, headers);
+    let auth;
+    if (requireAuth) {
+      const token = window.localStorage.getItem(AUTORIZATION_KEY);
+      auth = {
+        Authorization: `Bearer ${token}`,
+      };
+    }
+    return this.request<T>('GET', endpoint, null, { ...auth });
   }
 
   public post<T>(
     endpoint: string,
     data: any,
-    headers: HeadersInit = {},
+    requireAuth: boolean = true,
   ): Promise<T> | void {
-    return this.request<T>('POST', endpoint, data, headers);
+    let auth;
+    if (requireAuth) {
+      const token = window.localStorage.getItem(AUTORIZATION_KEY);
+      auth = {
+        Authorization: `Bearer ${token}`,
+      };
+    }
+    return this.request<T>('POST', endpoint, data, { ...auth });
   }
 
   public put<T>(
     endpoint: string,
     data: any,
-    headers: HeadersInit = {},
+    requireAuth: boolean = true,
   ): Promise<T> | void {
-    return this.request<T>('PUT', endpoint, data, headers);
+    let auth;
+    if (requireAuth) {
+      const token = window.localStorage.getItem(AUTORIZATION_KEY);
+      auth = {
+        Authorization: `Bearer ${token}`,
+      };
+    }
+    return this.request<T>('PUT', endpoint, data, { ...auth });
   }
 
   public delete<T>(
     endpoint: string,
-    headers: HeadersInit = {},
+    requireAuth: boolean = true,
   ): Promise<T> | void {
-    return this.request<T>('DELETE', endpoint, null, headers);
+    let auth;
+    if (requireAuth) {
+      const token = window.localStorage.getItem(AUTORIZATION_KEY);
+      auth = {
+        Authorization: `Bearer ${token}`,
+      };
+    }
+    return this.request<T>('DELETE', endpoint, null, { ...auth });
   }
 }
 
