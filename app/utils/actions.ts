@@ -91,7 +91,7 @@ export async function registryUser(RegistryUserSchema: any) {
       'Usuario Creado con exito. Sera redirigido a la pantalla de login',
     );
     await createTimer(2000);
-    // window.location.href = '/login';
+    window.location.href = '/login';
   } catch (error: any) {
     toast.dismiss();
     toast.error(error.message);
