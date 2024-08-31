@@ -127,7 +127,22 @@ export async function getTyCToBack() {
 
 export async function getQuienesSomosAction() {
   try {
-    return await FlowCraftAPI.get('Configuracion/ObtenerTYC', false);
+    return await FlowCraftAPI.get(
+      'Configuracion/GetPerfilClubQuienesSomos',
+      false,
+    );
+  } catch (error: any) {
+    toast.dismiss();
+    toast.error(error.message);
+  }
+}
+
+export async function getNewsAction() {
+  try {
+    return await FlowCraftAPI.get(
+      'Noticias/GetNoticiasActivasSimpatizante',
+      false,
+    );
   } catch (error: any) {
     toast.dismiss();
     toast.error(error.message);

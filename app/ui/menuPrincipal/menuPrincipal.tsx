@@ -8,6 +8,7 @@ import {
   LOGIN_HREF,
   QUIENES_SOMOS_HREF,
   SING_UP_HREF,
+  NOTICIAS_HREF,
 } from '@/app/utils/const';
 import { checkJWTSession } from '@/app/utils/actions';
 import { AquiVieneFlow } from '../components/AquiVieneFlow/AquiVieneFlow';
@@ -78,6 +79,13 @@ export default function MenuPrincipal() {
           <li className="my-6">
             <Button className="mx-3 text-xl font-semibold">
               INSTALACIONES
+            </Button>
+          </li>
+          <li className="my-6">
+            <Button
+              className={` mx-3 text-xl font-semibold ${pathname === NOTICIAS_HREF ? 'bg-blue-400 font-bold ' : ''} `}
+            >
+              <Link href={NOTICIAS_HREF}>NOTICIAS</Link>
             </Button>
           </li>
           <li className="my-6">
