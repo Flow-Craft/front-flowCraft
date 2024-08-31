@@ -21,9 +21,7 @@ export default function Page() {
   }, []);
   return (
     <section className="">
-      <div className="mt-6 self-start px-9 text-3xl font-bold">
-        Quienes Somos?
-      </div>
+      <div className="mt-6 self-start px-9 text-3xl font-bold">Disciplinas</div>
       <Accordion defaultIndex={[0]} allowMultiple className="p-6">
         <AccordionItem>
           <h2>

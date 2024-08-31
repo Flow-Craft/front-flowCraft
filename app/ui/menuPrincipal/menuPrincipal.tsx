@@ -9,6 +9,8 @@ import {
   QUIENES_SOMOS_HREF,
   SING_UP_HREF,
   NOTICIAS_HREF,
+  INSTALACIONES_HREF,
+  DISCIPLINAS_HREF,
 } from '@/app/utils/const';
 import { checkJWTSession } from '@/app/utils/actions';
 import { AquiVieneFlow } from '../components/AquiVieneFlow/AquiVieneFlow';
@@ -39,9 +41,21 @@ export default function MenuPrincipal() {
       <div className="flex h-20 shrink-0 items-end justify-between rounded-lg bg-blue-500 p-4 md:h-40">
         <AcmeLogo />
         <div className=" hidden flex-row min-[1100px]:flex">
-          <Button className="mx-3 font-medium">DISCIPLINAS</Button>
-          <Button className="mx-3 font-medium">INSTALACIONES</Button>
-          <Button className="mx-3 font-medium">NOTICIAS</Button>
+          <Button
+            className={` mx-3 font-medium ${pathname === DISCIPLINAS_HREF ? 'bg-blue-400' : ''} font-bold`}
+          >
+            <Link href={DISCIPLINAS_HREF}>DISCIPLINAS</Link>
+          </Button>
+          <Button
+            className={` mx-3 font-medium ${pathname === INSTALACIONES_HREF ? 'bg-blue-400' : ''} font-bold`}
+          >
+            <Link href={INSTALACIONES_HREF}>INSTALACIONES</Link>
+          </Button>
+          <Button
+            className={` mx-3 font-medium ${pathname === NOTICIAS_HREF ? 'bg-blue-400' : ''} font-bold`}
+          >
+            <Link href={NOTICIAS_HREF}>NOTICIAS</Link>
+          </Button>
           <Button
             className={` mx-3 font-medium ${pathname === QUIENES_SOMOS_HREF ? 'bg-blue-400' : ''} font-bold`}
           >
@@ -74,11 +88,17 @@ export default function MenuPrincipal() {
       <MenuPrincipalMobile isOpen={isOpen} onOpen={onOpen} onClose={onClose}>
         <ul>
           <li className="my-6">
-            <Button className="mx-3 text-xl font-semibold">DISCIPLINAS</Button>
+            <Button
+              className={` mx-3 text-xl font-semibold ${pathname === DISCIPLINAS_HREF ? 'bg-blue-400 font-bold ' : ''} `}
+            >
+              <Link href={DISCIPLINAS_HREF}>DISCIPLINAS</Link>
+            </Button>
           </li>
           <li className="my-6">
-            <Button className="mx-3 text-xl font-semibold">
-              INSTALACIONES
+            <Button
+              className={` mx-3 text-xl font-semibold ${pathname === INSTALACIONES_HREF ? 'bg-blue-400 font-bold ' : ''} `}
+            >
+              <Link href={INSTALACIONES_HREF}>INSTALACIONES</Link>
             </Button>
           </li>
           <li className="my-6">

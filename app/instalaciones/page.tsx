@@ -22,7 +22,7 @@ export default function Page() {
   return (
     <section className="">
       <div className="mt-6 self-start px-9 text-3xl font-bold">
-        Quienes Somos?
+        Instalaciones
       </div>
       <Accordion defaultIndex={[0]} allowMultiple className="p-6">
         <AccordionItem>

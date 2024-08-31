@@ -18,6 +18,7 @@ export default function Page() {
   return (
     <main className="flex min-h-screen flex-col p-2">
       <MenuPrincipal />
+      <div className="mt-6 self-start px-9 text-3xl font-bold">Noticias</div>
       <div className="mt-4 flex grow flex-col gap-4 md:flex-row">
         <ShareInSocialMedia newID={123} />
         ACA VAN A IR NOTICIAS PERO POR EL MOMENTO FLOWCRAFT EL QUE LEE
