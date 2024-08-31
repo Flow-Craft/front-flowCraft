@@ -7,7 +7,10 @@ export const handleFileConversion = (
     reader.onload = () => {
       const result = reader.result;
       if (typeof result === 'string') {
-        const base64String = result.replace(/^data:[a-zA-Z]+\/[a-zA-Z]+;base64,/, '');
+        const base64String = result.replace(
+          /^data:[a-zA-Z]+\/[a-zA-Z]+;base64,/,
+          '',
+        );
         resolve(base64String);
       } else {
         reject(new Error('FileReader result is not a string'));

@@ -74,3 +74,6 @@ en la raiz del proyecto de backend solo para linux
 }
 }
 }
+
+//Excalidraw
+https://excalidraw.com/#json=KS4i_r1UgdXQosLEwNVdb,oUVPDZZ27cT7MvAwpNxB0Q

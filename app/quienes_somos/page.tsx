@@ -1,3 +1,4 @@
+'use client';
 import {
   Accordion,
   AccordionItem,
@@ -6,8 +7,14 @@ import {
   AccordionIcon,
   Box,
 } from '@chakra-ui/react';
+import { useCallback, useState } from 'react';
+import { getQuienesSomosAction } from '../utils/actions';
 
 export default function Page() {
+  const [quierenSomos, setQuierenSomos] = useState([]);
+  const getQuienesSomos = useCallback(async () => {
+    const result = await getQuienesSomosAction();
+  }, []);
   return (
     <section className="">
       <Accordion defaultIndex={[0]} allowMultiple className="p-6">

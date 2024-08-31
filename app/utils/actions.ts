@@ -71,13 +71,11 @@ export async function registryUser(RegistryUserSchema: any) {
     const finalUserToSend = JSON.parse(JSON.stringify(user));
     //convertir File to base 64
     let file64 = await handleFileConversion(
-      new File(
-        [user.FotoPerfilNo64],
-        user.FotoPerfilNo64.name,
-        { type: user.FotoPerfilNo64.type },
-      ),
+      new File([user.FotoPerfilNo64], user.FotoPerfilNo64.name, {
+        type: user.FotoPerfilNo64.type,
+      }),
     );
-    finalUserToSend.FotoPerfil = file64
+    finalUserToSend.FotoPerfil = file64;
     finalUserToSend.type = fileType;
     finalUserToSend.FechaNacimiento = parseDateWithOutTime(
       user.FechaNacimiento,
@@ -98,10 +96,40 @@ export async function registryUser(RegistryUserSchema: any) {
   }
 }
 
+export async function verifyRegistryUser(RegistryUserSchema: any) {
+  try {
+    const result = RegistryUserSchemaZod.safeParse(RegistryUserSchema);
+    if (!result.success) {
+      return { error: true, errors: result.error.errors };
+    }
+  } catch (error: any) {
+    toast.dismiss();
+    toast.error(error.message);
+  }
+}
+
 function createTimer(ms: number) {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve(`Timer completed after ${ms} milliseconds`);
     }, ms);
   });
+}
+
+export async function getTyCToBack() {
+  try {
+    return await FlowCraftAPI.get('Configuracion/ObtenerTYC', false);
+  } catch (error: any) {
+    toast.dismiss();
+    toast.error(error.message);
+  }
+}
+
+export async function getQuienesSomosAction() {
+  try {
+    return await FlowCraftAPI.get('Configuracion/ObtenerTYC', false);
+  } catch (error: any) {
+    toast.dismiss();
+    toast.error(error.message);
+  }
 }

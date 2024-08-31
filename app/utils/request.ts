@@ -39,7 +39,6 @@ class FlowCraftAPIMethod {
 
     try {
       const response = await fetch(url, options);
-
       // localhost manage
       this.getJWT(response);
 

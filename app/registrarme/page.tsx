@@ -1,7 +1,11 @@
 'use client';
 
-import { useState } from 'react';
-import { registryUser } from '../utils/actions';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import {
+  getTyCToBack,
+  registryUser,
+  verifyRegistryUser,
+} from '../utils/actions';
 import { Button } from '../ui/button';
 import { InputWithLabel } from '../ui/components/InputWithLabel/InputWithLabel';
 import { ZodIssue } from 'zod';
@@ -9,16 +13,57 @@ import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 import { SelectWithLabel } from '../ui/components/SelectWithLabel/SelectWithLabel';
 import { SEX_SELECT_OPTIONS } from '../utils/const';
 import { Toaster } from 'react-hot-toast';
+import { FlowModal } from '../ui/components/FlowModal/FlowModal';
 
 export default function Page() {
   const [errors, setErrors] = useState<ZodIssue[]>([]);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [socio, setSocio] = useState<boolean>(false);
-  const formAction = async (event: any) => {
+  const [openModal, setOpenModal] = useState(false);
+  const [event, setEvent] = useState<any>({});
+  const [tyC, setTyC] = useState<{ tyc: string }>({ tyc: '' });
+
+  const getTyC = useCallback(async () => {
+    const result: any = await getTyCToBack();
+    setTyC(result);
+  }, []);
+  const handleRegistryUser = useCallback(async () => {
+    setOpenModal(false);
+    await registryUser(event);
+  }, [event]);
+
+  const tyc = useMemo(() => {
+    return (
+      <div>
+        {tyC['tyc'].split('\n').map((pf, index) => (
+          <p key={index} className="mb-6">
+            {pf}
+          </p>
+        ))}
+      </div>
+    );
+  }, [tyC]);
+
+  const handleCancel = useCallback((event: any) => {
+    setOpenModal(false);
+    setErrors([
+      {
+        code: 'too_small',
+        minimum: 4,
+        type: 'string',
+        inclusive: true,
+        exact: false,
+        message: 'Debe aceptar los terminos y condiciones para registrarse',
+        path: ['TyC'],
+      },
+    ]);
+  }, []);
+
+  const handleSubmitForm = async (event: any) => {
     event.preventDefault();
     setErrors([]);
-    const result = await registryUser({
+    const result = await verifyRegistryUser({
       Nombre: event.target.Nombre.value,
       Apellido: event.target.Apellido.value,
       Contrasena: event.target.Contrasena.value,
@@ -34,14 +79,33 @@ export default function Page() {
     });
     if (result?.error) {
       setErrors(result.errors);
+    } else {
+      setEvent({
+        Nombre: event.target.Nombre.value,
+        Apellido: event.target.Apellido.value,
+        Contrasena: event.target.Contrasena.value,
+        OtraContrasena: event.target.OtraContrasena.value,
+        Direccion: event.target.Direccion.value,
+        Telefono: event.target.Telefono.value,
+        Dni: event.target.Dni.value,
+        Email: event.target.Email.value,
+        FechaNacimiento: event.target.FechaNacimiento.value,
+        Socio: socio,
+        FotoPerfilNo64: event.target.FotoPerfilNo64.files[0],
+        Sexo: event.target.Sexo.value,
+      });
+      setOpenModal(true);
     }
   };
+  useEffect(() => {
+    getTyC();
+  }, []);
   return (
     <div className="mt-2 flex w-full flex-col items-center justify-center">
       <div className="self-start px-9 text-3xl font-bold">Registrarme</div>
       <form
         className=" flex w-full flex-col md:flex-row md:justify-evenly"
-        onSubmit={formAction}
+        onSubmit={handleSubmitForm}
       >
         <div className="w-full md:w-[40%]">
           <InputWithLabel
@@ -169,6 +233,16 @@ export default function Page() {
             <Button className={`bg-blue-400 font-bold`}>REGISTRARME</Button>
           </div>
         </div>
+        {openModal && (
+          <FlowModal
+            title="Debe aceptar los terminos y condiciones"
+            isOpen={openModal}
+            modalBody={tyc}
+            onAcceptModal={handleRegistryUser}
+            onCancelModal={handleCancel}
+            primaryTextButton="Aceptar terminos y condiciones"
+          />
+        )}
       </form>
       <Toaster />
     </div>
