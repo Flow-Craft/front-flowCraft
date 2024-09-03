@@ -37,7 +37,10 @@ export const ShareInSocialMedia = ({ newID }: { newID: number }) => {
   );
   return (
     <Menu>
-      <MenuButton as={Button}>
+      <MenuButton
+        as={Button}
+        className="bg-blue-500 shadow-lg shadow-blue-500/50"
+      >
         <ShareIcon className="absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 cursor-pointer text-gray-500 peer-focus:text-gray-900" />
       </MenuButton>
       <MenuList>

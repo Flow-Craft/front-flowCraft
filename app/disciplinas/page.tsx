@@ -1,47 +1,33 @@
 'use client';
-import {
-  Accordion,
-  AccordionItem,
-  AccordionButton,
-  AccordionPanel,
-  AccordionIcon,
-  Box,
-} from '@chakra-ui/react';
+
 import { useCallback, useEffect, useState } from 'react';
-import { getQuienesSomosAction } from '../utils/actions';
+import { getDisciplinasctionAction } from '../utils/actions';
+import { FlowTags } from '../ui/components/flowTags/flowTags';
+import { Toaster } from 'react-hot-toast';
 
 export default function Page() {
-  const [quierenSomos, setQuierenSomos] = useState<any>();
-  const getQuienesSomos = useCallback(async () => {
-    const result: any = await getQuienesSomosAction();
-    setQuierenSomos(result);
+  const [disciplinas, setDisciplinas] = useState<any>([]);
+  const getDisciplinas = useCallback(async () => {
+    const result: any = await getDisciplinasctionAction();
+    setDisciplinas(result);
   }, []);
   useEffect(() => {
-    getQuienesSomos();
+    getDisciplinas();
   }, []);
+
   return (
-    <section className="">
+    <>
       <div className="mt-6 self-start px-9 text-3xl font-bold">Disciplinas</div>
-      <Accordion defaultIndex={[0]} allowMultiple className="p-6">
-        <AccordionItem>
-          <h2>
-            <AccordionButton>
-              <Box
-                as="span"
-                flex="1"
-                textAlign="center"
-                className="py-5 text-lg font-bold text-blue-500"
-              >
-                {quierenSomos?.tituloQuienesSomos}
-              </Box>
-              <AccordionIcon />
-            </AccordionButton>
-          </h2>
-          <AccordionPanel pb={4} className="mx-3 my-3">
-            {quierenSomos?.descripcionQuienesSomos}
-          </AccordionPanel>
-        </AccordionItem>
-      </Accordion>
-    </section>
+      <section className="flex flex-wrap gap-2 p-8">
+        {disciplinas.map((dis: any) => {
+          return (
+            <div key={dis.id}>
+              <FlowTags title={dis.nombre} />
+            </div>
+          );
+        })}
+      </section>
+      <Toaster />
+    </>
   );
 }

@@ -1,49 +1,46 @@
 'use client';
-import {
-  Accordion,
-  AccordionItem,
-  AccordionButton,
-  AccordionPanel,
-  AccordionIcon,
-  Box,
-} from '@chakra-ui/react';
 import { useCallback, useEffect, useState } from 'react';
-import { getQuienesSomosAction } from '../utils/actions';
+import { getInstalacionesAction } from '../utils/actions';
+import { FlowTags } from '../ui/components/flowTags/flowTags';
+import { Toaster } from 'react-hot-toast';
 
 export default function Page() {
-  const [quierenSomos, setQuierenSomos] = useState<any>();
-  const getQuienesSomos = useCallback(async () => {
-    const result: any = await getQuienesSomosAction();
-    setQuierenSomos(result);
+  const [instalaciones, setInstalaciones] = useState<any>([]);
+  const getInstaciones = useCallback(async () => {
+    const result: any = await getInstalacionesAction();
+    setInstalaciones(result);
   }, []);
+  const getDescription = useCallback(
+    (ins: any) => {
+      return (
+        <section className="flex flex-row  gap-3">
+          <span>*{ins.ubicacion}</span>
+          <span> </span>
+          <span>*{ins.precio}$</span>
+        </section>
+      );
+    },
+    [instalaciones],
+  );
   useEffect(() => {
-    getQuienesSomos();
+    getInstaciones();
   }, []);
+
   return (
-    <section className="">
+    <>
       <div className="mt-6 self-start px-9 text-3xl font-bold">
         Instalaciones
       </div>
-      <Accordion defaultIndex={[0]} allowMultiple className="p-6">
-        <AccordionItem>
-          <h2>
-            <AccordionButton>
-              <Box
-                as="span"
-                flex="1"
-                textAlign="center"
-                className="py-5 text-lg font-bold text-blue-500"
-              >
-                {quierenSomos?.tituloQuienesSomos}
-              </Box>
-              <AccordionIcon />
-            </AccordionButton>
-          </h2>
-          <AccordionPanel pb={4} className="mx-3 my-3">
-            {quierenSomos?.descripcionQuienesSomos}
-          </AccordionPanel>
-        </AccordionItem>
-      </Accordion>
-    </section>
+      <section className="flex flex-wrap gap-2 p-8">
+        {instalaciones.map((ins: any) => {
+          return (
+            <div key={ins.id}>
+              <FlowTags title={ins.nombre} description={getDescription(ins)} />
+            </div>
+          );
+        })}
+      </section>
+      <Toaster />
+    </>
   );
 }

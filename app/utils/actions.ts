@@ -148,3 +148,27 @@ export async function getNewsAction() {
     toast.error(error.message);
   }
 }
+
+export async function getDisciplinasctionAction() {
+  try {
+    return await FlowCraftAPI.get(
+      'DisciplinasYLecciones/GetDisciplinasMenu',
+      false,
+    );
+  } catch (error: any) {
+    toast.dismiss();
+    toast.error(error.message);
+  }
+}
+
+export async function getInstalacionesAction() {
+  try {
+    return await FlowCraftAPI.get(
+      'Reservas/GetInstalacionesActivasSimpatizante',
+      false,
+    );
+  } catch (error: any) {
+    toast.dismiss();
+    toast.error(error.message);
+  }
+}

@@ -7,18 +7,21 @@ import {
   Divider,
 } from '@chakra-ui/react';
 
-export const FlowModal = ({
+export const FlowCard = ({
   maxW = 'sm',
   CardBodyContent,
   CardHeaderContent,
   CardFooterContent,
-  divider = true,
+  divider = false,
 }: any) => {
   return (
     <>
-      <Card maxW={maxW}>
+      <Card
+        maxW={maxW}
+        className="transform transition-transform hover:-translate-y-2 hover:shadow-lg"
+      >
         {CardHeaderContent && <CardHeader>{CardHeaderContent}</CardHeader>}
-        <CardBody>{CardBodyContent}</CardBody>
+        {CardBodyContent && <CardBody>{CardBodyContent}</CardBody>}
         {divider && <Divider />}
         {CardFooterContent && <CardFooter>{CardFooterContent}</CardFooter>}
       </Card>
