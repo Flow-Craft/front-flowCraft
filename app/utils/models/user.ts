@@ -37,6 +37,7 @@ export const RegistryUserSchemaZod = z
     Dni: z
       .string()
       .min(1, { message: "El campo 'Dni' no fue enviado" })
+      .max(8, 'El dni es muy largo')
       .refine((val) => val === '' || /^\d+$/.test(val), {
         message: 'El DNI debe contener solo dígitos',
       }),

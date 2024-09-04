@@ -36,7 +36,7 @@ export default function Page() {
   const tyc = useMemo(() => {
     return (
       <div>
-        {tyC['tyc'].split('\n').map((pf, index) => (
+        {tyC?.['tyc'].split('\n').map((pf, index) => (
           <p key={index} className="mb-6">
             {pf}
           </p>

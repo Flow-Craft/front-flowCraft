@@ -56,7 +56,7 @@ export default function Page() {
       <MenuPrincipal />
       <div className="mt-6 self-start px-9 text-3xl font-bold">Noticias</div>
       <div className="mt-4 flex grow flex-col gap-4  p-7 md:flex-row">
-        {news.map((nw: any) => {
+        {news?.map((nw: any) => {
           return (
             <div className="cursor-pointer" key={nw.id}>
               {CardMap(nw)}

@@ -172,3 +172,15 @@ export async function getInstalacionesAction() {
     toast.error(error.message);
   }
 }
+
+export async function getNewsByIdSimpatizante(id: any) {
+  try {
+    return await FlowCraftAPI.get(
+      `Noticias/GetNoticiaByIdSimpatizante/${id}`,
+      false,
+    );
+  } catch (error: any) {
+    toast.dismiss();
+    toast.error(error.message);
+  }
+}
