@@ -1,17 +1,40 @@
 'use client';
+import { ShareInSocialMedia } from '@/app/ui/components/ShareInSocialMedia/ShareInSocialMedia';
 import { getNewsByIdSimpatizante as getNewsByIdAction } from '@/app/utils/actions';
 import { useParams } from 'next/navigation';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 export default function Page() {
+  const [news, setNews] = useState<any>({});
   const params = useParams();
   const { id } = params;
   const getNewByID = async (id: any) => {
     const result = await getNewsByIdAction(id);
     console.log(result);
+    setNews(result);
   };
   useEffect(() => {
     getNewByID(id);
   }, [id]);
-  return <section className=""></section>;
+  return (
+    <section className="flex w-full flex-col items-center justify-center gap-6 p-4">
+      <img
+        src={`data:image/png;base64,${news.imagen}`}
+        alt="My Decoded Image"
+      />
+      <div className="flex items-end">
+        <span className="mt-4 text-3xl font-bold">{news.titulo}</span>
+        <div className="ml-8">
+          <ShareInSocialMedia newID={news.id} />
+        </div>
+      </div>
+      <section className="">
+        {news?.['descripcion']?.split('\n').map((pf: any, index: any) => (
+          <p key={index} className="mb-6">
+            {pf}
+          </p>
+        ))}
+      </section>
+    </section>
+  );
 }
