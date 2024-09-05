@@ -3,7 +3,13 @@
 import FlowCraftAPI from './request';
 import toast from 'react-hot-toast';
 import { AUTORIZATION_KEY, LOCAL_STORAGE_NAME_KEY } from './const';
-import { loginUserSchema, RegistryUserSchemaZod } from './models/user';
+import {
+  loginUserSchema,
+  RegistryUserSchemaZod,
+  verifyEmail,
+  verifyEmailCode,
+  verifyPasswords,
+} from './models/user';
 import { handleFileConversion, parseDateWithOutTime } from './manageFile';
 
 export async function loginUser(formData: FormData) {
@@ -108,7 +114,7 @@ export async function verifyRegistryUser(RegistryUserSchema: any) {
   }
 }
 
-function createTimer(ms: number) {
+export function createTimer(ms: number) {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve(`Timer completed after ${ms} milliseconds`);
@@ -182,5 +188,66 @@ export async function getNewsByIdSimpatizante(id: any) {
   } catch (error: any) {
     toast.dismiss();
     toast.error(error.message);
+  }
+}
+
+export async function sentRecoverPasswordCode(email: any) {
+  try {
+    const result = verifyEmail.safeParse({ Email: email });
+    if (!result.success) {
+      return { error: true, errors: result.error.errors };
+    }
+    const { data } = result;
+    await FlowCraftAPI.post('Users/ReestablecerContrasenaInit', data, false);
+  } catch (error: any) {
+    toast.dismiss();
+    toast.error(error.message);
+    return { error: true };
+  }
+}
+
+export async function verifyRecorveryCode(code: any, Mail: any) {
+  try {
+    console.log(Number(code));
+    const result = verifyEmailCode.safeParse({ Code: code });
+    if (!result.success) {
+      return { error: true, errors: result.error.errors };
+    }
+    const {
+      data: { Code },
+    } = result;
+    // await FlowCraftAPI.post(
+    //   '/Users/VerificarCodigo',
+    //   {Codigo : Code, Mail},
+    //   false,
+    // );
+  } catch (error: any) {
+    toast.dismiss();
+    toast.error(error.message);
+    return { error: true };
+  }
+}
+
+export async function changePassword(
+  Contrasena: any,
+  OtraContrasena: any,
+  email: any,
+  code: any,
+) {
+  try {
+    const result = verifyPasswords.safeParse({ Contrasena, OtraContrasena });
+    if (!result.success) {
+      return { error: true, errors: result.error.errors };
+    }
+    await FlowCraftAPI.post(
+      'Users/ReestablecerContrasena',
+      { NuevaPassword: Contrasena, Mail: email, Codigo: code },
+      false,
+    );
+    return;
+  } catch (error: any) {
+    toast.dismiss();
+    toast.error(error.message);
+    return { error: true };
   }
 }

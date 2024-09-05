@@ -3,6 +3,7 @@ import { ArrowRightIcon } from '@heroicons/react/20/solid';
 import { Button } from './button';
 import { loginUser } from '../utils/actions';
 import { ToasterComponent } from './toaster/ToasterComponent';
+import Link from 'next/link';
 
 export default function LoginForm() {
   return (
@@ -48,6 +49,14 @@ export default function LoginForm() {
               <KeyIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
             </div>
           </div>
+        </div>
+        <div className="mt-4 flex flex-row justify-end">
+          <Link
+            href={'/cambiar_contrasena'}
+            className="pointer hover:text-blue-600"
+          >
+            cambiar contraseña
+          </Link>
         </div>
         <Button className="mt-4 w-full bg-blue-600 text-lg">
           Iniciar Sesion{' '}

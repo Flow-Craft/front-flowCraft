@@ -73,3 +73,33 @@ export const RegistryUserSchemaZod = z
     message: 'Las contraseñas no coinciden',
     path: ['OtraContrasena'],
   });
+
+export const verifyEmail = z.object({
+  Email: z
+    .string()
+    .min(1, { message: "El campo 'Email' no fue enviado" })
+    .refine((val) => val === '' || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val), {
+      message: 'El email es invalido',
+    }),
+});
+
+export const verifyEmailCode = z.object({
+  Code: z
+    .string({ message: 'Debe ingresar un número' })
+    .length(6, { message: 'El código debe tener exactamente 6 dígitos' }) // Valida que tenga exactamente 7 dígitos
+    .regex(/^\d+$/, { message: 'El código debe contener solo números' }), // Asegura que solo tenga números
+});
+
+export const verifyPasswords = z
+  .object({
+    Contrasena: z
+      .string()
+      .min(8, { message: "El campo 'Contrasena' no fue enviado" }),
+    OtraContrasena: z
+      .string()
+      .min(8, { message: "El campo 'OtraContrasena' no fue enviado" }),
+  })
+  .refine((data) => data.Contrasena === data.OtraContrasena, {
+    message: 'Las contraseñas no coinciden',
+    path: ['OtraContrasena'],
+  });
