@@ -208,7 +208,6 @@ export async function sentRecoverPasswordCode(email: any) {
 
 export async function verifyRecorveryCode(code: any, Mail: any) {
   try {
-    console.log(Number(code));
     const result = verifyEmailCode.safeParse({ Code: code });
     if (!result.success) {
       return { error: true, errors: result.error.errors };
@@ -216,11 +215,11 @@ export async function verifyRecorveryCode(code: any, Mail: any) {
     const {
       data: { Code },
     } = result;
-    // await FlowCraftAPI.post(
-    //   'Users/VerificarCodigo',
-    //   {Codigo : Code, Mail},
-    //   false,
-    // );
+    await FlowCraftAPI.post(
+      'Users/VerificarCodigo',
+      { Codigo: Code, Mail },
+      false,
+    );
   } catch (error: any) {
     toast.dismiss();
     toast.error(error.message);

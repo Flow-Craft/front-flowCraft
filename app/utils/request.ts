@@ -6,6 +6,7 @@ interface RequestOptions {
   method: HTTPMethod;
   headers: HeadersInit;
   body?: string;
+  credentials?: string;
 }
 
 class FlowCraftAPIMethod {
@@ -25,13 +26,14 @@ class FlowCraftAPIMethod {
     headers: HeadersInit = {},
   ): Promise<T> {
     const url = `${this.baseURL}${endpoint}`;
-    const options: RequestOptions = {
+    const options: any = {
       method,
+      credentials: 'include',
       headers: {
-        ...headers,
+        'Content-Type': 'application/json',
+        ...headers
       },
     };
-    console.log(options)
 
     if (data) {
       options.body = JSON.stringify(data);
