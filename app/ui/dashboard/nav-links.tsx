@@ -20,6 +20,8 @@ import {
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { AquiVieneFlow } from '../components/AquiVieneFlow/AquiVieneFlow';
 
 // Map of links to display in the side navigation.
 // Depending on the size of the application, this would be stored in a database.
@@ -58,15 +60,19 @@ const links = [
 ];
 
 export default function NavLinks({ onClose = () => {} }) {
+  const [isLoading, setIsLoading] = useState(false)
   const pathname = usePathname();
   const router = useRouter();
-  const logOut = () => {
+  const logOut = (e:any) => {
+    e.preventDefault()
+    setIsLoading(true)
     window.localStorage.clear();
     router.push('/');
   };
 
   return (
     <>
+    {isLoading && <AquiVieneFlow/>}
       {links.map((link) => {
         const LinkIcon = link.icon;
         return (

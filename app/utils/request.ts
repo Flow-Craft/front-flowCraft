@@ -32,6 +32,7 @@ class FlowCraftAPIMethod {
         ...headers,
       },
     };
+    console.log(options)
 
     if (data) {
       options.body = JSON.stringify(data);
