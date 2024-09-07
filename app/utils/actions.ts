@@ -217,7 +217,7 @@ export async function verifyRecorveryCode(code: any, Mail: any) {
       data: { Code },
     } = result;
     // await FlowCraftAPI.post(
-    //   '/Users/VerificarCodigo',
+    //   'Users/VerificarCodigo',
     //   {Codigo : Code, Mail},
     //   false,
     // );
@@ -245,6 +245,18 @@ export async function changePassword(
       false,
     );
     return;
+  } catch (error: any) {
+    toast.dismiss();
+    toast.error(error.message);
+    return { error: true };
+  }
+}
+
+export async function getUserToShow() {
+  try {
+    return await FlowCraftAPI.get(
+      'Users/GetMiPerfil'
+    );
   } catch (error: any) {
     toast.dismiss();
     toast.error(error.message);

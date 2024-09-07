@@ -28,10 +28,10 @@ class FlowCraftAPIMethod {
     const options: RequestOptions = {
       method,
       headers: {
-        'Content-Type': 'application/json',
         ...headers,
       },
     };
+    console.log(options)
 
     if (data) {
       options.body = JSON.stringify(data);
