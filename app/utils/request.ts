@@ -31,7 +31,7 @@ class FlowCraftAPIMethod {
       credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
-        ...headers
+        ...headers,
       },
     };
 

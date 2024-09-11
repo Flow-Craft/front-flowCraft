@@ -60,19 +60,19 @@ const links = [
 ];
 
 export default function NavLinks({ onClose = () => {} }) {
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
-  const logOut = (e:any) => {
-    e.preventDefault()
-    setIsLoading(true)
+  const logOut = (e: any) => {
+    e.preventDefault();
+    setIsLoading(true);
     window.localStorage.clear();
     router.push('/');
   };
 
   return (
     <>
-    {isLoading && <AquiVieneFlow/>}
+      {isLoading && <AquiVieneFlow />}
       {links.map((link) => {
         const LinkIcon = link.icon;
         return (

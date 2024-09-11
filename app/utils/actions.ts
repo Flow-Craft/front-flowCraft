@@ -9,6 +9,7 @@ import {
   verifyEmail,
   verifyEmailCode,
   verifyPasswords,
+  UpdateUserSchemaZod,
 } from './models/user';
 import { handleFileConversion, parseDateWithOutTime } from './manageFile';
 
@@ -253,12 +254,39 @@ export async function changePassword(
 
 export async function getUserToShow() {
   try {
-    return await FlowCraftAPI.get(
-      'Users/GetMiPerfil'
-    );
+    return await FlowCraftAPI.get('Users/GetMiPerfil');
   } catch (error: any) {
     toast.dismiss();
     toast.error(error.message);
     return { error: true };
   }
+}
+
+export async function UpdateUser(UpdateUserSchema: any, setErrors: any) {
+  const result = UpdateUserSchemaZod.safeParse(UpdateUserSchema);
+  if (!result.success) {
+    return { error: true, errors: result.error.errors };
+  }
+  setErrors([]);
+  const { data: userToEdit } = result;
+  const finalUserToSend = JSON.parse(JSON.stringify(userToEdit));
+  //convertir File to base 64
+  if (userToEdit.FotoPerfil) {
+    const fileType = userToEdit.FotoPerfil.type;
+    let file64 = await handleFileConversion(
+      new File([userToEdit.FotoPerfil], userToEdit.FotoPerfil.name, {
+        type: userToEdit.FotoPerfil.type,
+      }),
+    );
+    finalUserToSend.FotoPerfil = file64;
+    finalUserToSend.type = fileType;
+  }
+  finalUserToSend.FechaNacimiento = parseDateWithOutTime(
+    userToEdit.FechaNacimiento,
+  );
+  await FlowCraftAPI.post('Users/EditarMiPerfil', finalUserToSend);
+}
+
+export async function cancelUserAction() {
+  await FlowCraftAPI.post('Users/DarseDeBaja', {});
 }

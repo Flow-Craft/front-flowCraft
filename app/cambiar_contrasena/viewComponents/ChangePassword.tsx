@@ -36,6 +36,7 @@ export default function ChangePassword({ email, code }: any) {
         toast.success(
           'Su contraseña fue cambiada correctamente. Será redirigido al login.',
         );
+        window.localStorage.clear();
         await createTimer(3000);
         router.push(LOGIN_HREF);
       }

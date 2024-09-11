@@ -1,11 +1,11 @@
 import React from 'react';
 
 interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
-  label: string;
+  label?: string;
   name: string;
   stylesLabel?: string;
   stylesInput?: string;
-  type: string;
+  type?: string;
   placeHolder?: string;
   Icon?: React.ElementType;
   required?: boolean;
@@ -33,15 +33,17 @@ export const InputWithLabel = ({
 }: Props) => {
   return (
     <div>
-      <label
-        className={
-          stylesLabel || 'mb-3 mt-5 block text-lg font-medium text-gray-900'
-        }
-        htmlFor={name}
-      >
-        {label}
-        {required && <label className="text-red-600"> *</label>}
-      </label>
+      {label && (
+        <label
+          className={
+            stylesLabel || 'mb-3 mt-5 block text-lg font-medium text-gray-900'
+          }
+          htmlFor={name}
+        >
+          {label}
+          {required && <label className="text-red-600"> *</label>}
+        </label>
+      )}
       <div className="relative">
         <input
           className={
