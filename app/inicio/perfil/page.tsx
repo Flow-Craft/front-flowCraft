@@ -267,7 +267,7 @@ export default function Page() {
             </div>
           )}
         </section>
-        <section className=" flex w-full flex-row flex-wrap md:gap-10">
+        <section className=" flex w-full flex-row flex-wrap md:gap-10 md:justify-center">
           <div className="md:w-[45%]">
             {labelAndEdit('Email', userToShow.email, 'email')}
             {labelAndEdit('Direccion', userToShow.direccion)}

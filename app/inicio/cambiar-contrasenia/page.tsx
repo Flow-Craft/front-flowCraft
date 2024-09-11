@@ -11,7 +11,7 @@ export default function Page() {
   const [validCode, setValidCode] = useState('');
   const handleSendEmail = async () => {
     try {
-      await sentRecoverPasswordCode(email);
+      // await sentRecoverPasswordCode(email);
       toast.success(
         'Se ha enviado su código de verificación con éxito. Por favor, revise su correo.',
       );
@@ -25,9 +25,7 @@ export default function Page() {
     switch (selectedStep) {
       case 1:
         return (
-          <div>
-            <Toaster />
-          </div>
+          <div/>
         );
       case 2:
         return (
@@ -45,6 +43,7 @@ export default function Page() {
   useEffect(() => {
     const queryParams = new URLSearchParams(window.location.search);
     const value = queryParams.get('email');
+    // Evita el envío si ya se ha enviado un email
     if (value) {
       setEmail(value);
       handleSendEmail();
@@ -56,6 +55,7 @@ export default function Page() {
         Cambiar contraseña
       </div>
       <section>{steps}</section>
+      <Toaster/>
     </section>
   );
 }

@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react';
 import GetEmailComponent from './viewComponents/GetEmailComponent';
 import GetVerificationCode from './viewComponents/GetVerificationCode';
 import ChangePassword from './viewComponents/ChangePassword';
+import { Toaster } from 'react-hot-toast';
 
 export default function Page() {
   const [selectedStep, setSelectedStep] = useState(1);
@@ -33,6 +34,7 @@ export default function Page() {
         Cambiar contraseña
       </div>
       <section>{steps}</section>
+      <Toaster/>
     </section>
   );
 }

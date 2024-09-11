@@ -1,7 +1,6 @@
 'use client';
 
 import { Button } from '@/app/ui/button';
-import { ToasterComponent } from '@/app/ui/toaster/ToasterComponent';
 import {
   createTimer,
   sentRecoverPasswordCode,
@@ -142,7 +141,6 @@ export default function GetVerificationCode({
             </div>
           </div>
         </div>
-        <ToasterComponent position="top-center" />
       </form>
     </div>
   );

@@ -24,6 +24,7 @@ export default function MenuPrincipal() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const verifySession = async () => {
     await checkJWTSession();
+    setIsLoading(false);
   };
 
   useEffect(() => {

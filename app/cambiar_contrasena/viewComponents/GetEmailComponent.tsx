@@ -67,7 +67,6 @@ export default function GetEmailComponent({ nextStep, setEmail }: any) {
             </div>
           </div>
         </div>
-        <ToasterComponent position="top-center" />
       </form>
     </div>
   );

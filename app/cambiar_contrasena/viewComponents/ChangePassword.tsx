@@ -95,7 +95,6 @@ export default function ChangePassword({ email, code }: any) {
             </div>
           </div>
         </div>
-        <ToasterComponent position="top-center" />
       </form>
     </div>
   );
