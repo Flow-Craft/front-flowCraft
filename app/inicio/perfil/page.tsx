@@ -6,6 +6,7 @@ import {
   cancelUserAction,
   createTimer,
   getUserToShow,
+  sentRecoverPasswordCode,
   UpdateUser,
 } from '@/app/utils/actions';
 import { SEX_SELECT_OPTIONS } from '@/app/utils/const';
@@ -133,6 +134,20 @@ export default function Page() {
       router.push('/');
     } catch (error: any) {
       toast.error(error.message);
+    }
+  };
+
+  const handleSendEmail = async (e:any) => {
+    try {
+      e.preventDefault();
+      await sentRecoverPasswordCode(userToShow.email);
+      toast.success(
+        'Se ha enviado su código de verificación con éxito. Por favor, revise su correo.',
+      );
+      await createTimer(2500);
+      router.push(`/inicio/cambiar-contrasenia?email=${userToShow.email}`);
+    } catch (e: any) {
+      console.error(e.message);
     }
   };
 
@@ -333,6 +348,7 @@ export default function Page() {
               <div className="mt-4 hover:text-blue-600">
                 <Link
                   href={`/inicio/cambiar-contrasenia?email=${userToShow.email}`}
+                  onClick={handleSendEmail}
                 >
                   Cambiar Contraseña (se deslogueara)
                 </Link>

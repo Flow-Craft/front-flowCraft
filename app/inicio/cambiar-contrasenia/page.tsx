@@ -1,26 +1,14 @@
 'use client';
 import ChangePassword from '@/app/cambiar_contrasena/viewComponents/ChangePassword';
 import GetVerificationCode from '@/app/cambiar_contrasena/viewComponents/GetVerificationCode';
-import { createTimer, sentRecoverPasswordCode } from '@/app/utils/actions';
 import { useEffect, useMemo, useState } from 'react';
-import toast, { Toaster } from 'react-hot-toast';
+import  { Toaster } from 'react-hot-toast';
 
 export default function Page() {
-  const [selectedStep, setSelectedStep] = useState(1);
+  const [selectedStep, setSelectedStep] = useState(2);
   const [email, setEmail] = useState('');
   const [validCode, setValidCode] = useState('');
-  const handleSendEmail = async () => {
-    try {
-      // await sentRecoverPasswordCode(email);
-      toast.success(
-        'Se ha enviado su código de verificación con éxito. Por favor, revise su correo.',
-      );
-      await createTimer(3000);
-      setSelectedStep(2);
-    } catch (e: any) {
-      console.error(e.message);
-    }
-  };
+
   const steps = useMemo(() => {
     switch (selectedStep) {
       case 1:
@@ -46,7 +34,6 @@ export default function Page() {
     // Evita el envío si ya se ha enviado un email
     if (value) {
       setEmail(value);
-      handleSendEmail();
     }
   }, []);
   return (
