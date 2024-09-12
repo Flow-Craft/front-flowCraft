@@ -2,7 +2,7 @@
 import ChangePassword from '@/app/cambiar_contrasena/viewComponents/ChangePassword';
 import GetVerificationCode from '@/app/cambiar_contrasena/viewComponents/GetVerificationCode';
 import { useEffect, useMemo, useState } from 'react';
-import  { Toaster } from 'react-hot-toast';
+import { Toaster } from 'react-hot-toast';
 
 export default function Page() {
   const [selectedStep, setSelectedStep] = useState(2);
@@ -12,9 +12,7 @@ export default function Page() {
   const steps = useMemo(() => {
     switch (selectedStep) {
       case 1:
-        return (
-          <div/>
-        );
+        return <div />;
       case 2:
         return (
           <GetVerificationCode
@@ -42,7 +40,7 @@ export default function Page() {
         Cambiar contraseña
       </div>
       <section>{steps}</section>
-      <Toaster/>
+      <Toaster />
     </section>
   );
 }

@@ -34,7 +34,7 @@ export default function Page() {
         Cambiar contraseña
       </div>
       <section>{steps}</section>
-      <Toaster/>
+      <Toaster />
     </section>
   );
 }

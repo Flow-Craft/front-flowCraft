@@ -137,7 +137,7 @@ export default function Page() {
     }
   };
 
-  const handleSendEmail = async (e:any) => {
+  const handleSendEmail = async (e: any) => {
     try {
       e.preventDefault();
       await sentRecoverPasswordCode(userToShow.email);
@@ -149,6 +149,17 @@ export default function Page() {
     } catch (e: any) {
       console.error(e.message);
     }
+  };
+
+  const formatDateToDefaultValue = (dateString: string) => {
+    // Separa la fecha en partes día, mes y año (dd/mm/yyyy)
+    const [day, month, year] = dateString.split('/');
+
+    // Convierte al formato yyyy-mm-dd para que sea compatible con el constructor de Date
+    const formattedDate = `${year}-${month}-${day}`;
+
+    // Crea el objeto Date y luego convierte a ISOString y obtén solo la parte de la fecha
+    return new Date(formattedDate).toISOString().split('T')[0];
   };
 
   const labelAndEdit = (
@@ -187,8 +198,8 @@ export default function Page() {
           <InputWithLabel
             name={label}
             defaultValue={
-              label === 'Nacimiento'
-                ? new Date(field).toISOString().split('T')[0]
+              label === 'Nacimiento' && field
+                ? formatDateToDefaultValue(field)
                 : field
             }
             type={type}
@@ -282,7 +293,7 @@ export default function Page() {
             </div>
           )}
         </section>
-        <section className=" flex w-full flex-row flex-wrap md:gap-10 md:justify-center">
+        <section className=" flex w-full flex-row flex-wrap md:justify-center md:gap-10">
           <div className="md:w-[45%]">
             {labelAndEdit('Email', userToShow.email, 'email')}
             {labelAndEdit('Direccion', userToShow.direccion)}
