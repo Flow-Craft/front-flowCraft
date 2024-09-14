@@ -3,64 +3,20 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { InputWithLabel } from '../components/InputWithLabel/InputWithLabel';
 import { SelectWithLabel } from '../components/SelectWithLabel/SelectWithLabel';
 import { FlowTable } from '../components/FlowTable/FlowTable';
-import { createTimer } from '@/app/utils/actions';
+import { createTimer, getUsersAdmin } from '@/app/utils/actions';
 import {
   PencilIcon,
   TagIcon,
   TrashIcon,
   UserIcon,
 } from '@heroicons/react/24/outline';
+import { FlowModal } from '../components/FlowModal/FlowModal';
+import { ModalBlockUser } from './User/ModalBlockUser';
+import { Tooltip } from '@chakra-ui/react';
 
 const ACTIVE_VALUES = [
   { label: 'SI', value: true },
   { label: 'NO', value: false },
-];
-
-const userEjemplo = [
-  {
-    id: 14,
-    dni: 39235416,
-    nombre: 'Mario',
-    apellido: 'Merida',
-    sexo: 'H',
-    direccion: 'adolfo calle 245',
-    telefono: '2616730665',
-    email: 'sould.of.demon@gmail.com',
-    fechaNacimiento: '1995-08-19T00:00:00',
-  },
-  {
-    id: 15,
-    dni: 39235416,
-    nombre: 'Mario',
-    apellido: 'Merida',
-    sexo: 'H',
-    direccion: 'adolfo calle 245',
-    telefono: '2616730665',
-    email: 'sould.of.demon@gmail.com',
-    fechaNacimiento: '1995-08-19T00:00:00',
-  },
-  {
-    id: 16,
-    dni: 39235416,
-    nombre: 'Mario',
-    apellido: 'Merida',
-    sexo: 'H',
-    direccion: 'adolfo calle 245',
-    telefono: '2616730665',
-    email: 'sould.of.demon@gmail.com',
-    fechaNacimiento: '1995-08-19T00:00:00',
-  },
-  {
-    id: 17,
-    dni: 39235416,
-    nombre: 'Mario',
-    apellido: 'Merida',
-    sexo: 'H',
-    direccion: 'adolfo calle 245',
-    telefono: '2616730665',
-    email: 'sould.of.demon@gmail.com',
-    fechaNacimiento: '1995-08-19T00:00:00',
-  },
 ];
 
 const HEADER_TABLE = [
@@ -74,64 +30,76 @@ const HEADER_TABLE = [
 
 export const UserTab = () => {
   const [usersToShow, setUsersToShow] = useState<any>([]);
-  const getUsers = useCallback(async () => {
-    try {
-      await createTimer(3000);
-      return userEjemplo;
-    } catch (error) {}
-  }, []);
-  const handleClick = (id: number) => {
-    window.alert(id);
+  const [openBlockUserModal, setOpenBlockUserModal] = useState(false);
+  const [openDetailUserModal, setOpenDetailUserModal] = useState(false);
+  const [userSelected, setUserSelected] = useState<any>({});
+  const handleClick = (user: JSON) => {
+    window.alert(user);
   };
-  const ActionTab = (id: number) => {
-    return (
-      <div className="flex flex-row gap-4">
-        <TagIcon
-          onClick={() => {
-            handleClick(id);
-          }}
-          className="w-[50px] text-slate-500"
-        />
-        <UserIcon
-          onClick={() => {
-            handleClick(id);
-          }}
-          className="w-[50px] text-slate-500"
-        />
-        <PencilIcon
-          onClick={() => {
-            handleClick(id);
-          }}
-          className="w-[50px] text-slate-500"
-        />
-        <TrashIcon
-          onClick={() => {
-            handleClick(id);
-          }}
-          className="w-[50px] text-slate-500"
-        />
-      </div>
-    );
+  const openUserModalBlock = (user: JSON) => {
+    setOpenBlockUserModal(true);
   };
-  const userToTab = useCallback(async () => {
+  const handleAccept = () => {};
+  const userToTab = async () => {
     try {
-      await createTimer(3000);
+      const result: any = await getUsersAdmin();
       const newUserToShow =
-        userEjemplo &&
-        userEjemplo.map((user: any) => {
+        result.usuarios &&
+        result.usuarios.map((user: any) => {
           return {
             name: user.nombre,
             apellido: user.apellido,
             dni: user.dni,
             email: user.email,
             telefono: user.telefono,
-            acciones: ActionTab(user.id),
+            acciones: ActionTab(
+              result.usuarios.find((usr: any) => usr.id === user.id),
+            ),
             id: user.id,
           };
         });
       setUsersToShow(newUserToShow);
     } catch (error) {}
-  }, []);
+  };
+  const ActionTab = (user: JSON) => {
+    return (
+      <div className="flex flex-row gap-4">
+        <Tooltip label="Action 1">
+          <TagIcon
+            onClick={() => {
+              handleClick(user);
+            }}
+            className="w-[50px] cursor-pointer text-slate-500"
+          />
+        </Tooltip>
+        <Tooltip label="Mas detalles">
+          <UserIcon
+            onClick={() => {
+              setUserSelected(user);
+              setOpenDetailUserModal(true);
+            }}
+            className="w-[50px] cursor-pointer text-slate-500"
+          />
+        </Tooltip>
+        <Tooltip label="Editar">
+          <PencilIcon
+            onClick={() => {
+              handleClick(user);
+            }}
+            className="w-[50px] cursor-pointer text-slate-500"
+          />
+        </Tooltip>
+        <Tooltip label="Bloquear">
+          <TrashIcon
+            onClick={() => {
+              openUserModalBlock(user);
+            }}
+            className="w-[50px] cursor-pointer text-slate-500"
+          />
+        </Tooltip>
+      </div>
+    );
+  };
   useEffect(() => {
     userToTab();
   }, []);
@@ -173,7 +141,7 @@ export const UserTab = () => {
         </div>
 
         <button
-          className="ml-auto rounded-lg bg-blue-500 p-2 text-center text-xl text-white"
+          className="rounded-lg bg-blue-500 p-2 text-center text-xl text-white lg:ml-auto"
           disabled
         >
           Crear Usuario
@@ -182,6 +150,30 @@ export const UserTab = () => {
       <section>
         <FlowTable Header={HEADER_TABLE} dataToShow={usersToShow} />
       </section>
+      <FlowModal
+        title="Usuario a dar de baja"
+        modalBody={<ModalBlockUser userSelected={userSelected} />}
+        primaryTextButton="Dar de baja al Usuario"
+        isOpen={openBlockUserModal}
+        scrollBehavior="outside"
+        onAcceptModal={handleAccept}
+        onCancelModal={() => {
+          setOpenBlockUserModal(false);
+        }}
+      />
+      <FlowModal
+        title="Usuario"
+        modalBody={<ModalBlockUser userSelected={userSelected} />}
+        primaryTextButton="Aceptar"
+        isOpen={openDetailUserModal}
+        scrollBehavior="outside"
+        onAcceptModal={() => {
+          setOpenDetailUserModal(false);
+        }}
+        onCancelModal={() => {
+          setOpenDetailUserModal(false);
+        }}
+      />
     </div>
   );
 };

@@ -15,7 +15,7 @@ import { useEffect, useMemo, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import { ZodIssue } from 'zod';
 import { ArrowDownTrayIcon } from '@heroicons/react/24/outline';
-import { separarNombreCompleto } from '@/app/utils/functions';
+import { formatDate, separarNombreCompleto } from '@/app/utils/functions';
 import { FlowModal } from '@/app/ui/components/FlowModal/FlowModal';
 import { useRouter } from 'next/navigation';
 import SkeletonProfile from './pageSkeleton';
@@ -70,16 +70,6 @@ export default function Page() {
       toast.dismiss();
     }
   };
-
-  function formatDate(dateString: string): string {
-    const date = new Date(dateString);
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Los meses empiezan en 0
-    const year = date.getFullYear();
-
-    return `${day}/${month}/${year}`;
-  }
-  console.log(userToShow);
 
   const handleFileChange = (event: any) => {
     const file = event.target.files[0]; // Obtén el archivo seleccionado

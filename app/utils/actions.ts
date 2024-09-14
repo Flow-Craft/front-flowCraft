@@ -294,3 +294,9 @@ export async function cancelUserAction() {
 export async function asociateUser() {
   await FlowCraftAPI.post('Users/AsociarseMiPerfil', {});
 }
+
+//config_del_sistema
+
+export async function getUsersAdmin() {
+  return await FlowCraftAPI.get('Users/GetUsuarios');
+}

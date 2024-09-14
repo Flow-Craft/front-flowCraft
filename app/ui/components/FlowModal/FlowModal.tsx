@@ -19,6 +19,7 @@ export const FlowModal = ({
   primaryTextButton = 'Aceptar',
   secondaryTextButton = 'Cancelar',
   size = 'xl',
+  scrollBehavior = 'inside',
 }: any) => {
   return (
     <>
@@ -27,7 +28,7 @@ export const FlowModal = ({
         isOpen={isOpen}
         onClose={onCancelModal}
         size={size}
-        scrollBehavior="inside"
+        scrollBehavior={scrollBehavior}
         isCentered
       >
         <ModalOverlay />
