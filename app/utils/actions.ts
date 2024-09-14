@@ -290,3 +290,7 @@ export async function UpdateUser(UpdateUserSchema: any, setErrors: any) {
 export async function cancelUserAction() {
   await FlowCraftAPI.post('Users/DarseDeBaja', {});
 }
+
+export async function asociateUser() {
+  await FlowCraftAPI.post('Users/AsociarseMiPerfil', {});
+}

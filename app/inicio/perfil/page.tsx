@@ -3,6 +3,7 @@ import { InputWithLabel } from '@/app/ui/components/InputWithLabel/InputWithLabe
 import { SelectWithLabel } from '@/app/ui/components/SelectWithLabel/SelectWithLabel';
 import { QrGenerator } from '@/app/ui/QrGenerator/QrGenerator';
 import {
+  asociateUser,
   cancelUserAction,
   createTimer,
   getUserToShow,
@@ -22,7 +23,6 @@ import Link from 'next/link';
 
 export default function Page() {
   const [userToShow, setUserToShow] = useState<any>({});
-  const [areSend, setAreSend] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [openFirstModal, setOpenFirstModal] = useState(false);
   const [openSecondModal, setSecondModal] = useState(false);
@@ -55,10 +55,20 @@ export default function Page() {
     e.preventDefault();
     setEditMode(true);
   };
-  const makeMyselfSocio = (e: any) => {
-    e.preventDefault();
-    setAreSend(true);
-    toast.success('Se ha enviado la solicitud');
+  const makeMyselfSocio = async (e: any) => {
+    try {
+      e.preventDefault();
+      await asociateUser();
+      const deepCopy = JSON.parse(JSON.stringify(userToShow));
+      deepCopy.asociado = 1;
+      setUserToShow(deepCopy);
+      toast.success('Se ha enviado la solicitud');
+    } catch (error: any) {
+      toast.error(error.message);
+    } finally {
+      await createTimer(3000);
+      toast.dismiss();
+    }
   };
 
   function formatDate(dateString: string): string {
@@ -69,6 +79,7 @@ export default function Page() {
 
     return `${day}/${month}/${year}`;
   }
+  console.log(userToShow);
 
   const handleFileChange = (event: any) => {
     const file = event.target.files[0]; // Obtén el archivo seleccionado
@@ -236,17 +247,19 @@ export default function Page() {
           <div />
         )}
         <div>
-          {userToShow.mostrarBotonAsociarse ? (
+          {userToShow.asociado === 0 ? (
             <button
-              disabled={areSend || editMode}
-              className={`${areSend || editMode ? 'bg-blue-300' : 'cursor-pointer bg-blue-600'} rounded-full p-5 text-center  text-3xl text-white`}
+              disabled={editMode}
+              className={`${editMode ? 'bg-blue-300' : 'cursor-pointer bg-blue-600'} rounded-full p-5 text-center  text-3xl text-white`}
               onClick={makeMyselfSocio}
             >
               Hacete socio!
             </button>
           ) : (
             <span className="rounded-full bg-blue-300 p-5 text-center text-2xl font-bold text-white ">
-              Ya eres socio
+              {userToShow.asociado === 2
+                ? 'Ya eres socio'
+                : 'Solicitud pendiente'}
             </span>
           )}
         </div>
