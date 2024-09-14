@@ -25,6 +25,7 @@ const HEADER_TABLE = [
   { name: 'DNI' },
   { name: 'Email' },
   { name: 'Tef' },
+  { name: 'Estado' },
   { name: 'Acciones' },
 ];
 
@@ -37,12 +38,19 @@ export const UserTab = () => {
     window.alert(user);
   };
   const openUserModalBlock = (user: JSON) => {
+    setUserSelected(user);
     setOpenBlockUserModal(true);
   };
+  const openModalUsuarioEditar = (user: JSON) => {
+    setUserSelected(user);
+    setOpenDetailUserModal(true);
+  };
+
   const handleAccept = () => {};
   const userToTab = async () => {
     try {
       const result: any = await getUsersAdmin();
+      console.log(result);
       const newUserToShow =
         result.usuarios &&
         result.usuarios.map((user: any) => {
@@ -52,6 +60,7 @@ export const UserTab = () => {
             dni: user.dni,
             email: user.email,
             telefono: user.telefono,
+            estado: user.estado,
             acciones: ActionTab(
               result.usuarios.find((usr: any) => usr.id === user.id),
             ),
@@ -61,7 +70,7 @@ export const UserTab = () => {
       setUsersToShow(newUserToShow);
     } catch (error) {}
   };
-  const ActionTab = (user: JSON) => {
+  const ActionTab = (user: any) => {
     return (
       <div className="flex flex-row gap-4">
         <Tooltip label="Action 1">
@@ -75,28 +84,31 @@ export const UserTab = () => {
         <Tooltip label="Mas detalles">
           <UserIcon
             onClick={() => {
-              setUserSelected(user);
-              setOpenDetailUserModal(true);
+              openModalUsuarioEditar(user);
             }}
             className="w-[50px] cursor-pointer text-slate-500"
           />
         </Tooltip>
-        <Tooltip label="Editar">
-          <PencilIcon
-            onClick={() => {
-              handleClick(user);
-            }}
-            className="w-[50px] cursor-pointer text-slate-500"
-          />
-        </Tooltip>
-        <Tooltip label="Bloquear">
-          <TrashIcon
-            onClick={() => {
-              openUserModalBlock(user);
-            }}
-            className="w-[50px] cursor-pointer text-slate-500"
-          />
-        </Tooltip>
+        {user.estado === 'Activo' && (
+          <Tooltip label="Editar">
+            <PencilIcon
+              onClick={() => {
+                handleClick(user);
+              }}
+              className="w-[50px] cursor-pointer text-slate-500"
+            />
+          </Tooltip>
+        )}
+        {user.estado === 'Activo' && (
+          <Tooltip label="Bloquear">
+            <TrashIcon
+              onClick={() => {
+                openUserModalBlock(user);
+              }}
+              className="w-[50px] cursor-pointer text-slate-500"
+            />
+          </Tooltip>
+        )}
       </div>
     );
   };
