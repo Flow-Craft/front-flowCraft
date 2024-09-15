@@ -10,7 +10,8 @@ interface RequestOptions {
 }
 
 class FlowCraftAPIMethod {
-  private baseURL: string = 'http://localhost:5148/api/';
+  // public baseURL: string = 'http://192.168.1.20:5148/api/';
+  public baseURL: string = 'http://localhost:5148/api/';
 
   private getJWT(response: Response) {
     const jwtToken = response.headers.get('JWT');
