@@ -5,9 +5,9 @@ export const FlowTags = ({ title, description }: any) => {
   return (
     <>
       <Tag size="lg" colorScheme="red" borderRadius="full">
-        <div className="p-2">
-          <span className="p-2 font-bold">{title}</span>
-          {description}
+        <div className="p-2 flex flex-col text-center">
+          <span className="p-2 font-bold text-xl">{title}</span>
+          <span>{description}</span>
         </div>
       </Tag>
     </>
