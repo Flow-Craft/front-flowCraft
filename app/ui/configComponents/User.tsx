@@ -46,7 +46,7 @@ export const UserTab = () => {
     setOpenDetailUserModal(true);
   };
 
-  const handleAccept = () => {};
+  const handleAccept = () => { };
   const userToTab = async () => {
     try {
       const result: any = await getUsersAdmin();
@@ -68,7 +68,7 @@ export const UserTab = () => {
           };
         });
       setUsersToShow(newUserToShow);
-    } catch (error) {}
+    } catch (error) { }
   };
   const ActionTab = (user: any) => {
     return (

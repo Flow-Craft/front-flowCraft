@@ -18,7 +18,7 @@ export const FlowTable = ({
 }: any) => {
   return (
     <TableContainer>
-      <Table variant="simple">
+      <Table variant="simple" size="sm">
         {TableCaption && <TableCaption>{TableCaption}</TableCaption>}
         <Thead>
           <Tr>

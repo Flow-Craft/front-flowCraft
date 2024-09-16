@@ -29,7 +29,7 @@ export default function Page() {
         icon: <FolderIcon className="h-[100px] w-[100px]" />,
       },
       {
-        name: 'Config Generales',
+        name: 'Parámetros',
         icon: <CpuChipIcon className="h-[100px] w-[100px]" />,
       },
       {
@@ -66,8 +66,8 @@ export default function Page() {
             return (
               <div
                 className={`flex 
-                  h-[170px] 
-                  w-[160px] cursor-pointer flex-col items-center rounded-lg bg-blue-300 p-4 text-center text-white
+                  h-[150px] 
+                  w-[140px] cursor-pointer flex-col items-center rounded-lg bg-blue-300 p-4 text-center text-white
                   ${menuSelected === bt.name && 'bg-blue-600 shadow-lg shadow-cyan-500/50'}
                 `}
                 onClick={() => {
