@@ -395,13 +395,13 @@ export default function Page() {
             volver a activar su cuenta?{' '}
           </div>
         }
-        primaryTextButton="No"
-        secondaryTextButton="Si, estoy seguro"
+        primaryTextButton="Si, estoy seguro"
+        secondaryTextButton="No"
         isOpen={openSecondModal}
-        onAcceptModal={() => {
+        onCancelModal={() => {
           setSecondModal(false);
         }}
-        onCancelModal={cancelUser}
+        onAcceptModal={cancelUser}
       />
     </section>
   );
