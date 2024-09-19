@@ -22,7 +22,7 @@ export default function Page() {
         {disciplinas.map((dis: any) => {
           return (
             <div key={dis.id}>
-              <FlowTags title={dis.nombre} description={dis.descripcion}/>
+              <FlowTags title={dis.nombre} description={dis.descripcion} />
             </div>
           );
         })}

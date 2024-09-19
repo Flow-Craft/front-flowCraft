@@ -21,10 +21,18 @@ export const RegistryUserSchemaZod = z
       }),
     Contrasena: z
       .string()
-      .min(8, { message: "El campo 'Contrasena' no fue enviado" }),
+      .min(8, { message: "El campo 'Contrasena' no fue enviado" })
+      .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])/, {
+        message:
+          'La contraseña no cumple con los parámetros mínimos de seguridad. Debe contener un número, una letra mayúscula, una letra minúscula, y un símbolo.',
+      }),
     OtraContrasena: z
       .string()
-      .min(8, { message: "El campo 'OtraContrasena' no fue enviado" }),
+      .min(8, { message: "El campo 'OtraContrasena' no fue enviado" })
+      .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])/, {
+        message:
+          'La contraseña no cumple con los parámetros mínimos de seguridad. Debe contener un número, una letra mayúscula, una letra minúscula, y un símbolo.',
+      }),
     Direccion: z
       .string()
       .min(8, { message: 'La dirección debe tener al menos 8 caracteres' }),
@@ -94,10 +102,18 @@ export const verifyPasswords = z
   .object({
     Contrasena: z
       .string()
-      .min(8, { message: "El campo 'Contrasena' no fue enviado" }),
+      .min(8, { message: "El campo 'Contrasena' no fue enviado" })
+      .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])/, {
+        message:
+          'La contraseña no cumple con los parámetros mínimos de seguridad. Debe contener un número, una letra mayúscula, una letra minúscula, y un símbolo.',
+      }),
     OtraContrasena: z
       .string()
-      .min(8, { message: "El campo 'OtraContrasena' no fue enviado" }),
+      .min(8, { message: "El campo 'OtraContrasena' no fue enviado" })
+      .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])/, {
+        message:
+          'La contraseña no cumple con los parámetros mínimos de seguridad. Debe contener un número, una letra mayúscula, una letra minúscula, y un símbolo.',
+      }),
   })
   .refine((data) => data.Contrasena === data.OtraContrasena, {
     message: 'Las contraseñas no coinciden',

@@ -1,3 +1,4 @@
+'use client';
 import { AtSymbolIcon, KeyIcon } from '@heroicons/react/24/outline';
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
 import { Button } from './button';
@@ -6,8 +7,16 @@ import { ToasterComponent } from './toaster/ToasterComponent';
 import Link from 'next/link';
 
 export default function LoginForm() {
+  const handelLoginUser = async (e: any) => {
+    e.preventDefault();
+    const response = await loginUser({
+      email: e.target.email.value,
+      password: e.target.password.value,
+    });
+    console.log(response);
+  };
   return (
-    <form action={loginUser}>
+    <form onSubmit={handelLoginUser}>
       <div>
         <div className="w-full">
           <div>

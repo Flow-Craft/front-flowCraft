@@ -11,6 +11,7 @@ import {
   FunnelIcon,
 } from '@heroicons/react/24/outline';
 import { UserTab } from '@/app/ui/configComponents/User';
+import { DisciplinasTab } from '@/app/ui/configComponents/Disciplines';
 
 export default function Page() {
   const [menuSelected, setMenuSelected] = useState<string>('');
@@ -51,6 +52,8 @@ export default function Page() {
     switch (menuSelected) {
       case 'Usuario':
         return <UserTab />;
+      case 'Disciplinas':
+        return <DisciplinasTab />;
       default:
         <div />;
     }

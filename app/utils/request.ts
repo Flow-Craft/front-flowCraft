@@ -87,7 +87,7 @@ class FlowCraftAPIMethod {
 
   public post<T>(
     endpoint: string,
-    data: any,
+    data?: any,
     requireAuth: boolean = true,
   ): Promise<T> | void {
     let auth;

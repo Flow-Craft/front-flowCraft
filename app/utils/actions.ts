@@ -13,12 +13,13 @@ import {
 } from './models/user';
 import { handleFileConversion, parseDateWithOutTime } from './manageFile';
 
-export async function loginUser(formData: FormData) {
+export async function loginUser(formData: any) {
   try {
     const { Email, Contrasena } = loginUserSchema.parse({
-      Email: formData.get('email'),
-      Contrasena: formData.get('password'),
+      Email: formData.email,
+      Contrasena: formData.password,
     });
+    console.log(Email, Contrasena);
     const response: any = await FlowCraftAPI.post(
       'Users/Login',
       {
@@ -29,7 +30,7 @@ export async function loginUser(formData: FormData) {
     );
     if (response?.nombre)
       window.localStorage.setItem(LOCAL_STORAGE_NAME_KEY, response?.nombre);
-    window.location.href = '/inicio/noticias';
+    return response;
   } catch (error: any) {
     toast.error(error.message);
   }
@@ -299,4 +300,14 @@ export async function asociateUser() {
 
 export async function getUsersAdmin() {
   return await FlowCraftAPI.get('Users/GetUsuarios');
+}
+
+export async function getDisciplinasAdmin() {
+  return await FlowCraftAPI.get('DisciplinasYLecciones/GetDisciplinas');
+}
+
+export async function deleteDisciplineAction(id: string) {
+  return await FlowCraftAPI.post(
+    `DisciplinasYLecciones/EliminarDisciplina?id=${id}`,
+  );
 }
