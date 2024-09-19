@@ -19,20 +19,23 @@ export async function loginUser(formData: any) {
       Email: formData.email,
       Contrasena: formData.password,
     });
-    console.log(Email, Contrasena);
     const response: any = await FlowCraftAPI.post(
       'Users/Login',
       {
         Email,
         Contrasena,
+        ReaceptarTyC: formData.ReaceptarTyC,
       },
       false,
     );
-    if (response?.nombre)
-      window.localStorage.setItem(LOCAL_STORAGE_NAME_KEY, response?.nombre);
     return response;
   } catch (error: any) {
     toast.error(error.message);
+    if (
+      error.message === 'Usuario debe aceptar los nuevos términos y condiciones'
+    ) {
+      return { aceptarNuevaMenteTyC: true };
+    }
   }
 }
 
