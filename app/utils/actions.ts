@@ -314,3 +314,13 @@ export async function deleteDisciplineAction(id: string) {
     `DisciplinasYLecciones/EliminarDisciplina?id=${id}`,
   );
 }
+export async function createDisciplineAction(dis: any) {
+  return await FlowCraftAPI.post(`DisciplinasYLecciones/CrearDisciplina`, dis);
+}
+
+export async function editDisciplineAction(dis: any) {
+  return await FlowCraftAPI.post(
+    `DisciplinasYLecciones/ActualizarDisciplina`,
+    dis,
+  );
+}

@@ -20,6 +20,7 @@ export const FlowModal = ({
   secondaryTextButton = 'Cancelar',
   size = 'xl',
   scrollBehavior = 'inside',
+  disabled = false,
 }: any) => {
   return (
     <>
@@ -37,7 +38,12 @@ export const FlowModal = ({
           <ModalCloseButton />
           <ModalBody>{modalBody}</ModalBody>
           <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={onAcceptModal}>
+            <Button
+              colorScheme="blue"
+              isDisabled={disabled}
+              mr={3}
+              onClick={onAcceptModal}
+            >
               {primaryTextButton}
             </Button>
             {secondaryTextButton && (
