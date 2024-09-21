@@ -11,7 +11,11 @@ import {
   verifyPasswords,
   UpdateUserSchemaZod,
 } from './models/user';
-import { editCreateNewSchema } from './models/news';
+import {
+  editCreateNewSchema,
+  editNewSchema,
+  editWithoutFotoNewSchema,
+} from './models/news';
 import {
   formatDateToISOString,
   handleFileConversion,
@@ -359,4 +363,43 @@ export async function createNew(createdNew: any) {
   } catch (error: any) {
     toast.error(error.message);
   }
+}
+
+export async function editNew(editedNew: any) {
+  try {
+    const finalNew = JSON.parse(JSON.stringify(editedNew));
+    if (editedNew.foto.name) {
+      //convertir File to base 64
+      let file64 = await handleFileConversion(
+        // @ts-ignore
+        new File([editedNew.foto], editedNew.foto.name, {
+          // @ts-ignore
+          type: editedNew.foto.type,
+        }),
+      );
+      finalNew.Imagen = file64;
+    } else {
+      finalNew.Imagen = editedNew.foto;
+    }
+    finalNew.Id = editedNew.id;
+    finalNew.Titulo = editedNew.titulo;
+    finalNew.Descripcion = editedNew.descripcion;
+    finalNew.FechaInicio = editedNew.fechaInicio;
+    finalNew.FechaFin = editedNew.fechaFin;
+    delete finalNew.titulo;
+    delete finalNew.foto;
+    delete finalNew.descripcion;
+    delete finalNew.fechaInicio;
+    delete finalNew.fechaFin;
+    delete finalNew.id;
+    delete finalNew.imagen;
+    console.log(finalNew);
+    return await FlowCraftAPI.post(`Noticias/ActualizarNoticia`, finalNew);
+  } catch (error: any) {
+    toast.error(error.message);
+  }
+}
+
+export async function deleteNewAction(id: any) {
+  return await FlowCraftAPI.post(`Noticias/EliminarNoticia/${id}`);
 }

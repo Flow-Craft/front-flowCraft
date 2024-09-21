@@ -1,6 +1,6 @@
 import { InputWithLabel } from '@/app/ui/components/InputWithLabel/InputWithLabel';
 
-export const FormModal = ({ errors }) => {
+export const FormModal = ({ errors, newToEdit = null }) => {
   return (
     <section>
       <InputWithLabel
@@ -9,6 +9,7 @@ export const FormModal = ({ errors }) => {
         label="Titulo de la noticia"
         required
         wrong={!!errors.find((e) => e.path[0] === 'titulo')}
+        defaultValue={newToEdit?.titulo}
       />
       <InputWithLabel
         name={'imagenDeLaNoticia'}
@@ -22,15 +23,17 @@ export const FormModal = ({ errors }) => {
         type="date"
         label="Fecha Inicio"
         wrong={!!errors.find((e) => e.path[0] === 'fechaInicio')}
-        min={new Date().toISOString().split('T')[0]}
+        min={!newToEdit ? new Date().toISOString().split('T')[0] : undefined}
+        defaultValue={newToEdit?.fechaInicio?.split('T')[0]}
         required
       />
       <InputWithLabel
         name={'fechaFin'}
         type="date"
         label="Fecha Fin"
-        min={new Date().toISOString().split('T')[0]}
+        min={!newToEdit ? new Date().toISOString().split('T')[0] : undefined}
         wrong={!!errors.find((e) => e.path[0] === 'fechaFin')}
+        defaultValue={newToEdit?.fechaFin?.split('T')[0]}
         required
       />
       <label
@@ -43,6 +46,7 @@ export const FormModal = ({ errors }) => {
           name="descripcion"
           rows="5"
           cols="50"
+          defaultValue={newToEdit?.descripcion}
           className={`w-full ${!!errors.find((e) => e.path[0] === 'descripcion') ? 'border-red-600' : 'border-gray-200'}  resize-none rounded-lg border border-gray-300 p-2 focus:border-gray-500 focus:outline-none`}
         />
       </label>

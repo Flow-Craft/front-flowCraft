@@ -9,7 +9,12 @@ import React, {
 import { useRouter } from 'next/navigation';
 import { FlowCard } from '@/app/ui/components/FlowCard/FlowCard';
 import { ShareInSocialMedia } from '@/app/ui/components/ShareInSocialMedia/ShareInSocialMedia';
-import { createNew, getNewsAction } from '@/app/utils/actions';
+import {
+  createNew,
+  deleteNewAction,
+  editNew,
+  getNewsAction,
+} from '@/app/utils/actions';
 import { AUTORIZATION_KEY } from '@/app/utils/const';
 import { FlowModal } from '@/app/ui/components/FlowModal/FlowModal';
 import { Button } from '@/app/ui/button';
@@ -23,7 +28,11 @@ export default function Page() {
   const [news, setNews] = useState([]);
   const [filteredNews, setFilteredNews] = useState([]);
   const [first, setFirst] = useState(false);
+  const [second, setSecond] = useState(false);
   const [errors, setErrors] = useState<ZodIssue[]>([]);
+  const [newToEdit, setNewToEdit] = useState<any>(null);
+  const [newToDelete, setNewToDelete] = useState<any>(null);
+
   const tituloRef = useRef<any>(null);
   const fechaInicioRef = useRef<any>(null);
   const fechaFinRef = useRef<any>(null);
@@ -52,21 +61,27 @@ export default function Page() {
             <ShareInSocialMedia newID={nw.id} />
           </section>
           {edit && (
-            <section className="absolute right-10 top-0 z-20">
-              <PencilIcon
-                onClick={() => {
-                  edit(nw.id);
-                }}
-              />
+            <section className="relative bg-slate-400">
+              <div className="absolute bottom-[-40px] right-11 flex items-center justify-center rounded-full bg-gray-600 p-2">
+                <PencilIcon
+                  className="h-[24px] w-[24px] cursor-pointer text-white"
+                  onClick={() => {
+                    edit(nw.id);
+                  }}
+                />
+              </div>
             </section>
           )}
           {allowDel && (
-            <section className="absolute right-0 top-0 z-20">
-              <TrashIcon
-                onClick={() => {
-                  allowDel(nw.id);
-                }}
-              />
+            <section className="relative bg-slate-400">
+              <div className="absolute bottom-[-40px] left-0 flex items-center justify-center rounded-full bg-gray-600 p-2">
+                <TrashIcon
+                  className="h-[24px] w-[24px] cursor-pointer text-white"
+                  onClick={() => {
+                    allowDel(nw.id);
+                  }}
+                />
+              </div>
             </section>
           )}
           <section
@@ -86,9 +101,28 @@ export default function Page() {
     [news],
   );
 
-  const onEditNew = (e: any) => {};
+  const onEditNew = (e: any) => {
+    const newToEdit = news.find((nw: any) => nw.id === e);
+    setNewToEdit(newToEdit);
+    setFirst(true);
+  };
 
-  const onDeleteNew = (e: any) => {};
+  const onDeleteNew = (e: any) => {
+    setNewToDelete(e);
+    setSecond(true);
+  };
+
+  const deleteNew = async () => {
+    try {
+      await deleteNewAction(newToDelete);
+      toast.success('Exito');
+      setSecond(false);
+      setNewToDelete(null);
+      getNews();
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+  };
 
   const CardMap = useCallback(
     (nw: any) => {
@@ -98,26 +132,55 @@ export default function Page() {
     },
     [news],
   );
-  const onCreateNew = async (e: any) => {
-    const fechaInicio = e.target.fechaInicio.value
-      ? new Date(e.target.fechaInicio.value)
-      : null;
-    const fechaFin = e.target.fechaFin.value
-      ? new Date(e.target.fechaFin.value)
-      : null;
-    const result: any = await createNew({
-      titulo: e.target.titulo.value,
-      foto: e.target.imagenDeLaNoticia.files[0],
-      fechaInicio: fechaInicio,
-      fechaFin: fechaFin,
-      descripcion: e.target.descripcion.value,
-    });
-    if (result.error) {
-      return setErrors(result.errors);
+
+  const EditNew = async (e: any) => {
+    try {
+      const fechaInicio = e.target.fechaInicio.value
+        ? e.target.fechaInicio.value
+        : newToEdit.fechaInicio;
+      const fechaFin = e.target.fechaFin.value
+        ? e.target.fechaFin.value
+        : newToEdit.fechaFin;
+      await editNew({
+        ...newToEdit,
+        id: newToEdit.id,
+        titulo: e.target.titulo.value,
+        foto: e.target.imagenDeLaNoticia.files[0] || newToEdit.imagen,
+        fechaInicio: fechaInicio,
+        fechaFin: fechaFin,
+        descripcion: e.target.descripcion.value,
+      });
+      toast.success('Noticia editada con exito');
+      setFirst(false);
+      getNews();
+    } catch (error: any) {
+      toast.error(error.message);
     }
-    setErrors([]);
-    toast.success('Noticia creada con exito');
-    setFirst(false);
+  };
+  const onCreateNew = async (e: any) => {
+    try {
+      const fechaInicio = e.target.fechaInicio.value
+        ? new Date(e.target.fechaInicio.value)
+        : null;
+      const fechaFin = e.target.fechaFin.value
+        ? new Date(e.target.fechaFin.value)
+        : null;
+      const result: any = await createNew({
+        titulo: e.target.titulo.value,
+        foto: e.target.imagenDeLaNoticia.files[0],
+        fechaInicio: fechaInicio,
+        fechaFin: fechaFin,
+        descripcion: e.target.descripcion.value,
+      });
+      if (result.error) {
+        return setErrors(result.errors);
+      }
+      setErrors([]);
+      toast.success('Noticia creada con exito');
+      setFirst(false);
+    } catch (error: any) {
+      toast.error(error.message);
+    }
   };
   function filterNews(e: any) {
     e.preventDefault();
@@ -209,16 +272,30 @@ export default function Page() {
         })}
       </div>
       <FlowModal
-        title="Usuario"
-        modalBody={<FormModal errors={errors} />}
-        primaryTextButton="Crear"
+        title="Noticia"
+        modalBody={<FormModal errors={errors} newToEdit={newToEdit} />}
+        primaryTextButton={newToEdit ? 'Editar' : 'Crear'}
         isOpen={first}
         type="submit"
         scrollBehavior="outside"
-        onAcceptModal={onCreateNew}
+        onAcceptModal={newToEdit ? EditNew : onCreateNew}
         onCancelModal={() => {
           setFirst(false);
           setErrors([]);
+          setNewToEdit({});
+        }}
+      />
+      <FlowModal
+        title="Noticia"
+        modalBody={<>¿Esta seguro que desea eliminar esta noticia</>}
+        primaryTextButton={'Si'}
+        isOpen={second}
+        scrollBehavior="outside"
+        onAcceptModal={deleteNew}
+        onCancelModal={() => {
+          setSecond(false);
+          setErrors([]);
+          setNewToEdit({});
         }}
       />
       <Toaster />

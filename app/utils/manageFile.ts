@@ -28,6 +28,7 @@ export function parseDateWithOutTime(fechaStr: string) {
 }
 
 export function formatDateToISOString(date: Date) {
+  if (!date) return null;
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, '0'); // meses de 0 a 11
   const day = String(date.getDate()).padStart(2, '0');
