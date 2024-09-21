@@ -5,9 +5,11 @@ import { FlowCard } from '@/app/ui/components/FlowCard/FlowCard';
 import { ShareInSocialMedia } from '@/app/ui/components/ShareInSocialMedia/ShareInSocialMedia';
 import { getNewsAction } from '@/app/utils/actions';
 import { AUTORIZATION_KEY } from '@/app/utils/const';
+import { FlowModal } from '@/app/ui/components/FlowModal/FlowModal';
 
 export default function Page() {
   const [news, setNews] = useState([]);
+  const [first, setFirst] = useState(false)
   const router = useRouter();
   const getNews = useCallback(async () => {
     const result: any = await getNewsAction();
@@ -48,6 +50,9 @@ export default function Page() {
     },
     [news],
   );
+  const handleSubmit = (e:any) =>{
+    console.log("e",e.target.test.value)
+  }
 
   useEffect(() => {
     getNews();
@@ -55,6 +60,25 @@ export default function Page() {
   return (
     <main className="flex min-h-screen flex-col p-2">
       <div className="mt-6 self-start px-9 text-3xl font-bold">Noticias</div>
+      <button onClick={()=>{setFirst(true)}}>testT</button>
+      <FlowModal
+        title={`test`}
+        modalBody={<div>
+          <input
+            name="test"
+            type="text"
+
+          />
+          </div>}
+        primaryTextButton="¿Esta seguro que desea eliminar esta disciplina?"
+        isOpen={first}
+        scrollBehavior="outside"
+        onAcceptModal={handleSubmit}
+        onCancelModal={() => {
+          setFirst(false)
+        }}
+        type="submit"
+      />
       <div className="mt-4 flex grow flex-col gap-4  p-7 md:flex-row">
         {news?.map((nw: any) => {
           return (

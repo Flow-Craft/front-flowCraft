@@ -21,7 +21,13 @@ export const FlowModal = ({
   size = 'xl',
   scrollBehavior = 'inside',
   disabled = false,
+  type="button"
 }: any) => {
+
+  const onSubmitForm = (e:any) =>{
+    e.preventDefault()
+    onAcceptModal(e)
+  }
   return (
     <>
       <Modal
@@ -36,13 +42,15 @@ export const FlowModal = ({
         <ModalContent>
           <ModalHeader>{title}</ModalHeader>
           <ModalCloseButton />
+          <form onSubmit={type==="submit"? onSubmitForm : undefined}>
           <ModalBody>{modalBody}</ModalBody>
           <ModalFooter>
             <Button
               colorScheme="blue"
               isDisabled={disabled}
               mr={3}
-              onClick={onAcceptModal}
+              type={type}
+              onClick={type==="submit"? undefined : onAcceptModal}
             >
               {primaryTextButton}
             </Button>
@@ -52,6 +60,7 @@ export const FlowModal = ({
               </Button>
             )}
           </ModalFooter>
+          </form>
         </ModalContent>
       </Modal>
     </>
