@@ -52,11 +52,11 @@ y la de abajo para poder restaurar backups directamente en el contenedor
 
 -- Restaurar la base de datos
 USE master;
-RESTORE DATABASE [flow]
-FROM DISK = N'/var/opt/mssql/backup/flow.bak'
+RESTORE DATABASE [flowCraft]
+FROM DISK = N'/var/opt/mssql/backup/flowCraft.bak'
 WITH REPLACE,
-MOVE 'flow' TO '/var/opt/mssql/data/flow.mdf',
-MOVE 'flow_log' TO '/var/opt/mssql/data/flow.ldf';
+MOVE 'flowCraft' TO '/var/opt/mssql/data/flowCraft.mdf',
+MOVE 'flowCraft_log' TO '/var/opt/mssql/data/flowCraft_log.ldf';
 
 dotnet build
 dotnet run
@@ -77,3 +77,10 @@ en la raiz del proyecto de backend solo para linux
 
 //Excalidraw
 https://excalidraw.com/#json=KS4i_r1UgdXQosLEwNVdb,oUVPDZZ27cT7MvAwpNxB0Q
+
+
+// puede que al intentar ejecutar el contenedor de sql de un error al intentar escribir en la carpeta base de datos
+sudo chmod -R 777 ./backups
+sudo chmod -R 777 ./database
+
+con estos comandos se le da permiso al contenedor para escribir.

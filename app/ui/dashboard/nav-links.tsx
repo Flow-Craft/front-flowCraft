@@ -26,7 +26,7 @@ import { AquiVieneFlow } from '../components/AquiVieneFlow/AquiVieneFlow';
 // Map of links to display in the side navigation.
 // Depending on the size of the application, this would be stored in a database.
 const links = [
-  { name: 'Noticias', href: '/v1/noticias', icon: NewspaperIcon },
+  { name: 'Noticias', href: '/inicio/noticias', icon: NewspaperIcon },
   {
     name: 'Reservas',
     href: '/inicio/reservas',

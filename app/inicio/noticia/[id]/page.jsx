@@ -6,19 +6,18 @@ import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 export default function Page() {
-  const [news, setNews] = useState<any>({});
+  const [news, setNews] = useState({});
   const params = useParams();
   const { id } = params;
   const router = useRouter();
-  const getNewByID = async (id: any) => {
+  const getNewByID = async (id) => {
     const result = await getNewsByIdAction(id);
-    console.log(result);
     setNews(result);
   };
   useEffect(() => {
     const token = window.localStorage.getItem(AUTORIZATION_KEY);
-    if(token){
-      router.push(`/inicio/noticia/${id}`);
+    if(!token){
+      router.push(`/noticia/${id}`);
     }
     getNewByID(id);
   }, [id]);
@@ -35,7 +34,7 @@ export default function Page() {
         </div>
       </div>
       <section className="">
-        {news?.['descripcion']?.split('\n').map((pf: any, index: any) => (
+        {news?.['descripcion']?.split('\n').map((pf, index) => (
           <p key={index} className="mb-6">
             {pf}
           </p>
