@@ -64,15 +64,18 @@ dotnet run
 esto va en un archivo llamado appsettings.Development.json
 en la raiz del proyecto de backend solo para linux
 {
-"ConnectionStrings": {
-"flowCraft": "Server=localhost,1433;Database=flowCraft;User Id=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=true;"
-},
-"Logging": {
-"LogLevel": {
-"Default": "Information",
-"Microsoft.AspNetCore": "Warning"
-}
-}
+    "ApiSettings": {
+    "secretToken": "Muchaaaachos ahora nos volvimo a ilusionar, quiero ganar la tercera, quiero ser campeon mundial"
+    },
+    "ConnectionStrings": {
+        "flowCraft": "Server=localhost,1433;Database=flowCraft;User Id=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=true;"
+    },
+    "Logging": {
+        "LogLevel": {
+        "Default": "Information",
+        "Microsoft.AspNetCore": "Warning"
+        }
+    }
 }
 
 //Excalidraw
