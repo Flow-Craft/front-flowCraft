@@ -64,23 +64,22 @@ dotnet run
 esto va en un archivo llamado appsettings.Development.json
 en la raiz del proyecto de backend solo para linux
 {
-    "ApiSettings": {
-    "secretToken": "Muchaaaachos ahora nos volvimo a ilusionar, quiero ganar la tercera, quiero ser campeon mundial"
-    },
-    "ConnectionStrings": {
-        "flowCraft": "Server=localhost,1433;Database=flowCraft;User Id=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=true;"
-    },
-    "Logging": {
-        "LogLevel": {
-        "Default": "Information",
-        "Microsoft.AspNetCore": "Warning"
-        }
-    }
+"ApiSettings": {
+"secretToken": "Muchaaaachos ahora nos volvimo a ilusionar, quiero ganar la tercera, quiero ser campeon mundial"
+},
+"ConnectionStrings": {
+"flowCraft": "Server=localhost,1433;Database=flowCraft;User Id=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=true;"
+},
+"Logging": {
+"LogLevel": {
+"Default": "Information",
+"Microsoft.AspNetCore": "Warning"
+}
+}
 }
 
 //Excalidraw
 https://excalidraw.com/#json=KS4i_r1UgdXQosLEwNVdb,oUVPDZZ27cT7MvAwpNxB0Q
-
 
 // puede que al intentar ejecutar el contenedor de sql de un error al intentar escribir en la carpeta base de datos
 sudo chmod -R 777 ./backups

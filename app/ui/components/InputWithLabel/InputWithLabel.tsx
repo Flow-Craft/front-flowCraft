@@ -14,6 +14,7 @@ interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
   value?: any;
   iconClassName?: string;
   onClickIcon?: any;
+  ref?: any;
 }
 
 export const InputWithLabel = ({
@@ -29,6 +30,7 @@ export const InputWithLabel = ({
   wrong = false,
   iconClassName = 'cursor-pointer absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900',
   onClickIcon,
+  ref = null,
   ...props
 }: Props) => {
   return (
@@ -55,6 +57,7 @@ export const InputWithLabel = ({
           name={name}
           placeholder={placeHolder}
           defaultValue={defaultValue}
+          ref={ref}
           {...props}
         />
         {Icon && (

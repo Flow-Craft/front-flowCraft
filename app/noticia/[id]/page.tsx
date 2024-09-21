@@ -17,7 +17,7 @@ export default function Page() {
   };
   useEffect(() => {
     const token = window.localStorage.getItem(AUTORIZATION_KEY);
-    if(token){
+    if (token) {
       router.push(`/inicio/noticia/${id}`);
     }
     getNewByID(id);

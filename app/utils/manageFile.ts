@@ -26,3 +26,11 @@ export function parseDateWithOutTime(fechaStr: string) {
   const [year, month, day] = fechaStr.split('-');
   return `${year}-${month}-${day}T00:00:00`;
 }
+
+export function formatDateToISOString(date: Date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // meses de 0 a 11
+  const day = String(date.getDate()).padStart(2, '0');
+
+  return `${year}-${month}-${day}T00:00:00`;
+}

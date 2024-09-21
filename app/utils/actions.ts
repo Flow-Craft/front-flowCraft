@@ -11,7 +11,12 @@ import {
   verifyPasswords,
   UpdateUserSchemaZod,
 } from './models/user';
-import { handleFileConversion, parseDateWithOutTime } from './manageFile';
+import { editCreateNewSchema } from './models/news';
+import {
+  formatDateToISOString,
+  handleFileConversion,
+  parseDateWithOutTime,
+} from './manageFile';
 
 export async function loginUser(formData: any) {
   try {
@@ -323,4 +328,35 @@ export async function editDisciplineAction(dis: any) {
     `DisciplinasYLecciones/ActualizarDisciplina`,
     dis,
   );
+}
+
+export async function createNew(createdNew: any) {
+  try {
+    const result = editCreateNewSchema.safeParse(createdNew);
+    if (!result.success) {
+      return { error: true, errors: result.error.errors };
+    }
+    const { data: nw } = result;
+    const finalNew = JSON.parse(JSON.stringify(nw));
+    //convertir File to base 64
+    let file64 = await handleFileConversion(
+      new File([nw.foto], nw.foto.name, {
+        type: nw.foto.type,
+      }),
+    );
+    finalNew.Titulo = nw.titulo;
+    finalNew.Descripcion = nw.descripcion;
+    finalNew.Imagen = file64;
+    finalNew.FechaInicio = formatDateToISOString(nw.fechaInicio);
+    finalNew.FechaFin = formatDateToISOString(nw.fechaFin);
+    delete finalNew.titulo;
+    delete finalNew.foto;
+    delete finalNew.descripcion;
+    delete finalNew.fechaInicio;
+    delete finalNew.fechaFin;
+    console.log(finalNew);
+    return await FlowCraftAPI.post(`Noticias/CrearNoticia`, finalNew);
+  } catch (error: any) {
+    toast.error(error.message);
+  }
 }
