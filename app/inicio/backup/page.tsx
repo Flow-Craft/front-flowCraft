@@ -13,14 +13,15 @@ import {
   CardHeader,
   CardBody,
   CardFooter,
+  useToast,
 } from '@chakra-ui/react';
 import { useRef } from 'react';
 
 export default function Page() {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const inputRef2 = useRef<HTMLInputElement | null>(null);
+  const toast = useToast();
 
-  //TODO arreglar la condicional
   const handleButtonClick = () => {
     inputRef.current?.click();
   };
@@ -28,35 +29,58 @@ export default function Page() {
     inputRef2.current?.click();
   };
 
-  // Función para manejar el archivo subido
-  const handleFileChange = async (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    const file = event.target.files?.[0];
-    if (file && file.type === 'application/pdf') {
-      const formData = new FormData();
-      formData.append('file', file);
+  const handleFileChange =
+    (expectedFileName: string) =>
+    async (event: React.ChangeEvent<HTMLInputElement>) => {
+      const file = event.target.files?.[0];
+      if (file) {
+        if (file.type !== 'application/pdf') {
+          toast({
+            title: 'Error',
+            description: 'El archivo debe ser un PDF.',
+            status: 'error',
+            duration: 3000,
+            isClosable: true,
+          });
+          return;
+        }
 
-      const res = await fetch('http://localhost:5148/api/backup/subirbackup', {
-        method: 'POST',
-        body: formData,
-      });
-      console.log(await res.json())
-    }
-  };
+        if (file.name !== expectedFileName) {
+          toast({
+            title: 'Error',
+            description: `El archivo debe llamarse "${expectedFileName}".`,
+            status: 'error',
+            duration: 3000,
+            isClosable: true,
+          });
+          return;
+        }
 
-  const handleFileChange2 = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file && file.type === 'application/pdf') {
-      const formData = new FormData()
-      formData.append('file', file)
-      const res = await fetch('http://localhost:5148/api/backup/subirbackup', {
-        method: "POST",
-        body: formData
-      })
-      console.log( await res.json())
-    }
-  };
+        const formData = new FormData();
+        formData.append('file', file);
+
+        try {
+          const res = await fetch(
+            'http://localhost:5148/api/backup/subirbackup',
+            {
+              method: 'POST',
+              body: formData,
+            },
+          );
+          const result = await res.json();
+          console.log(result);
+          toast({
+            title: 'Éxito',
+            description: `El archivo "${expectedFileName}" se ha subido correctamente.`,
+            status: 'success',
+            duration: 3000,
+            isClosable: true,
+          });
+        } catch (error) {
+          console.error('Error al subir el archivo:', error);
+        }
+      }
+    };
   return (
     <Box minH="100vh" bg="white">
       <Flex>
@@ -85,20 +109,13 @@ export default function Page() {
                     type="file"
                     accept="application/pdf"
                     ref={inputRef}
-                    onChange={handleFileChange}
+                    onChange={handleFileChange('GENERAR_BACKUP.pdf')}
                   />
                 </Flex>
                 <Flex justify="space-between" align="center">
                   <Text>
                     LINK A LA GUIA PARA RESTAURAR UN BACKUP EN EL SISTEMA
                   </Text>
-                  <Input
-                    display="none"
-                    type="file"
-                    accept="application/pdf"
-                    ref={inputRef2}
-                    onChange={handleFileChange2}
-                  />
                   <Button
                     variant="outline"
                     size="sm"
@@ -106,15 +123,22 @@ export default function Page() {
                   >
                     RESTAURAR BACKUP.PDF
                   </Button>
+                  <Input
+                    display="none"
+                    type="file"
+                    accept="application/pdf"
+                    ref={inputRef2}
+                    onChange={handleFileChange('RESTAURAR_BACKUP.pdf')}
+                  />
                 </Flex>
                 <Flex justify="flex-end" mt={4}>
-                  <Button
+                  {/* <Button
                     bg="blue.500"
                     color="white"
                     _hover={{ bg: 'blue.700' }}
                   >
                     Guardar
-                  </Button>
+                  </Button> */}
                 </Flex>
               </VStack>
             </CardBody>
