@@ -45,6 +45,9 @@ export async function loginUser(formData: any) {
     ) {
       return { aceptarNuevaMenteTyC: true };
     }
+    if (error.message === 'Contraseña vencida') {
+      return { debeCambiarContraseña: true };
+    }
   }
 }
 
@@ -265,6 +268,29 @@ export async function changePassword(
   }
 }
 
+export async function changePasswordWithoutCode(
+  Contrasena: any,
+  OtraContrasena: any,
+  email: any,
+) {
+  try {
+    const result = verifyPasswords.safeParse({ Contrasena, OtraContrasena });
+    if (!result.success) {
+      return { error: true, errors: result.error.errors };
+    }
+    await FlowCraftAPI.post(
+      'Users/ReestablecerContrasena',
+      { NuevaPassword: Contrasena, Mail: email },
+      false,
+    );
+    return;
+  } catch (error: any) {
+    toast.dismiss();
+    toast.error(error.message);
+    return { error: true };
+  }
+}
+
 export async function getUserToShow() {
   try {
     return await FlowCraftAPI.get('Users/GetMiPerfil');
@@ -298,6 +324,14 @@ export async function UpdateUser(UpdateUserSchema: any, setErrors: any) {
     userToEdit.FechaNacimiento,
   );
   await FlowCraftAPI.post('Users/EditarMiPerfil', finalUserToSend);
+}
+
+export async function getUserByDni(dni: any) {
+  return await FlowCraftAPI.get(`Users/RecuperarUsuarioByDni?dni=${dni}`);
+}
+
+export async function clearPasswordByEmail(email: any) {
+  return await FlowCraftAPI.post(`Users/BlanquearContrasena?mail=${email}`);
 }
 
 export async function cancelUserAction() {
@@ -393,7 +427,6 @@ export async function editNew(editedNew: any) {
     delete finalNew.fechaFin;
     delete finalNew.id;
     delete finalNew.imagen;
-    console.log(finalNew);
     return await FlowCraftAPI.post(`Noticias/ActualizarNoticia`, finalNew);
   } catch (error: any) {
     toast.error(error.message);

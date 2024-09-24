@@ -3,7 +3,11 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { InputWithLabel } from '../components/InputWithLabel/InputWithLabel';
 import { SelectWithLabel } from '../components/SelectWithLabel/SelectWithLabel';
 import { FlowTable } from '../components/FlowTable/FlowTable';
-import { createTimer, getUsersAdmin } from '@/app/utils/actions';
+import {
+  clearPasswordByEmail,
+  createTimer,
+  getUsersAdmin,
+} from '@/app/utils/actions';
 import {
   PencilIcon,
   TagIcon,
@@ -51,6 +55,7 @@ export const UserTab = () => {
 
   const blanquearContraseña = async (user: any) => {
     try {
+      await clearPasswordByEmail(user.email);
       toast.success(`se blanqueo la contraseña del usuario ${user.email}`);
     } catch (error: any) {
       toast.error(error.message);

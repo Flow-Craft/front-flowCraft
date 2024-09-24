@@ -2,18 +2,31 @@
 import { AtSymbolIcon, KeyIcon } from '@heroicons/react/24/outline';
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
 import { Button } from './button';
-import { createTimer, getTyCToBack, loginUser } from '../utils/actions';
+import {
+  changePasswordWithoutCode,
+  createTimer,
+  getTyCToBack,
+  getUserByDni,
+  loginUser,
+} from '../utils/actions';
 import { ToasterComponent } from './toaster/ToasterComponent';
 import Link from 'next/link';
 import { FlowModal } from './components/FlowModal/FlowModal';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { LOCAL_STORAGE_NAME_KEY } from '../utils/const';
 import toast from 'react-hot-toast';
+import { InputWithLabel } from './components/InputWithLabel/InputWithLabel';
+import { ChangePasswordLogin } from './dashboard/changePasswordLogin';
 
 export default function LoginForm() {
   const [tyC, setTyC] = useState<{ tyc: string }>({ tyc: '' });
   const [openModal, setOpenModal] = useState(false);
+  const [openModalfindUser, setOpenModalfindUser] = useState(false);
+  const [openChangePassword, setOpenChangePassword] = useState(false);
+  const [userName, setUserName] = useState<string>('');
+  const [userEmail, setUserEmail] = useState<string>('');
   const [userLoged, setUserLoged] = useState({});
+  const [errors, setErrors] = useState([]);
   const getTyC = useCallback(async () => {
     const result: any = await getTyCToBack();
     setTyC(result);
@@ -47,23 +60,74 @@ export default function LoginForm() {
       'Debes aceptar los nuevos términos y condiciones para continuar',
     );
   };
+
+  const handleCancelFindUser = () => {
+    setOpenModalfindUser(false);
+  };
+
+  const getUserEmail = async (e: any) => {
+    try {
+      console.log(e.target.dni.value);
+      const result: any = await getUserByDni(e.target.dni.value);
+      if (result?.email) {
+        const [username, domain] = result?.email.split('@');
+        const anonymizedUsername =
+          username[0] +
+          '*'.repeat(username.length - 2) +
+          username[username.length - 1];
+        setUserName(anonymizedUsername + '@' + domain);
+      }
+    } catch (error: any) {
+      toast.error('DNI incorrecto');
+    }
+  };
+
+  const handleCloseWithUserName = () => {
+    setUserName('');
+    setOpenModalfindUser(false);
+  };
+
+  const ChangePassword = async (e: any) => {
+    setErrors([]);
+    const result: any = await changePasswordWithoutCode(
+      e.target.Contrasena.value,
+      e.target.OtraContrasena.value,
+      userEmail,
+    );
+    if (result?.error) {
+      setErrors(result.errors);
+    } else {
+      toast.success(
+        'Su contraseña fue cambiada correctamente. Por favor vuelva a ingresar sus datos.',
+      );
+      setOpenChangePassword(false);
+      setUserEmail('');
+    }
+  };
+
   const handelLoginUser = async (e: any) => {
     e.preventDefault();
     const response = await loginUser({
       email: e.target.email.value,
       password: e.target.password.value,
     });
-    if (response?.nombre) {
+
+    if (response?.usuario?.nombre) {
       window.localStorage.setItem(LOCAL_STORAGE_NAME_KEY, response?.nombre);
       window.location.replace('/');
     }
 
-    if (response.aceptarNuevaMenteTyC) {
+    if (response?.aceptarNuevaMenteTyC) {
       setUserLoged({
         email: e.target.email.value,
         password: e.target.password.value,
       });
       setOpenModal(true);
+    }
+
+    if (response?.debeCambiarContraseña) {
+      setOpenChangePassword(true);
+      setUserEmail(e.target.email.value);
     }
   };
   useEffect(() => {
@@ -92,6 +156,16 @@ export default function LoginForm() {
                 />
                 <AtSymbolIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
               </div>
+            </div>
+            <div className="mt-4 flex flex-row justify-end">
+              <a
+                onClick={() => {
+                  setOpenModalfindUser(true);
+                }}
+                className="pointer hover:text-blue-600"
+              >
+                no recuerdo mi usuario
+              </a>
             </div>
             <div className="mt-4">
               <label
@@ -130,12 +204,44 @@ export default function LoginForm() {
         <ToasterComponent position="top-center" />
       </form>
       <FlowModal
+        title={!userName ? 'Por favor ingrese su DNI' : 'Su usuario es:'}
+        isOpen={openModalfindUser}
+        modalBody={
+          <div>
+            {!userName ? (
+              <InputWithLabel name={'dni'} type="number" min={1} />
+            ) : (
+              <div>{userName}</div>
+            )}
+          </div>
+        }
+        onAcceptModal={!userName ? getUserEmail : handleCloseWithUserName}
+        onCancelModal={handleCancelFindUser}
+        primaryTextButton={!userName ? 'Recuperar mi usuario' : 'Gracias!'}
+        type="submit"
+      />
+      <FlowModal
         title="Debe aceptar los nuevos terminos y condiciones"
         isOpen={openModal}
         modalBody={tyc}
         onAcceptModal={LoginAgain}
         onCancelModal={handleCancel}
         primaryTextButton="Aceptar terminos y condiciones"
+      />
+      <FlowModal
+        title="Debe actualizar su contraseña"
+        isOpen={openChangePassword}
+        modalBody={
+          <div>
+            <ChangePasswordLogin errors={errors} />
+          </div>
+        }
+        onAcceptModal={ChangePassword}
+        onCancelModal={() => {
+          setOpenChangePassword(false);
+        }}
+        primaryTextButton="Actualizar"
+        type="submit"
       />
     </div>
   );
