@@ -36,6 +36,7 @@ export async function loginUser(formData: any) {
         ReaceptarTyC: formData.ReaceptarTyC,
       },
       false,
+      false
     );
     return response;
   } catch (error: any) {
@@ -44,9 +45,6 @@ export async function loginUser(formData: any) {
       error.message === 'Usuario debe aceptar los nuevos términos y condiciones'
     ) {
       return { aceptarNuevaMenteTyC: true };
-    }
-    if (error.message === 'Contraseña vencida') {
-      return { debeCambiarContraseña: true };
     }
   }
 }
@@ -272,6 +270,7 @@ export async function changePasswordWithoutCode(
   Contrasena: any,
   OtraContrasena: any,
   email: any,
+  jwt:any
 ) {
   try {
     const result = verifyPasswords.safeParse({ Contrasena, OtraContrasena });
@@ -279,9 +278,9 @@ export async function changePasswordWithoutCode(
       return { error: true, errors: result.error.errors };
     }
     await FlowCraftAPI.post(
-      'Users/ReestablecerContrasena',
-      { NuevaPassword: Contrasena, Mail: email },
-      false,
+      'Users/ReestablecerContrasenaPorVencimiento',
+      { NuevaPassword: Contrasena, Mail: email},
+      false,false,jwt
     );
     return;
   } catch (error: any) {
@@ -350,6 +349,10 @@ export async function getUsersAdmin() {
 
 export async function getDisciplinasAdmin() {
   return await FlowCraftAPI.get('DisciplinasYLecciones/GetDisciplinas');
+}
+
+export async function getPerfilesAdmin() {
+  return await FlowCraftAPI.get('Configuracion/GetPerfiles');
 }
 
 export async function deleteDisciplineAction(id: string) {

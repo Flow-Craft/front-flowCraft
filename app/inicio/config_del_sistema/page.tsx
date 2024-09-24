@@ -12,6 +12,8 @@ import {
 } from '@heroicons/react/24/outline';
 import { UserTab } from '@/app/ui/configComponents/User';
 import { DisciplinasTab } from '@/app/ui/configComponents/Disciplines';
+import { ProfilesTab } from '@/app/ui/configComponents/Profiles';
+
 
 export default function Page() {
   const [menuSelected, setMenuSelected] = useState<string>('');
@@ -54,6 +56,8 @@ export default function Page() {
         return <UserTab />;
       case 'Disciplinas':
         return <DisciplinasTab />;
+      case 'Perfiles':
+          return <ProfilesTab />;
       default:
         <div />;
     }

@@ -13,7 +13,7 @@ import { ToasterComponent } from './toaster/ToasterComponent';
 import Link from 'next/link';
 import { FlowModal } from './components/FlowModal/FlowModal';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { LOCAL_STORAGE_NAME_KEY } from '../utils/const';
+import { AUTORIZATION_KEY, LOCAL_STORAGE_NAME_KEY } from '../utils/const';
 import toast from 'react-hot-toast';
 import { InputWithLabel } from './components/InputWithLabel/InputWithLabel';
 import { ChangePasswordLogin } from './dashboard/changePasswordLogin';
@@ -24,7 +24,7 @@ export default function LoginForm() {
   const [openModalfindUser, setOpenModalfindUser] = useState(false);
   const [openChangePassword, setOpenChangePassword] = useState(false);
   const [userName, setUserName] = useState<string>('');
-  const [userEmail, setUserEmail] = useState<string>('');
+  const [userEmail, setUserEmail] = useState<any>('');
   const [userLoged, setUserLoged] = useState({});
   const [errors, setErrors] = useState([]);
   const getTyC = useCallback(async () => {
@@ -67,7 +67,6 @@ export default function LoginForm() {
 
   const getUserEmail = async (e: any) => {
     try {
-      console.log(e.target.dni.value);
       const result: any = await getUserByDni(e.target.dni.value);
       if (result?.email) {
         const [username, domain] = result?.email.split('@');
@@ -92,7 +91,8 @@ export default function LoginForm() {
     const result: any = await changePasswordWithoutCode(
       e.target.Contrasena.value,
       e.target.OtraContrasena.value,
-      userEmail,
+      userEmail.email,
+      userEmail.jwt
     );
     if (result?.error) {
       setErrors(result.errors);
@@ -111,10 +111,16 @@ export default function LoginForm() {
       email: e.target.email.value,
       password: e.target.password.value,
     });
-
     if (response?.usuario?.nombre) {
       window.localStorage.setItem(LOCAL_STORAGE_NAME_KEY, response?.nombre);
+      window.localStorage.setItem(AUTORIZATION_KEY, response.JWT);
       window.location.replace('/');
+    }
+
+    if(response?.error === 'Contraseña vencida'){
+      console.log(response)
+      setOpenChangePassword(true);
+      setUserEmail({email:e.target.email.value, jwt:response.JWT});
     }
 
     if (response?.aceptarNuevaMenteTyC) {
@@ -124,15 +130,10 @@ export default function LoginForm() {
       });
       setOpenModal(true);
     }
-
-    if (response?.debeCambiarContraseña) {
-      setOpenChangePassword(true);
-      setUserEmail(e.target.email.value);
-    }
   };
   useEffect(() => {
     getTyC();
-  }, []);
+  }, []);  
   return (
     <div>
       <form onSubmit={handelLoginUser}>
@@ -239,6 +240,7 @@ export default function LoginForm() {
         onAcceptModal={ChangePassword}
         onCancelModal={() => {
           setOpenChangePassword(false);
+          window.localStorage.clear()
         }}
         primaryTextButton="Actualizar"
         type="submit"
