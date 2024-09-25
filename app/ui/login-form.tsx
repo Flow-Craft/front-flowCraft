@@ -92,7 +92,7 @@ export default function LoginForm() {
       e.target.Contrasena.value,
       e.target.OtraContrasena.value,
       userEmail.email,
-      userEmail.jwt
+      userEmail.jwt,
     );
     if (result?.error) {
       setErrors(result.errors);
@@ -117,10 +117,10 @@ export default function LoginForm() {
       window.location.replace('/');
     }
 
-    if(response?.error === 'Contraseña vencida'){
-      console.log(response)
+    if (response?.error === 'Contraseña vencida') {
+      console.log(response);
       setOpenChangePassword(true);
-      setUserEmail({email:e.target.email.value, jwt:response.JWT});
+      setUserEmail({ email: e.target.email.value, jwt: response.JWT });
     }
 
     if (response?.aceptarNuevaMenteTyC) {
@@ -133,7 +133,7 @@ export default function LoginForm() {
   };
   useEffect(() => {
     getTyC();
-  }, []);  
+  }, []);
   return (
     <div>
       <form onSubmit={handelLoginUser}>
@@ -240,7 +240,7 @@ export default function LoginForm() {
         onAcceptModal={ChangePassword}
         onCancelModal={() => {
           setOpenChangePassword(false);
-          window.localStorage.clear()
+          window.localStorage.clear();
         }}
         primaryTextButton="Actualizar"
         type="submit"

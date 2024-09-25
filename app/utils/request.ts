@@ -25,7 +25,7 @@ class FlowCraftAPIMethod {
     endpoint: string,
     data: any = null,
     headers: HeadersInit = {},
-    saveJWT: boolean = true
+    saveJWT: boolean = true,
   ): Promise<T> {
     const url = `${this.baseURL}${endpoint}`;
     const options: any = {
@@ -44,11 +44,11 @@ class FlowCraftAPIMethod {
     try {
       const response = await fetch(url, options);
       // localhost manage
-      let returnJWT
-      if(saveJWT){
+      let returnJWT;
+      if (saveJWT) {
         this.getJWT(response);
-      }else{
-        returnJWT =  response.headers.get('JWT');
+      } else {
+        returnJWT = response.headers.get('JWT');
       }
 
       if (!response.ok) {
@@ -64,9 +64,9 @@ class FlowCraftAPIMethod {
 
       if (response.status !== 204) {
         try {
-          if(returnJWT){
-            const rst = await response.json()
-            return {JWT:returnJWT,...rst}
+          if (returnJWT) {
+            const rst = await response.json();
+            return { JWT: returnJWT, ...rst };
           }
           return await response.json();
         } catch (e) {
@@ -99,8 +99,8 @@ class FlowCraftAPIMethod {
     endpoint: string,
     data?: any,
     requireAuth: boolean = true,
-    saveJWT:boolean = true,
-    Jwt:string = ""
+    saveJWT: boolean = true,
+    Jwt: string = '',
   ): Promise<T> | void {
     let auth;
     if (requireAuth && !Jwt) {
@@ -109,8 +109,8 @@ class FlowCraftAPIMethod {
         Authorization: `Bearer ${token}`,
       };
     }
-    if(Jwt){
-      console.log("entre",Jwt)
+    if (Jwt) {
+      console.log('entre', Jwt);
       auth = {
         Authorization: `Bearer ${Jwt}`,
       };

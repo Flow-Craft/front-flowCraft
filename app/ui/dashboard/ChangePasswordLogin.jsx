@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { InputWithLabel } from '../components/InputWithLabel/InputWithLabel';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 
-export const ChangePasswordLogin = ({ errors  }) => {
+export const ChangePasswordLogin = ({ errors }) => {
   const [showPassword, setShowPassword] = React.useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
 

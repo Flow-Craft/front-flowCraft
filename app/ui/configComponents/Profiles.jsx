@@ -7,7 +7,7 @@ import { FlowModal } from '../components/FlowModal/FlowModal';
 import { Tooltip } from '@chakra-ui/react';
 import toast, { Toaster } from 'react-hot-toast';
 import EditCreateDisciplineModalForm from './Disciplines/EditCreateModalForm';
-import {getPerfilesAdmin} from '../../utils/actions';
+import { getPerfilesAdmin } from '../../utils/actions';
 import { formatDate } from '@/app/utils/functions';
 
 const HEADER_TABLE = [
@@ -147,10 +147,12 @@ export const ProfilesTab = () => {
             nombre: dis.nombrePerfil,
             descripcion: dis.descripcionPerfil,
             fechaCreacion: formatDate(dis.fechaCreacion),
-            fechaModificacion: dis.fechaModificacion ?formatDate(dis.fechaModificacion) : "",
-            fechaBaja: dis.fechaBaja ?formatDate(dis.fechaBaja) : "",
+            fechaModificacion: dis.fechaModificacion
+              ? formatDate(dis.fechaModificacion)
+              : '',
+            fechaBaja: dis.fechaBaja ? formatDate(dis.fechaBaja) : '',
             acciones: ActionTab(result.find((disc) => disc.id === dis.id)),
-            id:dis.id
+            id: dis.id,
           };
         });
       setProfilesToShow(newProfilesToShow);

@@ -14,7 +14,6 @@ import { UserTab } from '@/app/ui/configComponents/User';
 import { DisciplinasTab } from '@/app/ui/configComponents/Disciplines';
 import { ProfilesTab } from '@/app/ui/configComponents/Profiles';
 
-
 export default function Page() {
   const [menuSelected, setMenuSelected] = useState<string>('');
   const buttonsUser = useMemo(() => {
@@ -57,7 +56,7 @@ export default function Page() {
       case 'Disciplinas':
         return <DisciplinasTab />;
       case 'Perfiles':
-          return <ProfilesTab />;
+        return <ProfilesTab />;
       default:
         <div />;
     }

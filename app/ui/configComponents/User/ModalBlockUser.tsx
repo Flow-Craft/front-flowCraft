@@ -1,7 +1,8 @@
 import { formatDate } from '@/app/utils/functions';
 import React from 'react';
+import { InputWithLabel } from '../../components/InputWithLabel/InputWithLabel';
 
-export const ModalBlockUser = ({ userSelected }: any) => {
+export const ModalBlockUser = ({ userSelected, showReazon = false }: any) => {
   return (
     <section className="flex flex-col gap-2">
       <div className="self-center text-center">
@@ -14,6 +15,21 @@ export const ModalBlockUser = ({ userSelected }: any) => {
         </label>
       </div>
       <div>
+        {showReazon && (
+          <label
+            className="mb-3 mt-5 block text-lg font-medium text-gray-900"
+            htmlFor={'razon'}
+          >
+            Razon
+            <textarea
+              name="razon"
+              placeholder="Opcional"
+              rows={4}
+              cols={50}
+              className={`w-full resize-none rounded-lg border border-gray-300 p-2 focus:border-gray-500 focus:outline-none`}
+            />
+          </label>
+        )}
         <section className="flex flex-row gap-3">
           <label className="mb-3 mt-5 block text-lg font-bold text-gray-900">
             Email:

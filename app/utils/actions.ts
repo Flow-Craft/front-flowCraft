@@ -10,6 +10,7 @@ import {
   verifyEmailCode,
   verifyPasswords,
   UpdateUserSchemaZod,
+  RegistryUserByAdminSchemaZod,
 } from './models/user';
 import {
   editCreateNewSchema,
@@ -36,7 +37,7 @@ export async function loginUser(formData: any) {
         ReaceptarTyC: formData.ReaceptarTyC,
       },
       false,
-      false
+      false,
     );
     return response;
   } catch (error: any) {
@@ -117,12 +118,80 @@ export async function registryUser(RegistryUserSchema: any) {
   }
 }
 
+export const bloquearUsuarioAdmin = async (id: string, razon: string) => {
+  try {
+    await FlowCraftAPI.post('Users/BloquearUsuario', { Id: id, Razon: razon });
+  } catch (error: any) {
+    toast.error(error.message);
+  }
+};
+
+export const desbloquearUsuarioAdmin = async (id: string, razon: string) => {
+  try {
+    await FlowCraftAPI.post('Users/DesbloquearUsuario', {
+      Id: id,
+      Razon: razon,
+    });
+  } catch (error: any) {
+    toast.error(error.message);
+  }
+};
+
 export async function verifyRegistryUser(RegistryUserSchema: any) {
   try {
     const result = RegistryUserSchemaZod.safeParse(RegistryUserSchema);
     if (!result.success) {
       return { error: true, errors: result.error.errors };
     }
+  } catch (error: any) {
+    toast.dismiss();
+    toast.error(error.message);
+  }
+}
+
+export async function verifyRegistryUserByAdmin(RegistryUserSchema: any) {
+  try {
+    const result = RegistryUserByAdminSchemaZod.safeParse(RegistryUserSchema);
+    if (!result.success) {
+      return { error: true, errors: result.error.errors };
+    }
+    return result;
+  } catch (error: any) {
+    toast.dismiss();
+    toast.error(error.message);
+  }
+}
+
+export async function registrarUsuarioAdmin(userToCreate: any) {
+  try {
+    const fileType = userToCreate.FotoPerfilNo64.type;
+    const finalUserToSend = JSON.parse(JSON.stringify(userToCreate));
+    //convertir File to base 64
+    let file64 = await handleFileConversion(
+      new File(
+        [userToCreate.FotoPerfilNo64],
+        userToCreate.FotoPerfilNo64.name,
+        {
+          type: userToCreate.FotoPerfilNo64.type,
+        },
+      ),
+    );
+    finalUserToSend.FotoPerfil = file64;
+    finalUserToSend.type = fileType;
+    finalUserToSend.FechaNacimiento = parseDateWithOutTime(
+      userToCreate.FechaNacimiento,
+    );
+    delete finalUserToSend.FotoPerfilNo64;
+    await FlowCraftAPI.post('Users/CrearUsuario', finalUserToSend);
+  } catch (error: any) {
+    toast.dismiss();
+    toast.error(error.message);
+  }
+}
+export async function EditUserByAdmin(userToEdit: any) {
+  try {
+    await FlowCraftAPI.post('Users/ActualizarUsuario', userToEdit);
+    toast.success('Usuario editado con exito');
   } catch (error: any) {
     toast.dismiss();
     toast.error(error.message);
@@ -140,6 +209,14 @@ export function createTimer(ms: number) {
 export async function getTyCToBack() {
   try {
     return await FlowCraftAPI.get('Configuracion/ObtenerTYC', false);
+  } catch (error: any) {
+    toast.dismiss();
+    toast.error(error.message);
+  }
+}
+export async function getPerfilesAction() {
+  try {
+    return await FlowCraftAPI.get('Configuracion/GetPerfiles');
   } catch (error: any) {
     toast.dismiss();
     toast.error(error.message);
@@ -270,7 +347,7 @@ export async function changePasswordWithoutCode(
   Contrasena: any,
   OtraContrasena: any,
   email: any,
-  jwt:any
+  jwt: any,
 ) {
   try {
     const result = verifyPasswords.safeParse({ Contrasena, OtraContrasena });
@@ -279,8 +356,10 @@ export async function changePasswordWithoutCode(
     }
     await FlowCraftAPI.post(
       'Users/ReestablecerContrasenaPorVencimiento',
-      { NuevaPassword: Contrasena, Mail: email},
-      false,false,jwt
+      { NuevaPassword: Contrasena, Mail: email },
+      false,
+      false,
+      jwt,
     );
     return;
   } catch (error: any) {
