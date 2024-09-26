@@ -44,7 +44,7 @@ export default function Page() {
     filesExist();
   }, []);
 
-  const token = window.localStorage.getItem(AUTORIZATION_KEY)
+  const token = window.localStorage.getItem(AUTORIZATION_KEY);
   const downloadFile = async (fileName: string) => {
     try {
       const res = await fetch(
@@ -57,9 +57,6 @@ export default function Page() {
           },
         },
       );
-      
-
-      console.log('Respuesta de la solicitud:', res);
 
       if (!res) {
         throw new Error('La respuesta es null o undefined.');
@@ -143,8 +140,6 @@ export default function Page() {
               },
             },
           );
-          const result = await res.json();
-          console.log(result);
           toast({
             title: 'Éxito',
             description: `El archivo "${expectedFileName}" se ha subido correctamente.`,
@@ -265,16 +260,6 @@ export default function Page() {
                       />
                     </>
                   )}
-                </Flex>
-                <Flex justify="flex-end" mt={4}>
-                  {/* <Button
-                    bg="blue.500"
-                    color="white"
-                    _hover={{ bg: 'blue.700' }}
-                    onClick={checkData}
-                  >
-                    Editar
-                  </Button> */}
                 </Flex>
               </VStack>
             </CardBody>
