@@ -17,6 +17,7 @@ import {
 } from '@chakra-ui/react';
 import { useRef, useEffect, useState } from 'react';
 import FlowCraftAPI from '../../utils/request';
+import { AUTORIZATION_KEY } from '@/app/utils/const';
 
 export default function Page() {
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -43,6 +44,7 @@ export default function Page() {
     filesExist();
   }, []);
 
+  const token = window.localStorage.getItem(AUTORIZATION_KEY)
   const downloadFile = async (fileName: string) => {
     try {
       const res = await fetch(
@@ -51,14 +53,11 @@ export default function Page() {
           method: 'GET',
 
           headers: {
-            Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VyX0VtYWlsIjoiSXZvLnRvbmlvbmlAZ21haWwuY29tIiwidW5pcXVlX25hbWUiOiJJdm8gU2FoaWQiLCJVc2VyX0lkIjoiMTMiLCJ2YWxpZGF0aW9uX2V4cGlyeSI6IjIwMjQtMDktMjZUMjA6NTY6MzUuMzk5Mjc5N1oiLCJuYmYiOjE3MjczNzY5OTUsImV4cCI6MTcyNzM4MDU5NSwiaWF0IjoxNzI3Mzc2OTk1fQ.MJoVXV6-OEmFxrEZWemi1WM9CtJMq-kwqk729MW8LD4`,
+            Authorization: `Bearer ${token}`,
           },
         },
       );
-      // const res = await FlowCraftAPI.get(
-      //   `backup/DescargarBackup?fileName=${fileName}`,
-      //   true,
-      // );
+      
 
       console.log('Respuesta de la solicitud:', res);
 
@@ -140,7 +139,7 @@ export default function Page() {
               method: 'POST',
               body: formData,
               headers: {
-                Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VyX0VtYWlsIjoiSXZvLnRvbmlvbmlAZ21haWwuY29tIiwidW5pcXVlX25hbWUiOiJJdm8gU2FoaWQiLCJVc2VyX0lkIjoiMTMiLCJ2YWxpZGF0aW9uX2V4cGlyeSI6IjIwMjQtMDktMjZUMjA6NTY6MzUuMzk5Mjc5N1oiLCJuYmYiOjE3MjczNzY5OTUsImV4cCI6MTcyNzM4MDU5NSwiaWF0IjoxNzI3Mzc2OTk1fQ.MJoVXV6-OEmFxrEZWemi1WM9CtJMq-kwqk729MW8LD4`,
+                Authorization: `Bearer ${token}`,
               },
             },
           );
