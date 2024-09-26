@@ -39,10 +39,6 @@ export default function Page() {
         icon: <FireIcon className="h-[100px] w-[100px]" />,
       },
       {
-        name: 'Lecciones',
-        icon: <EyeSlashIcon className="h-[100px] w-[100px]" />,
-      },
-      {
         name: 'Categorias',
         icon: <FunnelIcon className="h-[100px] w-[100px]" />,
       },

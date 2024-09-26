@@ -55,7 +55,6 @@ const links = [
   { name: 'Tipos', href: '/inicio/tipos', icon: ChatBubbleLeftIcon },
   { name: 'Mi Perfil', href: '/inicio/perfil', icon: UserCircleIcon },
   { name: 'Partidos', href: '/inicio/partido', icon: MegaphoneIcon },
-  { name: 'Disciplinas', href: '/inicio/disciplinas', icon: PaperAirplaneIcon },
   { name: 'Estadisticas', href: '/inicio/estadisticas', icon: ChartBarIcon },
 ];
 
