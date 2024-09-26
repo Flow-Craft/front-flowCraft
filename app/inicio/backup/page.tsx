@@ -15,12 +15,79 @@ import {
   CardFooter,
   useToast,
 } from '@chakra-ui/react';
-import { useRef } from 'react';
+import { useRef, useEffect, useState } from 'react';
+import FlowCraftAPI from '../../utils/request';
 
 export default function Page() {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const inputRef2 = useRef<HTMLInputElement | null>(null);
   const toast = useToast();
+
+  const [RestaurarFile, setRestaurarFile] = useState(false);
+  const [GenerarFile, setGenerarFile] = useState(false);
+
+  const checkData = async (fileName: string) => {
+    const res = await FlowCraftAPI.get(
+      `Backup/VerificarArchivo?fileName=${fileName}`,
+    );
+    const data = res as { existe: boolean };
+    return data.existe;
+  };
+  useEffect(() => {
+    const filesExist = async () => {
+      const generarExist = await checkData('GENERAR_BACKUP.pdf');
+      const restaurarExist = await checkData('RESTAURAR_BACKUP.pdf');
+      setGenerarFile(generarExist);
+      setRestaurarFile(restaurarExist);
+    };
+    filesExist();
+  }, []);
+
+  const downloadFile = async (fileName: string) => {
+    try {
+      const res = await fetch(
+        `http://localhost:5148/api/backup/DescargarBackup?fileName=${fileName}`,
+        {
+          method: 'GET',
+
+          headers: {
+            Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VyX0VtYWlsIjoiSXZvLnRvbmlvbmlAZ21haWwuY29tIiwidW5pcXVlX25hbWUiOiJJdm8gU2FoaWQiLCJVc2VyX0lkIjoiMTMiLCJ2YWxpZGF0aW9uX2V4cGlyeSI6IjIwMjQtMDktMjZUMjA6NTY6MzUuMzk5Mjc5N1oiLCJuYmYiOjE3MjczNzY5OTUsImV4cCI6MTcyNzM4MDU5NSwiaWF0IjoxNzI3Mzc2OTk1fQ.MJoVXV6-OEmFxrEZWemi1WM9CtJMq-kwqk729MW8LD4`,
+          },
+        },
+      );
+      // const res = await FlowCraftAPI.get(
+      //   `backup/DescargarBackup?fileName=${fileName}`,
+      //   true,
+      // );
+
+      console.log('Respuesta de la solicitud:', res);
+
+      if (!res) {
+        throw new Error('La respuesta es null o undefined.');
+      }
+
+      const blob = await res.blob();
+
+      // Crear un enlace para descargar el archivo
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', fileName); // Nombre del archivo para la descarga
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode?.removeChild(link);
+    } catch (error) {
+      console.error('Error durante la descarga del archivo:', error);
+      toast({
+        title: 'Error',
+        description: 'No se pudo descargar el archivo.',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+        position: 'top',
+      });
+    }
+  };
 
   const handleButtonClick = () => {
     inputRef.current?.click();
@@ -41,6 +108,7 @@ export default function Page() {
             status: 'error',
             duration: 3000,
             isClosable: true,
+            position: 'top',
           });
           return;
         }
@@ -52,8 +120,14 @@ export default function Page() {
             status: 'error',
             duration: 3000,
             isClosable: true,
+            position: 'top',
           });
           return;
+        }
+        if (file.name == 'GENERAR_BACKUP.pdf') {
+          setGenerarFile(true);
+        } else {
+          setRestaurarFile(true);
         }
 
         const formData = new FormData();
@@ -65,6 +139,9 @@ export default function Page() {
             {
               method: 'POST',
               body: formData,
+              headers: {
+                Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VyX0VtYWlsIjoiSXZvLnRvbmlvbmlAZ21haWwuY29tIiwidW5pcXVlX25hbWUiOiJJdm8gU2FoaWQiLCJVc2VyX0lkIjoiMTMiLCJ2YWxpZGF0aW9uX2V4cGlyeSI6IjIwMjQtMDktMjZUMjA6NTY6MzUuMzk5Mjc5N1oiLCJuYmYiOjE3MjczNzY5OTUsImV4cCI6MTcyNzM4MDU5NSwiaWF0IjoxNzI3Mzc2OTk1fQ.MJoVXV6-OEmFxrEZWemi1WM9CtJMq-kwqk729MW8LD4`,
+              },
             },
           );
           const result = await res.json();
@@ -75,6 +152,7 @@ export default function Page() {
             status: 'success',
             duration: 3000,
             isClosable: true,
+            position: 'top',
           });
         } catch (error) {
           console.error('Error al subir el archivo:', error);
@@ -84,9 +162,6 @@ export default function Page() {
   return (
     <Box minH="100vh" bg="white">
       <Flex>
-        {/* Barra lateral */}
-
-        {/* Contenido principal */}
         <Box as="main" flex="1" p={6}>
           <Card>
             <CardHeader>
@@ -96,48 +171,110 @@ export default function Page() {
               <VStack spacing={4} align="stretch">
                 <Flex justify="space-between" align="center">
                   <Text>LINK A LA GUIA PARA GENERAR BACKUP DEL SISTEMA</Text>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={handleButtonClick}
-                  >
-                    GENERAR BACKUP.PDF
-                  </Button>
-                  {/* Input de archivo oculto */}
-                  <Input
-                    display="none"
-                    type="file"
-                    accept="application/pdf"
-                    ref={inputRef}
-                    onChange={handleFileChange('GENERAR_BACKUP.pdf')}
-                  />
+                  {GenerarFile ? (
+                    <>
+                      <div className="flex gap-2 ">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => downloadFile('GENERAR_BACKUP.pdf')}
+                        >
+                          DESCARGAR GENERAR.pdf
+                        </Button>
+
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={handleButtonClick}
+                        >
+                          ACTUALIZAR
+                        </Button>
+                        <Input
+                          display="none"
+                          type="file"
+                          accept="application/pdf"
+                          ref={inputRef}
+                          onChange={handleFileChange('GENERAR_BACKUP.pdf')}
+                        />
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={handleButtonClick}
+                      >
+                        GENERAR BACKUP.PDF
+                      </Button>
+                      <Input
+                        display="none"
+                        type="file"
+                        accept="application/pdf"
+                        ref={inputRef}
+                        onChange={handleFileChange('GENERAR_BACKUP.pdf')}
+                      />
+                    </>
+                  )}
                 </Flex>
                 <Flex justify="space-between" align="center">
                   <Text>
                     LINK A LA GUIA PARA RESTAURAR UN BACKUP EN EL SISTEMA
                   </Text>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={handleButtonClick2}
-                  >
-                    RESTAURAR BACKUP.PDF
-                  </Button>
-                  <Input
-                    display="none"
-                    type="file"
-                    accept="application/pdf"
-                    ref={inputRef2}
-                    onChange={handleFileChange('RESTAURAR_BACKUP.pdf')}
-                  />
+                  {RestaurarFile ? (
+                    <>
+                      <div className="flex gap-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => downloadFile('RESTAURAR_BACKUP.pdf')}
+                        >
+                          DESCARGAR RESTAURAR.pdf
+                        </Button>
+
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={handleButtonClick2}
+                        >
+                          ACTUALIZAR
+                        </Button>
+                        <Input
+                          display="none"
+                          type="file"
+                          accept="application/pdf"
+                          ref={inputRef2}
+                          onChange={handleFileChange('RESTAURAR_BACKUP.pdf')}
+                        />
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={handleButtonClick2}
+                      >
+                        RESTAURAR BACKUP.PDF
+                      </Button>
+                      <Input
+                        display="none"
+                        type="file"
+                        accept="application/pdf"
+                        ref={inputRef2}
+                        onChange={handleFileChange('RESTAURAR_BACKUP.pdf')}
+                      />
+                    </>
+                  )}
                 </Flex>
                 <Flex justify="flex-end" mt={4}>
                   {/* <Button
                     bg="blue.500"
                     color="white"
                     _hover={{ bg: 'blue.700' }}
+                    onClick={checkData}
                   >
-                    Guardar
+                    Editar
                   </Button> */}
                 </Flex>
               </VStack>
