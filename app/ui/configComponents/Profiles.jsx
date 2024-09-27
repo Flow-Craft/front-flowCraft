@@ -6,8 +6,14 @@ import { PencilIcon, FireIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { FlowModal } from '../components/FlowModal/FlowModal';
 import { Tooltip } from '@chakra-ui/react';
 import toast, { Toaster } from 'react-hot-toast';
-import EditCreateDisciplineModalForm from './Disciplines/EditCreateModalForm';
-import { getPerfilesAdmin } from '../../utils/actions';
+import { EditCreatProfile } from './Perfiles/EditCreatProfile';
+import {
+  createPerfilAction,
+  editPerfilAction,
+  eliminarPerfilAdmin,
+  getPerfilesAdmin,
+  getPermisosAdmin,
+} from '../../utils/actions';
 import { formatDate } from '@/app/utils/functions';
 
 const HEADER_TABLE = [
@@ -15,125 +21,124 @@ const HEADER_TABLE = [
   { name: 'Descripcion' },
   { name: 'Alta' },
   { name: 'Edicion' },
-  { name: 'Baja' },
   { name: 'Acciones' },
 ];
 
 export const ProfilesTab = () => {
   const [profilesToShow, setProfilesToShow] = useState([]);
   const [profiles, setProfiles] = useState([]);
-  const [openDetailDiscipline, setOpenDetailDiscipline] = useState(false);
-  const [disciplineToShow, setDisciplineToShow] = useState(null);
-  const [openDeleteDiscipline, setOpenDeleteDiscipline] = useState(false);
-  const [disciplineToDelte, setDisciplineToDelte] = useState(null);
-  const [openCreateDiscipline, setOpenCreateDiscipline] = useState(false);
-  const [disciplineToEdit, setDisciplineToEdit] = useState(null);
-
-  const isValidDiscipline = (disciplineToEdit) => {
-    if (!disciplineToEdit) {
-      return false; // Si disciplineToEdit es null o undefined, no es válido
+  const [openDeleteProfile, setopenDeleteProfile] = useState(false);
+  const [profileToDelte, setprofileToDelte] = useState(null);
+  const [openCreateProfile, setOpenCreateProfile] = useState(false);
+  const [perfilToEdit, setPerfilToEdit] = useState(null);
+  const [permisos, setPermisos] = useState([]);
+  const [permisosSelected, setPermisosSelected] = useState([]);
+  const [errors, setErrors] = useState([]);
+  const getPermisos = async () => {
+    try {
+      const result = await getPermisosAdmin();
+      const resultToShow = result.map((permiso) => ({
+        value: permiso.id,
+        label: `${permiso.nombrePermiso} - ${permiso.funcionalidades}`,
+      }));
+      setPermisos(resultToShow);
+    } catch (error) {
+      toast.error(error.message);
     }
-
-    // Verificar si las propiedades requeridas existen y no están vacías
-    const requiredFields = [
-      'nombre',
-      'cantJugadores',
-      'cantJugadoresEnBanca',
-      'periodosMax',
-      'tarjetasAdvertencia',
-      'tarjetasExpulsion',
-    ];
-
-    // Validar que todos los campos requeridos existen y no están vacíos o llenos de espacios
-    return requiredFields.every((field) => {
-      const value = disciplineToEdit[field];
-
-      // Si el valor es una cadena, verificar que no esté vacía
-      if (typeof value === 'string') {
-        return value.trim() !== '';
-      }
-
-      // Si el valor es un número, verificar que sea mayor que 0
-      if (typeof value === 'number') {
-        return value > 0;
-      }
-
-      // En cualquier otro caso, el valor no es válido
-      return false;
-    });
-  };
-
-  const handleClick = (dis) => {
-    setDisciplineToShow(dis);
-    setOpenDetailDiscipline(true);
   };
 
   const deleteDicipline = async () => {
     try {
-      await deleteDisciplineAction(disciplineToDelte.id);
-      toast.success('disciplina eliminada con exito');
-      disciplinasToTab();
+      await eliminarPerfilAdmin(profileToDelte.perfil.id);
+      toast.success('Perfil eliminado con exito');
+      PerfilesToTab();
     } catch (error) {
       toast.error(error.message);
     } finally {
-      setOpenDeleteDiscipline(false);
-      setDisciplineToDelte(null);
+      setopenDeleteProfile(false);
+      setprofileToDelte(null);
     }
   };
 
-  const filterUsers = (e) => {
+  const filterPerfiles = (e) => {
     e.preventDefault();
     const filtros = {
       nombre: e.target.nombre.value.trim(), // Asegura que no haya espacios vacíos
     };
     // Filtramos los usuarios
-    const disFiltered = disciplinas.filter((dis) => {
+    const disFiltered = profiles.filter((dis) => {
       // Filtrar por nombre si está presente
       const filtroNombreValido = filtros.nombre
-        ? dis.nombre.toLowerCase().includes(filtros.nombre.toLowerCase())
+        ? dis.perfil.nombrePerfil
+            .toLowerCase()
+            .includes(filtros.nombre.toLowerCase())
         : true; // Ignorar si está vacío
 
       // Devuelve true si pasa todos los filtros aplicables
       return filtroNombreValido;
     });
     // Mapeamos los usuarios filtrados
-    const filterMappeds = disFiltered.map((dis) => {
-      return {
-        nombre: dis.nombre,
-        cantJugadores: dis.cantJugadores,
-        cantJugadoresEnBanca: dis.cantJugadoresEnBanca,
-        periodosMax: dis.periodosMax,
-        tarjetasAdvertencia: dis.tarjetasAdvertencia,
-        tarjetasExpulsion: dis.tarjetasExpulsion,
-        eliminada: dis.fechaBaja ? 'Si' : 'No',
-        acciones: ActionTab(disciplinas.find((usr) => usr.id === dis.id)),
-        id: dis.id,
-      };
-    });
+    const newProfilesToShow =
+      disFiltered &&
+      disFiltered.map((dis) => {
+        return {
+          nombre: dis.perfil.nombrePerfil,
+          descripcion: dis.perfil.descripcionPerfil,
+          fechaCreacion: formatDate(dis.perfil.fechaCreacion),
+          fechaModificacion: dis.perfil.fechaModificacion
+            ? formatDate(dis.perfil.fechaModificacion)
+            : '--/--/--',
+          acciones: ActionTab(
+            disFiltered.find((disc) => disc.perfil.id === dis.perfil.id),
+          ),
+          id: dis.perfil.id,
+        };
+      });
 
-    setDisciplinasToShow(filterMappeds);
+    setProfilesToShow(newProfilesToShow);
   };
 
   const handleEliminarDisciplina = (dis) => {
-    setOpenDeleteDiscipline(true);
-    setDisciplineToDelte(dis);
+    setopenDeleteProfile(true);
+    setprofileToDelte(dis);
   };
 
-  const handleFormDiscipline = async () => {
+  const handleFormPerfil = async (e) => {
     try {
-      if (!disciplineToEdit.id) {
-        await createDisciplineAction(disciplineToEdit);
-        toast.success('Disciplina creada con exito');
-      } else {
-        await editDisciplineAction(disciplineToEdit);
-        toast.success('Disciplina editada con exito');
+      setErrors([]);
+      let serPerfilToEdit = {
+        Perfil: {
+          NombrePerfil: e.target.nombre.value,
+          DescripcionPerfil: e.target.descripcion.value,
+        },
+        Permisos: permisosSelected.map((perm) => perm.value),
+      };
+      if (perfilToEdit.id) {
+        let perfil = {
+          Perfil: {
+            Id: perfilToEdit.id,
+            NombrePerfil: e.target.nombre.value,
+            DescripcionPerfil: e.target.descripcion.value,
+          },
+          Permisos: permisosSelected.map((perm) => perm.value),
+        };
+        await editPerfilAction(perfil);
+        toast.success('perfil editado con exito');
+        PerfilesToTab();
+        return;
       }
-      disciplinasToTab();
+      const result = await createPerfilAction(serPerfilToEdit, setErrors);
+      if (result?.error) {
+        setErrors(result.errors);
+      }
+      toast.success('perfil creado con exito');
+      PerfilesToTab();
     } catch (error) {
       toast.error(error.message);
     } finally {
-      setDisciplineToEdit(null);
-      setOpenCreateDiscipline(false);
+      setPerfilToEdit(null);
+      setOpenCreateProfile(false);
+      setPermisosSelected([]);
     }
   };
   const PerfilesToTab = async () => {
@@ -144,47 +149,50 @@ export const ProfilesTab = () => {
         result &&
         result.map((dis) => {
           return {
-            nombre: dis.nombrePerfil,
-            descripcion: dis.descripcionPerfil,
-            fechaCreacion: formatDate(dis.fechaCreacion),
-            fechaModificacion: dis.fechaModificacion
-              ? formatDate(dis.fechaModificacion)
-              : '',
-            fechaBaja: dis.fechaBaja ? formatDate(dis.fechaBaja) : '',
-            acciones: ActionTab(result.find((disc) => disc.id === dis.id)),
-            id: dis.id,
+            nombre: dis.perfil.nombrePerfil,
+            descripcion: dis.perfil.descripcionPerfil,
+            fechaCreacion: formatDate(dis.perfil.fechaCreacion),
+            fechaModificacion: dis.perfil.fechaModificacion
+              ? formatDate(dis.perfil.fechaModificacion)
+              : '--/--/--',
+            acciones: ActionTab(
+              result.find((disc) => disc.perfil.id === dis.perfil.id),
+            ),
+            id: dis.perfil.id,
           };
         });
       setProfilesToShow(newProfilesToShow);
     } catch (error) {}
   };
-  const ActionTab = (disciplina) => {
+  const ActionTab = (perfil) => {
     return (
       <div className="flex flex-row gap-4">
-        <Tooltip label="Ver mas detalles">
-          <FireIcon
-            onClick={() => {
-              handleClick(disciplina);
-            }}
-            className="w-[50px] cursor-pointer text-slate-500"
-          />
-        </Tooltip>
-        {!disciplina.fechaBaja && (
+        {!perfil.fechaBaja && (
           <Tooltip label="Editar">
             <PencilIcon
               onClick={() => {
-                setDisciplineToEdit(disciplina);
-                setOpenCreateDiscipline(true);
+                const perfilToEdit = {
+                  id: perfil.perfil.id,
+                  nombre: perfil.perfil.nombrePerfil,
+                  descripcion: perfil.perfil.descripcionPerfil,
+                };
+                const permisosToEdit = perfil.permisos?.map((per) => ({
+                  label: `${per.modulo} - ${per.nombrePermiso}`,
+                  value: per.id,
+                }));
+                setPerfilToEdit(perfilToEdit);
+                setPermisosSelected(permisosToEdit);
+                setOpenCreateProfile(true);
               }}
               className="w-[50px] cursor-pointer text-slate-500"
             />
           </Tooltip>
         )}
-        {!disciplina.fechaBaja && (
+        {!perfil.fechaBaja && (
           <Tooltip label="Eliminar">
             <TrashIcon
               onClick={() => {
-                handleEliminarDisciplina(disciplina);
+                handleEliminarDisciplina(perfil);
               }}
               className="w-[50px] cursor-pointer text-slate-500"
             />
@@ -195,12 +203,13 @@ export const ProfilesTab = () => {
   };
   useEffect(() => {
     PerfilesToTab();
+    getPermisos();
   }, []);
   return (
     <div className="mt-7">
       <form
         className="flex w-full flex-wrap items-center"
-        onSubmit={filterUsers}
+        onSubmit={filterPerfiles}
       >
         <div className="flex flex-row flex-wrap gap-5">
           <section className="flex flex-row items-center gap-3">
@@ -220,7 +229,7 @@ export const ProfilesTab = () => {
         <button
           className="rounded-lg bg-blue-500 p-2 text-center text-xl text-white lg:ml-auto"
           onClick={() => {
-            setOpenCreateDiscipline(true);
+            setOpenCreateProfile(true);
           }}
         >
           Crear Perfil
@@ -231,48 +240,38 @@ export const ProfilesTab = () => {
       </section>
       <Toaster />
       <FlowModal
-        title={`Disciplina ${disciplineToShow?.nombre}`}
-        modalBody={<div>{disciplineToShow?.descripcion}</div>}
-        primaryTextButton="Ok"
-        isOpen={openDetailDiscipline}
-        scrollBehavior="outside"
-        onAcceptModal={() => {
-          setOpenDetailDiscipline(false);
-        }}
-        onCancelModal={() => {
-          setOpenDetailDiscipline(false);
-        }}
-      />
-      <FlowModal
-        title={`Eliminar Disciplina ${disciplineToDelte?.nombre}`}
-        modalBody={<div>{disciplineToDelte?.descripcion}</div>}
-        primaryTextButton="¿Esta seguro que desea eliminar esta disciplina?"
-        isOpen={openDeleteDiscipline}
+        title={`Eliminar Perfil ${profileToDelte?.perfil?.nombrePerfil}`}
+        modalBody={<div>{profileToDelte?.perfil?.descripcionPerfil}</div>}
+        primaryTextButton="¿Esta seguro que desea eliminar este perfil?"
+        isOpen={openDeleteProfile}
         scrollBehavior="outside"
         onAcceptModal={deleteDicipline}
         onCancelModal={() => {
-          setOpenDeleteDiscipline(false);
-          setDisciplineToDelte(null);
+          setopenDeleteProfile(false);
+          setprofileToDelte(null);
         }}
       />
       <FlowModal
-        title={`${disciplineToEdit?.id ? 'Editar disciplina' : 'Crear disciplina'}`}
+        title={`${perfilToEdit?.id ? 'Editar perfil' : 'Crear perfil'}`}
         modalBody={
           <div>
-            <EditCreateDisciplineModalForm
-              disciplina={disciplineToEdit}
-              onChange={setDisciplineToEdit}
+            <EditCreatProfile
+              permisos={permisos}
+              permisosSelected={permisosSelected}
+              setPermisosSelected={setPermisosSelected}
+              errors={errors}
+              perfil={perfilToEdit}
             />
           </div>
         }
         primaryTextButton="Guardar"
-        isOpen={openCreateDiscipline}
+        isOpen={openCreateProfile}
         scrollBehavior="outside"
-        onAcceptModal={handleFormDiscipline}
-        disabled={!isValidDiscipline(disciplineToEdit)}
+        onAcceptModal={handleFormPerfil}
+        type="submit"
         onCancelModal={() => {
-          setOpenCreateDiscipline(false);
-          setDisciplineToEdit(false);
+          setOpenCreateProfile(false);
+          setPerfilToEdit(false);
         }}
       />
     </div>

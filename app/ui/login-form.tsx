@@ -114,7 +114,7 @@ export default function LoginForm() {
     if (response?.usuario?.nombre) {
       window.localStorage.setItem(LOCAL_STORAGE_NAME_KEY, response?.nombre);
       window.localStorage.setItem(AUTORIZATION_KEY, response.JWT);
-      window.location.replace('/');
+      window.location.replace('/inicio/noticias');
     }
 
     if (response?.error === 'Contraseña vencida') {

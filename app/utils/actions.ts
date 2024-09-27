@@ -11,6 +11,7 @@ import {
   verifyPasswords,
   UpdateUserSchemaZod,
   RegistryUserByAdminSchemaZod,
+  CreatePerfilSchema,
 } from './models/user';
 import {
   editCreateNewSchema,
@@ -434,6 +435,10 @@ export async function getPerfilesAdmin() {
   return await FlowCraftAPI.get('Configuracion/GetPerfiles');
 }
 
+export async function getPermisosAdmin() {
+  return await FlowCraftAPI.get('Configuracion/GetPermisos');
+}
+
 export async function deleteDisciplineAction(id: string) {
   return await FlowCraftAPI.post(
     `DisciplinasYLecciones/EliminarDisciplina?id=${id}`,
@@ -441,6 +446,21 @@ export async function deleteDisciplineAction(id: string) {
 }
 export async function createDisciplineAction(dis: any) {
   return await FlowCraftAPI.post(`DisciplinasYLecciones/CrearDisciplina`, dis);
+}
+export async function createPerfilAction(dis: any, setErrors: any) {
+  const result = CreatePerfilSchema.safeParse(dis);
+  if (!result.success) {
+    return { error: true, errors: result.error.errors };
+  }
+  setErrors([]);
+  return await FlowCraftAPI.post(`Configuracion/CrearPerfil`, dis);
+}
+export async function editPerfilAction(dis: any) {
+  return await FlowCraftAPI.post(`Configuracion/ActualizarPerfil`, dis);
+}
+
+export async function eliminarPerfilAdmin(id: any) {
+  return await FlowCraftAPI.post(`Configuracion/EliminarPerfil/${id}`);
 }
 
 export async function editDisciplineAction(dis: any) {

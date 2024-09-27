@@ -235,3 +235,19 @@ export const UpdateUserSchemaZod = z.object({
     })
     .optional(),
 });
+
+const perfilSchema = z.object({
+  NombrePerfil: z.string().min(1, 'El nombre del perfil no puede estar vacío'),
+  DescripcionPerfil: z
+    .string()
+    .min(1, 'La descripción del perfil no puede estar vacía'),
+});
+
+const permisosSchema = z
+  .array(z.number().min(1, 'El ID de permiso debe ser mayor a 0'))
+  .nonempty('El array de permisos no puede estar vacío');
+
+export const CreatePerfilSchema = z.object({
+  Perfil: perfilSchema,
+  Permisos: permisosSchema,
+});
