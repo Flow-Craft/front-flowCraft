@@ -113,7 +113,6 @@ export const SolicitudesTab = () => {
       await gestionarSolicitudAdmin({
         Id: solicitud.id.toString(),
         Accion: 'Aprobada',
-        MotivoRechazo: '',
       });
       toast.success('solicitud aprobada');
       SolicutedToTab(typeSelected);

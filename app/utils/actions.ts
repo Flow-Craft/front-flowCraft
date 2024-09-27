@@ -18,6 +18,7 @@ import {
   editNewSchema,
   editWithoutFotoNewSchema,
 } from './models/news';
+import { tipoAcrearSchema, tipoAccionPartidoSchema } from './models/tipos';
 import {
   formatDateToISOString,
   handleFileConversion,
@@ -550,4 +551,55 @@ export async function editNew(editedNew: any) {
 
 export async function deleteNewAction(id: any) {
   return await FlowCraftAPI.post(`Noticias/EliminarNoticia/${id}`);
+}
+
+//TIPOS
+
+export async function getTipoEventosAdmin() {
+  return await FlowCraftAPI.get(`Eventos/GetTiposEvento`);
+}
+
+export async function crearTipoEventosAdmin(eventoAcrear: any) {
+  const result = tipoAcrearSchema.safeParse(eventoAcrear);
+  if (!result.success) {
+    return { error: true, errors: result.error.errors };
+  }
+  return await FlowCraftAPI.post(`Eventos/CrearTipoEvento`, eventoAcrear);
+}
+
+export async function editarTipoEventosAdmin(eventoAcrear: any) {
+  return await FlowCraftAPI.post(`Eventos/ActualizarTipoEvento`, eventoAcrear);
+}
+
+export async function eliminarTipoEventosAdmin(eventoAcrear: any) {
+  return await FlowCraftAPI.post(`Eventos/EliminarTipoEvento`, eventoAcrear);
+}
+
+export async function getTipoAccionPartidosAdmin() {
+  return await FlowCraftAPI.get(`Partidos/GetTiposAccionPartido`);
+}
+
+export async function crearTipoAccionPartidosAdmin(eventoAcrear: any) {
+  const result = tipoAccionPartidoSchema.safeParse(eventoAcrear);
+  if (!result.success) {
+    return { error: true, errors: result.error.errors };
+  }
+  return await FlowCraftAPI.post(
+    `Partidos/CrearTipoAccionPartido`,
+    eventoAcrear,
+  );
+}
+
+export async function editarTipoAccionPartidoAdmin(eventoAcrear: any) {
+  return await FlowCraftAPI.post(
+    `Partidos/ActualizarTipoAccionPartido`,
+    eventoAcrear,
+  );
+}
+
+export async function eliminarTipoAccionPartidoAdmin(eventoAcrear: any) {
+  return await FlowCraftAPI.post(
+    `Partidos/EliminarTipoAccionPartido`,
+    eventoAcrear,
+  );
 }

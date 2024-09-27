@@ -54,6 +54,8 @@ class FlowCraftAPIMethod {
       if (!response.ok) {
         if (response.status === 401) {
           const error = new Error('Unauthorized');
+          localStorage.clear();
+          window.location.href = '/';
           (error as any).status = 401;
           throw error;
         }
