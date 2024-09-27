@@ -13,6 +13,7 @@ import {
 import { UserTab } from '@/app/ui/configComponents/User';
 import { DisciplinasTab } from '@/app/ui/configComponents/Disciplines';
 import { ProfilesTab } from '@/app/ui/configComponents/Profiles';
+import { SolicitudesTab } from '@/app/ui/configComponents/Solicitudes';
 
 export default function Page() {
   const [menuSelected, setMenuSelected] = useState<string>('');
@@ -53,6 +54,8 @@ export default function Page() {
         return <DisciplinasTab />;
       case 'Perfiles':
         return <ProfilesTab />;
+      case 'Solicitudes':
+        return <SolicitudesTab />;
       default:
         <div />;
     }

@@ -90,7 +90,6 @@ export const UserTab = () => {
     e.preventDefault();
 
     // Capturamos los valores de los filtros
-    console.log(typeof e.target.activo.value);
     const filtros = {
       nombre: e.target.nombre.value.trim(), // Asegura que no haya espacios vacíos
       dni: e.target.dni.value.trim(), // Asegura que no haya espacios vacíos

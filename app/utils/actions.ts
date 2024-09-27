@@ -463,6 +463,19 @@ export async function eliminarPerfilAdmin(id: any) {
   return await FlowCraftAPI.post(`Configuracion/EliminarPerfil/${id}`);
 }
 
+export async function getSolicitudesAdmin(id: any) {
+  return await FlowCraftAPI.get(
+    `Users/GetSolicitudesAsociacionFiltradas?id=${id}`,
+  );
+}
+
+export async function gestionarSolicitudAdmin(solicitud: any) {
+  return await FlowCraftAPI.post(
+    `Users/GestionarSolicitudesAsociacion`,
+    solicitud,
+  );
+}
+
 export async function editDisciplineAction(dis: any) {
   return await FlowCraftAPI.post(
     `DisciplinasYLecciones/ActualizarDisciplina`,
