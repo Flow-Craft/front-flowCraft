@@ -179,6 +179,11 @@ export default function Page() {
                         <Button
                           variant="outline"
                           size="sm"
+                          bg={'green.300'}
+                          textColor={'white'}
+                          _hover={{
+                            bg: 'green.400',
+                          }}
                           onClick={() => downloadFile('GENERAR_BACKUP.pdf')}
                         >
                           DESCARGAR GENERAR.pdf
@@ -187,6 +192,11 @@ export default function Page() {
                         <Button
                           variant="outline"
                           size="sm"
+                          textColor={'white'}
+                          bg={'blue.300'}
+                          _hover={{
+                            bg: 'blue.400',
+                          }}
                           onClick={handleButtonClick}
                         >
                           ACTUALIZAR
@@ -204,7 +214,12 @@ export default function Page() {
                     <>
                       <Button
                         variant="outline"
-                        size="sm"
+                          size="sm"
+                          textColor={'white'}
+                          bg={'blue.300'}
+                          _hover={{
+                            bg: 'blue.400',
+                          }}
                         onClick={handleButtonClick}
                       >
                         GENERAR BACKUP.PDF
@@ -229,6 +244,11 @@ export default function Page() {
                         <Button
                           variant="outline"
                           size="sm"
+                          textColor={'white'}
+                          bg={'green.300'}
+                          _hover={{
+                            bg: 'green.400',
+                          }}
                           onClick={() => downloadFile('RESTAURAR_BACKUP.pdf')}
                         >
                           DESCARGAR RESTAURAR.pdf
@@ -237,6 +257,11 @@ export default function Page() {
                         <Button
                           variant="outline"
                           size="sm"
+                          textColor={'white'}
+                          bg={'blue.300'}
+                          _hover={{
+                            bg: 'blue.400',
+                          }}
                           onClick={handleButtonClick2}
                         >
                           ACTUALIZAR
@@ -254,7 +279,12 @@ export default function Page() {
                     <>
                       <Button
                         variant="outline"
-                        size="sm"
+                          size="sm"
+                          textColor={'white'}
+                          bg={'blue.300'}
+                          _hover={{
+                            bg: 'blue.400',
+                          }}
                         onClick={handleButtonClick2}
                       >
                         RESTAURAR BACKUP.PDF
@@ -268,6 +298,15 @@ export default function Page() {
                       />
                     </>
                   )}
+                </Flex>
+                <Flex align="start">
+                  <Text color="tomato" fontSize="xs" as="b">
+                    Nota: 
+                  </Text> 
+                  <Text color="tomato" fontSize="xs" ml={2}>
+                    Los PDF deben tener el nombre "GENERAR_BACKUP.pdf" y
+                    "RESTAURAR_BACKUP.pdf"
+                  </Text>
                 </Flex>
               </VStack>
             </CardBody>
