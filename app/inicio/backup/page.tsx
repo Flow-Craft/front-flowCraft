@@ -72,6 +72,14 @@ export default function Page() {
       document.body.appendChild(link);
       link.click();
       link.parentNode?.removeChild(link);
+      toast({
+        title: 'Éxito',
+        description: `El archivo se ha descargado correctamente.`,
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+        position: 'top',
+      });
     } catch (error) {
       console.error('Error durante la descarga del archivo:', error);
       toast({
