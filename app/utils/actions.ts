@@ -603,3 +603,8 @@ export async function eliminarTipoAccionPartidoAdmin(eventoAcrear: any) {
     eventoAcrear,
   );
 }
+
+// INSTALACIONES
+export async function getInstalacionesAdmin() {
+  return await FlowCraftAPI.get(`Reservas/GetInstalaciones`);
+}
