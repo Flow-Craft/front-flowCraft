@@ -46,6 +46,7 @@ function Page() {
   const getInstalacionesAction = async () => {
     try {
       const result = await getInstalacionesAdmin();
+      console.log('result', result)
       setInstalaciones(result);
       const newtipoEventosToShow =
         result &&
@@ -94,7 +95,7 @@ function Page() {
         Precio: e.target.precio.value,
         Condiciones: e.target.condiciones.value,
         HoraInicio: `${e.target.inicio.value}:00`,
-        HoraFin: `${e.target.cierre.value}:00`,
+        HoraCierre: `${e.target.cierre.value}:00`,
         EstadoId: Number(e.target.estadoInstalacion.value),
       };
       const result = await editarInstalacionAction(instalacionAEditar);
@@ -120,7 +121,7 @@ function Page() {
         Precio: e.target.precio.value,
         Condiciones: e.target.condiciones.value,
         HoraInicio: `${e.target.inicio.value}:00`,
-        HoraFin: `${e.target.cierre.value}:00`,
+        HoraCierre: `${e.target.cierre.value}:00`,
         EstadoId: Number(e.target.estadoInstalacion.value),
       };
 

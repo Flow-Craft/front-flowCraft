@@ -8,7 +8,6 @@ export const EditCreateInstall = ({
   disable,
   estadoInstalacion = [],
 }) => {
-  console.log('instalacionSeleccionada', instalacionSeleccionada);
   const defaultEstadoInstalacion = useMemo(() => {
     if (!estadoInstalacion || !instalacionSeleccionada) {
       return null;

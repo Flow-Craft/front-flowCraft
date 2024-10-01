@@ -117,7 +117,6 @@ export default function LoginForm() {
       password: e.target.password.value,
     });
     if (response?.usuario?.nombre) {
-      console.log('response', response);
       window.localStorage.setItem(
         LOCAL_STORAGE_NAME_KEY,
         response?.usuario?.nombre,

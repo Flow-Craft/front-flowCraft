@@ -631,9 +631,5 @@ export async function editarInstalacionAction(instalacion: any) {
 }
 
 export async function eliminarInstalacionAdmin(instalacion: any) {
-  const result = crearInstalacionSchema.safeParse(instalacion);
-  if (!result.success) {
-    return { error: true, errors: result.error.errors };
-  }
   return await FlowCraftAPI.post(`Reservas/EliminarInstalacion/${instalacion}`);
 }
