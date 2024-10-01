@@ -74,7 +74,7 @@ export async function checkJWTSession() {
     const token = window.localStorage.getItem(AUTORIZATION_KEY);
     if (token) {
       await FlowCraftAPI.get('Users/ComprobarJWT');
-      window.location.href = '/inicio/noticias';
+      // window.location.href = '/inicio/noticias';
     }
 
     return;

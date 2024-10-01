@@ -1,5 +1,9 @@
 export const LOCAL_STORAGE_NAME_KEY = 'nombre';
 
+export const LOCAL_STORAGE_PERMISOS_KEY = 'permisos';
+
+export const LOCAL_STORAGE_PERFIL_KEY = 'perfil';
+
 export const AUTORIZATION_KEY = 'Autorization';
 
 export const LOGIN_HREF = '/login';

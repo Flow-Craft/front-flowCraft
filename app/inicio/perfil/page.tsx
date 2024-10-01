@@ -20,8 +20,9 @@ import { FlowModal } from '@/app/ui/components/FlowModal/FlowModal';
 import { useRouter } from 'next/navigation';
 import SkeletonProfile from './pageSkeleton';
 import Link from 'next/link';
+import withAuthorization from '@/app/utils/autorization';
 
-export default function Page() {
+function Page() {
   const [userToShow, setUserToShow] = useState<any>({});
   const [editMode, setEditMode] = useState(false);
   const [openFirstModal, setOpenFirstModal] = useState(false);
@@ -406,3 +407,5 @@ export default function Page() {
     </section>
   );
 }
+
+export default withAuthorization(Page, 'Mi perfil');

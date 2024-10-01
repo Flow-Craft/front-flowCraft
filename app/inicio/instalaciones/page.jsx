@@ -1,5 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
+
 import { FlowTable } from '@/app/ui/components/FlowTable/FlowTable';
 import toast, { Toaster } from 'react-hot-toast';
 import {
@@ -18,6 +19,7 @@ import {
 } from '@/app/utils/actions';
 import { EditCreateInstall } from './components/editCreateInstall';
 import { FlowModal } from '@/app/ui/components/FlowModal/FlowModal';
+import withAuthorization from '@/app/utils/autorization';
 
 const HEADER_TABLE = [
   { name: 'Nombre' },
@@ -29,7 +31,7 @@ const HEADER_TABLE = [
   { name: 'Acciones' },
 ];
 
-export default function Page() {
+function Page() {
   const [instalaciones, setInstalaciones] = useState([]);
   const [instalacionesToShow, setInstalacionesToShow] = useState([]);
   const [errors, setErrors] = useState([]);
@@ -44,7 +46,6 @@ export default function Page() {
   const getInstalacionesAction = async () => {
     try {
       const result = await getInstalacionesAdmin();
-      console.log('result', result);
       setInstalaciones(result);
       const newtipoEventosToShow =
         result &&
@@ -279,3 +280,5 @@ export default function Page() {
     </section>
   );
 }
+
+export default withAuthorization(Page, 'Instalaciones');

@@ -20,42 +20,102 @@ import {
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { AquiVieneFlow } from '../components/AquiVieneFlow/AquiVieneFlow';
 
 // Map of links to display in the side navigation.
 // Depending on the size of the application, this would be stored in a database.
 const links = [
-  { name: 'Noticias', href: '/inicio/noticias', icon: NewspaperIcon },
+  {
+    name: 'Noticias',
+    href: '/inicio/noticias',
+    icon: NewspaperIcon,
+    nombrePermiso: 'Noticias',
+  },
   {
     name: 'Reservas',
     href: '/inicio/reservas',
     icon: CalendarIcon,
+    nombrePermiso: 'Reservas',
   },
   {
     name: 'Instalaciones',
     href: '/inicio/instalaciones',
     icon: BuildingOffice2Icon,
+    nombrePermiso: 'Instalaciones',
   },
-  { name: 'Eventos', href: '/inicio/eventos', icon: CalendarDaysIcon },
-  { name: 'Torneos', href: '/inicio/torneos', icon: TableCellsIcon },
-  { name: 'Reportes', href: '/inicio/reportes', icon: DocumentIcon },
+  {
+    name: 'Eventos',
+    href: '/inicio/eventos',
+    icon: CalendarDaysIcon,
+    nombrePermiso: 'Eventos',
+  },
+  {
+    name: 'Torneos',
+    href: '/inicio/torneos',
+    icon: TableCellsIcon,
+    nombrePermiso: 'Torneos',
+  },
+  {
+    name: 'Reportes',
+    href: '/inicio/reportes',
+    icon: DocumentIcon,
+    nombrePermiso: 'Reportes',
+  },
   {
     name: 'Configuracion del sistema',
     href: '/inicio/config_del_sistema',
     icon: CogIcon,
+    nombrePermiso: 'Configuracion del sistema',
   },
-  { name: 'Lecciones', href: '/inicio/lecciones', icon: AcademicCapIcon },
-  { name: 'Backup', href: '/inicio/backup', icon: ServerStackIcon },
+  {
+    name: 'Lecciones',
+    href: '/inicio/lecciones',
+    icon: AcademicCapIcon,
+    nombrePermiso: 'Lecciones',
+  },
+  {
+    name: 'Backup',
+    href: '/inicio/backup',
+    icon: ServerStackIcon,
+    nombrePermiso: 'Backup',
+  },
   {
     name: 'Estados',
     href: '/inicio/estados',
     icon: ChatBubbleBottomCenterIcon,
+    nombrePermiso: 'Estados',
   },
-  { name: 'Tipos', href: '/inicio/tipos', icon: ChatBubbleLeftIcon },
-  { name: 'Mi Perfil', href: '/inicio/perfil', icon: UserCircleIcon },
-  { name: 'Partidos', href: '/inicio/partido', icon: MegaphoneIcon },
-  { name: 'Estadisticas', href: '/inicio/estadisticas', icon: ChartBarIcon },
+  {
+    name: 'Tipos',
+    href: '/inicio/tipos',
+    icon: ChatBubbleLeftIcon,
+    nombrePermiso: 'Tipos',
+  },
+  {
+    name: 'Mi Perfil',
+    href: '/inicio/perfil',
+    icon: UserCircleIcon,
+    nombrePermiso: 'Mi perfil',
+  },
+  {
+    name: 'Partidos',
+    href: '/inicio/partido',
+    icon: MegaphoneIcon,
+    nombrePermiso: 'Partidos',
+  },
+  {
+    name: 'Estadisticas',
+    href: '/inicio/estadisticas',
+    icon: ChartBarIcon,
+    nombrePermiso: 'Estadisticas',
+  },
+  {
+    name: 'Disciplinas',
+    href: '/inicio/estadisticas',
+    icon: PaperAirplaneIcon,
+    nombrePermiso: 'Disciplina',
+  },
 ];
 
 export default function NavLinks({ onClose = () => {} }) {
@@ -69,10 +129,35 @@ export default function NavLinks({ onClose = () => {} }) {
     router.push('/');
   };
 
+  const MenuNuevo = useMemo(() => {
+    if (window?.localStorage?.permisos) {
+      const permisos =
+        window?.localStorage?.permisos &&
+        JSON.parse(window?.localStorage?.permisos);
+      const permisosNombres = new Set(
+        permisos.map((permiso: any) => permiso.nombrePermiso),
+      );
+      let linksFiltrados = links.filter((link) =>
+        permisosNombres.has(link.nombrePermiso),
+      );
+      linksFiltrados = [
+        {
+          name: 'Noticias',
+          href: '/inicio/noticias',
+          icon: NewspaperIcon,
+          nombrePermiso: 'Noticias',
+        },
+        ...linksFiltrados,
+      ];
+      return linksFiltrados || [];
+    }
+    return [];
+  }, [window.localStorage.permisos]);
+
   return (
     <>
       {isLoading && <AquiVieneFlow />}
-      {links.map((link) => {
+      {MenuNuevo.map((link) => {
         const LinkIcon = link.icon;
         return (
           <Link

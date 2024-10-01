@@ -13,7 +13,12 @@ import { ToasterComponent } from './toaster/ToasterComponent';
 import Link from 'next/link';
 import { FlowModal } from './components/FlowModal/FlowModal';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { AUTORIZATION_KEY, LOCAL_STORAGE_NAME_KEY } from '../utils/const';
+import {
+  AUTORIZATION_KEY,
+  LOCAL_STORAGE_NAME_KEY,
+  LOCAL_STORAGE_PERFIL_KEY,
+  LOCAL_STORAGE_PERMISOS_KEY,
+} from '../utils/const';
 import toast from 'react-hot-toast';
 import { InputWithLabel } from './components/InputWithLabel/InputWithLabel';
 import { ChangePasswordLogin } from './dashboard/changePasswordLogin';
@@ -112,7 +117,16 @@ export default function LoginForm() {
       password: e.target.password.value,
     });
     if (response?.usuario?.nombre) {
-      window.localStorage.setItem(LOCAL_STORAGE_NAME_KEY, response?.nombre);
+      console.log('response', response);
+      window.localStorage.setItem(
+        LOCAL_STORAGE_NAME_KEY,
+        response?.usuario?.nombre,
+      );
+      window.localStorage.setItem(
+        LOCAL_STORAGE_PERMISOS_KEY,
+        JSON.stringify(response?.permisos),
+      );
+      window.localStorage.setItem(LOCAL_STORAGE_PERFIL_KEY, response?.perfil);
       window.localStorage.setItem(AUTORIZATION_KEY, response.JWT);
       window.location.replace('/inicio/noticias');
     }
