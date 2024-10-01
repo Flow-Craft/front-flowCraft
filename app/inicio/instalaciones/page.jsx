@@ -1,10 +1,21 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { FlowTable } from '@/app/ui/components/FlowTable/FlowTable';
-import { Toaster } from 'react-hot-toast';
-import { CheckIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
+import toast, { Toaster } from 'react-hot-toast';
+import {
+  CheckIcon,
+  MagnifyingGlassIcon,
+  PencilIcon,
+  TrashIcon,
+} from '@heroicons/react/24/outline';
 import { Tooltip } from '@chakra-ui/react';
-import { getInstalacionesAdmin } from '@/app/utils/actions';
+import {
+  crearInstalacionAction,
+  editarInstalacionAction,
+  eliminarInstalacionAdmin,
+  getInstalacionesAdmin,
+  getInstalacionesEstadoAdmin,
+} from '@/app/utils/actions';
 import { EditCreateInstall } from './components/editCreateInstall';
 import { FlowModal } from '@/app/ui/components/FlowModal/FlowModal';
 
@@ -24,46 +35,142 @@ export default function Page() {
   const [errors, setErrors] = useState([]);
   const [openCreateEditInstalacion, setOpenCreateEditInstalacion] =
     useState(false);
+  const [disable, setDisable] = useState(false);
   const [instalacionSeleccionada, setInstalacionSeleccionada] = useState(null);
+  const [instalacionEliminar, setInstalacionEliminar] = useState(false);
+  const [estadoInstalacion, setEstadoInstalacion] = useState([]);
+  const [edit, setEdit] = useState(false);
+
   const getInstalacionesAction = async () => {
     try {
       const result = await getInstalacionesAdmin();
+      console.log('result', result);
       setInstalaciones(result);
       const newtipoEventosToShow =
         result &&
         result.map((dis) => {
           return {
-            id: dis.id,
-            nombre: dis.nombre,
-            ubicacion: dis.ubicacion,
-            precio: dis.precio,
-            horaInicio: dis.horaInicio,
-            horaCierre: dis.horaCierre,
-            activa: dis.fechaBaja && (
+            id: dis.instalacion.id,
+            nombre: dis.instalacion.nombre,
+            ubicacion: dis.instalacion.ubicacion,
+            precio: dis.instalacion.precio,
+            horaInicio: dis.instalacion.horaInicio,
+            horaCierre: dis.instalacion.horaCierre,
+            activa: dis.activo && (
               <CheckIcon className={`w-[50px] text-slate-500`} />
             ),
-            acciones: ActionTab(result.find((disc) => disc.id === dis.id)),
+            acciones: ActionTab(
+              result.find((disc) => disc.instalacion.id === dis.instalacion.id),
+            ),
           };
         });
       setInstalacionesToShow(newtipoEventosToShow);
     } catch (error) {}
   };
 
-  const editInstalacion = () => {};
+  const getInstalacionesEstado = async () => {
+    const result = await getInstalacionesEstadoAdmin();
+    const stateOptions =
+      result &&
+      result.map((r) => {
+        if (!r.fechaBaja) {
+          return {
+            value: r.id,
+            label: r.nombreEstado,
+          };
+        }
+      });
+    setEstadoInstalacion(stateOptions);
+  };
 
-  const crearInstalacion = () => {};
+  const editInstalacion = async (e) => {
+    try {
+      setErrors([]);
+      const instalacionAEditar = {
+        Id: instalacionSeleccionada.instalacion.Id,
+        Nombre: e.target.nombre.value,
+        Ubicacion: e.target.ubicacion.value,
+        Precio: e.target.precio.value,
+        Condiciones: e.target.condiciones.value,
+        HoraInicio: `${e.target.inicio.value}:00`,
+        HoraFin: `${e.target.cierre.value}:00`,
+        EstadoId: Number(e.target.estadoInstalacion.value),
+      };
+      const result = await editarInstalacionAction(instalacionAEditar);
+      if (result?.errors) {
+        setErrors(result.errors);
+        return;
+      }
+      toast.success('instalacion editada con exito');
+      getInstalacionesAction();
+      setOpenCreateEditInstalacion(false);
+      setEdit(false);
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  const crearInstalacion = async (e) => {
+    try {
+      setErrors([]);
+      const instalacionACrear = {
+        Nombre: e.target.nombre.value,
+        Ubicacion: e.target.ubicacion.value,
+        Precio: e.target.precio.value,
+        Condiciones: e.target.condiciones.value,
+        HoraInicio: `${e.target.inicio.value}:00`,
+        HoraFin: `${e.target.cierre.value}:00`,
+        EstadoId: Number(e.target.estadoInstalacion.value),
+      };
+
+      const result = await crearInstalacionAction(instalacionACrear);
+      if (result?.errors) {
+        setErrors(result.errors);
+        return;
+      }
+      toast.success('instalacion creada con exito');
+      getInstalacionesAction();
+      setOpenCreateEditInstalacion(false);
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  const handleEliminarInstalacion = async () => {
+    try {
+      await eliminarInstalacionAdmin(instalacionSeleccionada.instalacion.id);
+      toast.success('instalacion eliminada con exito');
+      getInstalacionesAction();
+      setInstalacionEliminar(false);
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
 
   const ActionTab = (instalacion) => {
     return (
       <div className="flex flex-row gap-4">
-        {!instalacion.fechaBaja ? (
+        {instalacion.activo && (
+          <Tooltip label="Ver detalles">
+            <MagnifyingGlassIcon
+              className={`w-[50px] cursor-pointer text-slate-500 `}
+              onClick={() => {
+                setInstalacionSeleccionada(instalacion);
+                setOpenCreateEditInstalacion(true);
+                setDisable(true);
+              }}
+            />
+          </Tooltip>
+        )}
+        {instalacion.activo ? (
           <>
             <Tooltip label="Editar">
               <PencilIcon
-                className={`w-[50px] cursor-pointer text-slate-500 ${instalacion.fechaBaja ? 'cursor-none text-transparent' : 'cursor-pointer'} `}
+                className={`w-[50px] cursor-pointer text-slate-500`}
                 onClick={() => {
-                  setTipoEventosToDelte(tipoEvento);
-                  setOpenCreateEditTipoEvento(true);
+                  setInstalacionSeleccionada(instalacion);
+                  setOpenCreateEditInstalacion(true);
+                  setEdit(true);
                 }}
               />
             </Tooltip>
@@ -73,14 +180,14 @@ export default function Page() {
             <PencilIcon className={`w-[50px] text-transparent `} />
           </>
         )}
-        {!instalacion.fechaBaja ? (
+        {instalacion.activo ? (
           <>
             <Tooltip label="Eliminar">
               <TrashIcon
-                className={`w-[50px] cursor-pointer text-slate-500 ${instalacion.fechaBaja ? 'cursor-none text-transparent' : 'cursor-pointer'} `}
+                className={`w-[50px] cursor-pointer text-slate-500`}
                 onClick={() => {
-                  // setTipoEventosToDelte(tipoEvento);
-                  // setOpenDeleteTipoEvento(true);
+                  setInstalacionSeleccionada(instalacion);
+                  setInstalacionEliminar(true);
                 }}
               />
             </Tooltip>
@@ -95,6 +202,7 @@ export default function Page() {
   };
   useEffect(() => {
     getInstalacionesAction();
+    getInstalacionesEstado();
   }, []);
 
   return (
@@ -110,7 +218,9 @@ export default function Page() {
               type="button"
               onClick={() => {
                 setErrors([]);
+                setEdit(false);
                 setOpenCreateEditInstalacion(true);
+                setInstalacionSeleccionada(null);
               }}
             >
               Crear Nueva instalacion
@@ -121,39 +231,49 @@ export default function Page() {
           </section>
           <Toaster />
           <FlowModal
-            title={`${instalacionSeleccionada ? 'Editar' : 'Crear'} Instalacion`}
+            title={`${disable ? 'Ver' : instalacionSeleccionada ? 'Editar' : 'Crear'} Instalacion`}
             modalBody={
-              <>
-                <EditCreateInstall
-                  errors={errors}
-                  instalacionSeleccionada={instalacionSeleccionada}
-                />
-              </>
+              <EditCreateInstall
+                errors={errors}
+                instalacionSeleccionada={instalacionSeleccionada}
+                disable={disable}
+                estadoInstalacion={estadoInstalacion}
+              />
             }
-            primaryTextButton={`Crear`}
+            primaryTextButton={`${disable ? 'Ver' : instalacionSeleccionada ? 'Editar' : 'Crear'}`}
             isOpen={openCreateEditInstalacion}
             scrollBehavior="outside"
             onAcceptModal={
-              openCreateEditInstalacion ? editInstalacion : crearInstalacion
+              disable
+                ? () => {
+                    setOpenCreateEditInstalacion(false);
+                    setInstalacionSeleccionada(null);
+                    setDisable(false);
+                  }
+                : edit
+                  ? editInstalacion
+                  : crearInstalacion
             }
             type="submit"
             onCancelModal={() => {
               setOpenCreateEditInstalacion(false);
               setInstalacionSeleccionada(null);
+              setDisable(false);
             }}
           />
-          {/* <FlowModal
-        title={`Seguro que desea eliminar el tipo de evento ${tipoEventosToDelte?.nombreTipoEvento}`}
-        modalBody={<div></div>}
-        primaryTextButton={`Si`}
-        isOpen={openDeleteTipoEvento}
-        scrollBehavior="outside"
-        onAcceptModal={handleEliminarTipoEvento}
-        onCancelModal={() => {
-          setOpenDeleteTipoEvento(false);
-          setTipoEventosToDelte(null);
-        }}
-      /> */}
+          <FlowModal
+            title={`Seguro que desea eliminar la siguiente instalacion ${instalacionSeleccionada?.instalacion?.nombre}`}
+            modalBody={<div></div>}
+            primaryTextButton={`Si`}
+            isOpen={instalacionEliminar}
+            scrollBehavior="outside"
+            onAcceptModal={handleEliminarInstalacion}
+            onCancelModal={() => {
+              setInstalacionSeleccionada(null);
+              setDisable(false);
+              setInstalacionEliminar(false);
+            }}
+          />
         </div>
       </section>
     </section>

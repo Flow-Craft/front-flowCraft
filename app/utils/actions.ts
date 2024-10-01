@@ -19,6 +19,7 @@ import {
   editWithoutFotoNewSchema,
 } from './models/news';
 import { tipoAcrearSchema, tipoAccionPartidoSchema } from './models/tipos';
+import { crearInstalacionSchema } from './models/instalaciones';
 import {
   formatDateToISOString,
   handleFileConversion,
@@ -607,4 +608,32 @@ export async function eliminarTipoAccionPartidoAdmin(eventoAcrear: any) {
 // INSTALACIONES
 export async function getInstalacionesAdmin() {
   return await FlowCraftAPI.get(`Reservas/GetInstalaciones`);
+}
+
+export async function getInstalacionesEstadoAdmin() {
+  return await FlowCraftAPI.get(`Configuracion/GetInstalacionEstado`);
+}
+
+export async function crearInstalacionAction(instalacion: any) {
+  const result = crearInstalacionSchema.safeParse(instalacion);
+  if (!result.success) {
+    return { error: true, errors: result.error.errors };
+  }
+  return await FlowCraftAPI.post(`Reservas/CrearInstalacion`, instalacion);
+}
+
+export async function editarInstalacionAction(instalacion: any) {
+  const result = crearInstalacionSchema.safeParse(instalacion);
+  if (!result.success) {
+    return { error: true, errors: result.error.errors };
+  }
+  return await FlowCraftAPI.post(`Reservas/ActualizarInstalacion`, instalacion);
+}
+
+export async function eliminarInstalacionAdmin(instalacion: any) {
+  const result = crearInstalacionSchema.safeParse(instalacion);
+  if (!result.success) {
+    return { error: true, errors: result.error.errors };
+  }
+  return await FlowCraftAPI.post(`Reservas/EliminarInstalacion/${instalacion}`);
 }

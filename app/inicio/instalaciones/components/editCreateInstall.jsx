@@ -1,28 +1,50 @@
 import { InputWithLabel } from '@/app/ui/components/InputWithLabel/InputWithLabel';
-import React from 'react';
+import { SelectWithLabel } from '@/app/ui/components/SelectWithLabel/SelectWithLabel';
+import React, { useMemo } from 'react';
 
-export const EditCreateInstall = ({ instalacionSeleccionada, errors }) => {
+export const EditCreateInstall = ({
+  instalacionSeleccionada,
+  errors,
+  disable,
+  estadoInstalacion = [],
+}) => {
+  console.log('instalacionSeleccionada', instalacionSeleccionada);
+  const defaultEstadoInstalacion = useMemo(() => {
+    if (!estadoInstalacion || !instalacionSeleccionada) {
+      return null;
+    } else {
+      const { instalacionEstado } =
+        instalacionSeleccionada?.instalacion?.instalacionHistoriales?.find(
+          (e) => !e.fechaBaja,
+        );
+      return estadoInstalacion?.find((e) => e.value === instalacionEstado?.id);
+    }
+  }, [estadoInstalacion, instalacionSeleccionada]);
   return (
     <div>
       <InputWithLabel
         name={'nombre'}
         type="text"
         label="Nombre"
-        defaultValue={instalacionSeleccionada?.nombreTipoEvento}
+        defaultValue={instalacionSeleccionada?.instalacion?.nombre}
+        readOnly={disable}
         required
       />
       <InputWithLabel
         name={'ubicacion'}
         type="text"
         label="Ubicacion"
-        defaultValue={instalacionSeleccionada?.nombreTipoEvento}
+        defaultValue={instalacionSeleccionada?.instalacion?.ubicacion}
+        readOnly={disable}
         required
       />
       <InputWithLabel
         name={'precio'}
         type="number"
+        min={0}
         label="Precio por hora"
-        defaultValue={instalacionSeleccionada?.nombreTipoEvento}
+        defaultValue={instalacionSeleccionada?.instalacion?.precio}
+        readOnly={disable}
         required
       />
       <InputWithLabel
@@ -31,7 +53,8 @@ export const EditCreateInstall = ({ instalacionSeleccionada, errors }) => {
         min="00:00"
         max="23:59"
         label="Hora de apertura"
-        defaultValue={instalacionSeleccionada?.nombreTipoEvento}
+        defaultValue={instalacionSeleccionada?.instalacion?.horaInicio}
+        readOnly={disable}
         required
       />
       <InputWithLabel
@@ -40,7 +63,16 @@ export const EditCreateInstall = ({ instalacionSeleccionada, errors }) => {
         min="00:00"
         max="23:59"
         label="Hora de cierre"
-        defaultValue={instalacionSeleccionada?.nombreTipoEvento}
+        defaultValue={instalacionSeleccionada?.instalacion?.horaCierre}
+        readOnly={disable}
+        required
+      />
+      <SelectWithLabel
+        name={'estadoInstalacion'}
+        label="Estado Instalacion"
+        options={estadoInstalacion}
+        defaultValue={defaultEstadoInstalacion}
+        isDisabled={disable}
         required
       />
       <label
@@ -50,15 +82,22 @@ export const EditCreateInstall = ({ instalacionSeleccionada, errors }) => {
         Condiciones
         <label className="text-red-600"> *</label>
         <textarea
-          name="descripcion"
+          name="condiciones"
           rows="5"
           cols="50"
-          defaultValue={instalacionSeleccionada?.descripcion}
+          defaultValue={instalacionSeleccionada?.instalacion?.condiciones}
+          readOnly={disable}
           className={`w-full resize-none rounded-lg border border-gray-300 p-2 focus:border-gray-500 focus:outline-none`}
         />
       </label>
-      {errors.length > 0 && (
-        <div className="text-red-600">Todos los campos son obligatorios</div>
+      {errors.length > 0 && errors.find((e) => e.path[0] === 'HoraFin') ? (
+        <div className="text-red-600">
+          Las horas seleccionadas son incompatibles
+        </div>
+      ) : (
+        errors.length > 0 && (
+          <div className="text-red-600">Todos los campos son obligatorios</div>
+        )
       )}
     </div>
   );
