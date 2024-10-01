@@ -46,7 +46,7 @@ function Page() {
   const getInstalacionesAction = async () => {
     try {
       const result = await getInstalacionesAdmin();
-      console.log('result', result)
+      console.log('result', result);
       setInstalaciones(result);
       const newtipoEventosToShow =
         result &&

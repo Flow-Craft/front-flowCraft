@@ -633,3 +633,13 @@ export async function editarInstalacionAction(instalacion: any) {
 export async function eliminarInstalacionAdmin(instalacion: any) {
   return await FlowCraftAPI.post(`Reservas/EliminarInstalacion/${instalacion}`);
 }
+
+// EVENTOS
+
+export async function getCategoriasActivasAdmin() {
+  return await FlowCraftAPI.get(`DisciplinasYLecciones/GetCategoriasActivas`);
+}
+
+export async function getEventosAdmin() {
+  return await FlowCraftAPI.get(`Eventos/GetEventos`);
+}

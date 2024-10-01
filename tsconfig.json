@@ -29,7 +29,8 @@
     ".next/types/**/*.ts",
     "app/utils/placeholder-data.js",
     "scripts/seed.js",
-    "app/inicio/instalaciones/page.jsx"
+    "app/inicio/instalaciones/page.jsx",
+    "app/inicio/eventos/page.jsx"
   ],
   "exclude": ["node_modules"]
 }

@@ -30,3 +30,16 @@ export function formatDate(dateString: string): string {
 
   return `${day}/${month}/${year}`;
 }
+
+export function formatearHoras(fechaInicio: any, fechaFin: any) {
+  const opcionesHora: any = {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  };
+
+  const horaInicio = new Date(fechaInicio).toLocaleTimeString([], opcionesHora);
+  const horaFin = new Date(fechaFin).toLocaleTimeString([], opcionesHora);
+
+  return `${horaInicio} a ${horaFin}`;
+}
