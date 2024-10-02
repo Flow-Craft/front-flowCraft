@@ -147,22 +147,20 @@ function Page() {
   const getEventos = async () => {
     const result = await getEventosAdmin();
     setEventos(result);
-    console.log('result', result);
     const resultFilter =
       result &&
       result.map((vnt) => ({
-        id: vnt.id,
-        nombre: vnt.titulo,
-        tipo: vnt.tipoEvento.nombreTipoEvento,
-        fecha: formatDate(vnt.fechaInicio),
-        hora: formatearHoras(vnt.fechaInicio, vnt.fechaFinEvento),
-        instalacion: vnt.instalacion.nombre,
-        disciplina: vnt.disciplinas.map((dis) => `|${dis.nombre}| `),
-        categoria: `${vnt.categoria.genero} - ${vnt.categoria.nombre}`,
-        acciones: ActionTab(result.find((disc) => disc.id === vnt.id)),
+        id: vnt.evento.id,
+        nombre: vnt.evento.titulo,
+        tipo: vnt.evento.tipoEvento.nombreTipoEvento,
+        fecha: formatDate(vnt.evento.fechaInicio),
+        hora: formatearHoras(vnt.evento.fechaInicio, vnt.evento.fechaFinEvento),
+        instalacion: vnt.evento.instalacion.nombre,
+        disciplina: vnt.evento.disciplinas.map((dis) => `|${dis.nombre}| `),
+        categoria: `${vnt.evento.categoria.genero} - ${vnt.evento.categoria.nombre}`,
+        acciones: ActionTab(result.find((disc) => disc.evento.id === vnt.evento.id)),
       }));
     setEventosToShow(resultFilter);
-    console.log('resultFilter', resultFilter);
   };
   useEffect(() => {
     getAllFilters();

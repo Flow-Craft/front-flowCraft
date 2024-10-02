@@ -14,9 +14,10 @@ import { UserTab } from '@/app/ui/configComponents/User';
 import { DisciplinasTab } from '@/app/ui/configComponents/Disciplines';
 import { ProfilesTab } from '@/app/ui/configComponents/Profiles';
 import { SolicitudesTab } from '@/app/ui/configComponents/Solicitudes';
+import withAuthorization from '@/app/utils/autorization';
 
-export default function Page() {
-  const [menuSelected, setMenuSelected] = useState<string>('');
+function Page() {
+  const [menuSelected, setMenuSelected] = useState('');
   const buttonsUser = useMemo(() => {
     return [
       {
@@ -91,3 +92,6 @@ export default function Page() {
     </section>
   );
 }
+
+
+export default withAuthorization(Page, 'Configuracion del sistema');
