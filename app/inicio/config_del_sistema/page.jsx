@@ -93,5 +93,4 @@ function Page() {
   );
 }
 
-
 export default withAuthorization(Page, 'Configuracion del sistema');

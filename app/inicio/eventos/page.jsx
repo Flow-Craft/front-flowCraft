@@ -3,6 +3,7 @@ import { FlowTable } from '@/app/ui/components/FlowTable/FlowTable';
 import { InputWithLabel } from '@/app/ui/components/InputWithLabel/InputWithLabel';
 import { SelectWithLabel } from '@/app/ui/components/SelectWithLabel/SelectWithLabel';
 import {
+  createTimer,
   getCategoriasActivasAdmin,
   getDisciplinasctionAction,
   getEventosAdmin,
@@ -13,11 +14,14 @@ import withAuthorization from '@/app/utils/autorization';
 import { formatDate, formatearHoras } from '@/app/utils/functions';
 import { Tooltip } from '@chakra-ui/react';
 import {
+  ClipboardIcon,
   MagnifyingGlassIcon,
   PencilIcon,
   TrashIcon,
 } from '@heroicons/react/24/outline';
 import { useEffect, useState } from 'react';
+import { Html5QrcodeScanner } from 'html5-qrcode';
+import toast, { Toaster } from 'react-hot-toast';
 const HEADER_TABLE = [
   { name: 'Nombre' },
   { name: 'Tipo' },
@@ -43,6 +47,9 @@ function Page() {
   const [disciplinas, setDisciplinas] = useState([]);
   const [eventos, setEventos] = useState([]);
   const [eventosToShow, setEventosToShow] = useState([]);
+  const [isScannerActive, setIsScannerActive] = useState(false);
+  const [eventoSeleccionado, setEventoSeleccionado] = useState({});
+  let scanner;
 
   const getAllFilters = async () => {
     const inst = await getInstalacionesAdmin();
@@ -140,6 +147,23 @@ function Page() {
             <PencilIcon className={`w-[50px] text-transparent `} />
           </>
         )}
+        {evento.activo ? (
+          <>
+            <Tooltip label="Tomar asistencia">
+              <ClipboardIcon
+                className={`w-[50px] cursor-pointer text-slate-500`}
+                onClick={() => {
+                  setEventoSeleccionado(evento.evento);
+                  setIsScannerActive(true);
+                }}
+              />
+            </Tooltip>
+          </>
+        ) : (
+          <>
+            <PencilIcon className={`w-[50px] text-transparent `} />
+          </>
+        )}
       </div>
     );
   };
@@ -158,14 +182,63 @@ function Page() {
         instalacion: vnt.evento.instalacion.nombre,
         disciplina: vnt.evento.disciplinas.map((dis) => `|${dis.nombre}| `),
         categoria: `${vnt.evento.categoria.genero} - ${vnt.evento.categoria.nombre}`,
-        acciones: ActionTab(result.find((disc) => disc.evento.id === vnt.evento.id)),
+        acciones: ActionTab(
+          result.find((disc) => disc.evento.id === vnt.evento.id),
+        ),
       }));
     setEventosToShow(resultFilter);
   };
+
+  const tomarAsistencia = async (userId, eventoId) => {
+    console.log('eventoId', eventoId);
+    console.log('userId', userId);
+    await createTimer(3000);
+    toast.success('Usuario Registrado con exito');
+  };
+
   useEffect(() => {
     getAllFilters();
     getEventos();
   }, []);
+
+  useEffect(() => {
+    if (isScannerActive) {
+      scanner = new Html5QrcodeScanner('reader', {
+        qrbox: {
+          width: 500,
+          height: 500,
+        },
+        fps: 5,
+      });
+      let lastUser = {};
+      // Manejador de éxito
+      const success = (decodedText) => {
+        console.log(`Código QR detectado: ${decodedText}`);
+        const user = JSON.parse(decodedText);
+        if (lastUser.id !== user.id) {
+          tomarAsistencia(user.id, eventoSeleccionado.id);
+          lastUser = user;
+        }
+        // Aquí puedes manejar el código QR detectado
+      };
+
+      // Manejador de error
+      const error = (errorMessage) => {
+        // console.error(`Error al escanear: ${errorMessage}`);
+      };
+
+      scanner.render(success, error);
+    }
+
+    // Limpiar el escáner cuando el componente se desmonta o el escáner se detenga
+    return () => {
+      if (scanner) {
+        scanner.clear().catch((error) => {
+          console.error('Error cleaning scanner:', error);
+        });
+      }
+    };
+  }, [isScannerActive, eventoSeleccionado]);
 
   return (
     <section>
@@ -254,6 +327,27 @@ function Page() {
           <FlowTable Header={HEADER_TABLE} dataToShow={eventosToShow} />
         </section>
       </section>
+      <Toaster />
+      {isScannerActive && (
+        <div className="fixed left-0 top-0 z-50 flex h-full w-full flex-col items-center justify-center bg-black bg-opacity-75">
+          <div className="flex flex-row content-center items-center gap-5">
+            <button
+              className="mb-2 rounded bg-red-600 p-2 text-white"
+              onClick={() => {
+                setIsScannerActive(false);
+                setEventoSeleccionado({});
+              }}
+            >
+              Cerrar
+            </button>
+            <span className="text-3xl font-bold text-cyan-50">
+              {eventoSeleccionado.titulo}
+            </span>
+          </div>
+
+          <div id="reader" className="h-[70vh] w-[70vw] bg-white"></div>
+        </div>
+      )}
     </section>
   );
 }

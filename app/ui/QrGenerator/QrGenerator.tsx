@@ -13,7 +13,7 @@ export const QrGenerator = ({
   const bodyQr = (
     <section className="flex w-full justify-center">
       <QRCode
-        value="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+        value={JSON.stringify(userData)}
         logoImage="/logoQr.jpeg"
         logoWidth={50}
         logoHeight={50}

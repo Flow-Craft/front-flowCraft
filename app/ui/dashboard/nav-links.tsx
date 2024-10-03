@@ -149,6 +149,11 @@ export default function NavLinks({ onClose = () => {} }) {
         },
         ...linksFiltrados,
       ];
+
+      linksFiltrados = linksFiltrados.filter(
+        (item, index, self) =>
+          index === self.findIndex((t) => t.name === item.name),
+      );
       return linksFiltrados || [];
     }
     return [];
