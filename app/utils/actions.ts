@@ -662,3 +662,29 @@ export async function crearEventosAdmin(evento: any) {
   eventToSend.FechaFinEvento = eventToSend.FechaFinEvento + ':00';
   return await FlowCraftAPI.get(`Eventos/GetEventos`);
 }
+
+export async function editarEventoAdmin(evento: any) {
+  const fileType = evento.Banner.type;
+  const eventToSend = JSON.parse(JSON.stringify(evento));
+  if (evento.Banner.name) {
+    //convertir File to base 64
+    let file64 = await handleFileConversion(
+      new File([evento.Banner], evento.Banner.name, {
+        type: evento.Banner.type,
+      }),
+    );
+    eventToSend.Banner = file64;
+    eventToSend.type = fileType;
+  }
+  eventToSend.FechaInicio = eventToSend.FechaInicio + ':00';
+  eventToSend.FechaFinEvento = eventToSend.FechaFinEvento + ':00';
+  return await FlowCraftAPI.get(`Eventos/GetEventos`);
+}
+
+export async function eliminarEventosAdmin(id: any) {
+  return await FlowCraftAPI.post(`Eventos/EliminarEvento`, { Id: id });
+}
+
+export async function tomarAsistenciaAdmin(usuarioEvento: any) {
+  return await FlowCraftAPI.post(`Eventos/TomarAsistencia`, usuarioEvento);
+}

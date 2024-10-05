@@ -5,11 +5,14 @@ import { SelectWithLabel } from '@/app/ui/components/SelectWithLabel/SelectWithL
 import {
   crearEventosAdmin,
   createTimer,
+  editarEventoAdmin,
+  eliminarEventosAdmin,
   getCategoriasActivasAdmin,
   getDisciplinasctionAction,
   getEventosAdmin,
   getInstalacionesAdmin,
   getTipoEventosAdmin,
+  tomarAsistenciaAdmin,
 } from '@/app/utils/actions';
 import withAuthorization from '@/app/utils/autorization';
 import { formatDate, formatearHoras } from '@/app/utils/functions';
@@ -53,6 +56,7 @@ function Page() {
   const [isScannerActive, setIsScannerActive] = useState(false);
   const [eventoSeleccionado, setEventoSeleccionado] = useState({});
   const [editCreateEvento, setEditCreateEvento] = useState(false);
+  const [eliminarEvento, setEliminarEvento] = useState(false);
   const [errors, setErrors] = useState([]);
   const [disciplinasSeleccionadas, setDisciplinasSeleccionadas] = useState([]);
   let scanner;
@@ -126,9 +130,8 @@ function Page() {
               <PencilIcon
                 className={`w-[50px] cursor-pointer text-slate-500`}
                 onClick={() => {
-                  setInstalacionSeleccionada(instalacion);
+                  setEventoSeleccionado(evento.evento);
                   setOpenCreateEditInstalacion(true);
-                  setEdit(true);
                 }}
               />
             </Tooltip>
@@ -144,8 +147,8 @@ function Page() {
               <TrashIcon
                 className={`w-[50px] cursor-pointer text-slate-500`}
                 onClick={() => {
-                  setInstalacionSeleccionada(instalacion);
-                  setInstalacionEliminar(true);
+                  setEventoSeleccionado(evento.evento);
+                  setEliminarEvento(true);
                 }}
               />
             </Tooltip>
@@ -212,7 +215,33 @@ function Page() {
         IdsDisciplinas: disciplinasSeleccionadas.map((perm) => perm.value),
         Banner: e.target.Banner.files[0],
       };
-      console.log('eventoACrear', eventoACrear);
+
+      const result = await editarEventoAdmin(eventoACrear);
+
+      if (result?.error) {
+        setErrors(result?.errors);
+        return;
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  const editarEvento = async (e) => {
+    try {
+      const eventoACrear = {
+        Titulo: e.target.Titulo.value,
+        FechaInicio: e.target.FechaInicio.value,
+        FechaFinEvento: e.target.FechaFinEvento.value,
+        CupoMaximo: e.target.CupoMaximo.value,
+        LinkStream: e.target.LinkStream.value,
+        Descripcion: e.target.Descripcion.value,
+        IdTipoEvento: e.target.IdTipoEvento.value,
+        IdInstalacion: e.target.IdInstalacion.value,
+        IdCategoria: e.target.IdCategoria.value,
+        IdsDisciplinas: disciplinasSeleccionadas.map((perm) => perm.value),
+        Banner: e.target.Banner.files[0] || eventoSeleccionado.Banner,
+      };
 
       const result = await crearEventosAdmin(eventoACrear);
 
@@ -220,18 +249,28 @@ function Page() {
         setErrors(result?.errors);
         return;
       }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
 
-      console.log('eventoACrear', eventoACrear);
+  const eliminarEventoAction = async () => {
+    try {
+      await eliminarEventosAdmin(eventoSeleccionado.id);
+      setEliminarEvento(false);
+      setEventoSeleccionado({});
     } catch (error) {
       toast.error(error.message);
     }
   };
 
   const tomarAsistencia = async (userId, eventoId) => {
-    console.log('eventoId', eventoId);
-    console.log('userId', userId);
-    await createTimer(3000);
-    toast.success('Usuario Registrado con exito');
+    try {
+      await tomarAsistenciaAdmin({ IdEvento: eventoId, IdUsuario: userId });
+      toast.success('Usuario Registrado con exito');
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
 
   useEffect(() => {
@@ -251,7 +290,6 @@ function Page() {
       let lastUser = {};
       // Manejador de éxito
       const success = (decodedText) => {
-        console.log(`Código QR detectado: ${decodedText}`);
         const user = JSON.parse(decodedText);
         if (lastUser.id !== user.id) {
           tomarAsistencia(user.id, eventoSeleccionado.id);
@@ -387,7 +425,7 @@ function Page() {
         primaryTextButton={eventoSeleccionado?.evento ? 'Editar' : 'Crear'}
         isOpen={editCreateEvento}
         scrollBehavior="outside"
-        onAcceptModal={eventoSeleccionado?.evento ? () => {} : crearEvento}
+        onAcceptModal={eventoSeleccionado?.evento ? editarEvento : crearEvento}
         onCancelModal={() => {
           setEditCreateEvento(false);
           setErrors([]);
@@ -397,11 +435,23 @@ function Page() {
         type="submit"
         size="full"
       />
+      <FlowModal
+        title={`Seguro que desea eliminar el evento: ${eventoSeleccionado.titulo}`}
+        modalBody={<></>}
+        primaryTextButton={'Si'}
+        isOpen={eliminarEvento}
+        scrollBehavior="outside"
+        onAcceptModal={eliminarEventoAction}
+        onCancelModal={() => {
+          setEliminarEvento(false);
+          setEventoSeleccionado({});
+        }}
+      />
       {isScannerActive && (
-        <div className="fixed left-0 top-0 z-50 flex h-full w-full flex-col items-center justify-center bg-black bg-opacity-75">
+        <div className="fixed left-0 top-0 z-50 flex h-full w-full flex-col items-center justify-start bg-black bg-opacity-75">
           <div className="flex flex-row content-center items-center gap-5">
             <button
-              className="mb-2 rounded bg-red-600 p-2 text-white"
+              className="mb-2 mt-4 rounded bg-red-600 p-2 text-white"
               onClick={() => {
                 setIsScannerActive(false);
                 setEventoSeleccionado({});
@@ -413,7 +463,7 @@ function Page() {
               {eventoSeleccionado.titulo}
             </span>
           </div>
-          <div id="reader" className="h-[70vh] w-[70vw] bg-white"></div>
+          <div id="reader" className="h-[50vh] w-[50vw] bg-white"></div>
         </div>
       )}
     </section>
