@@ -122,7 +122,6 @@ export const ProfilesTab = () => {
           },
           Permisos: permisosSelected.map((perm) => perm.value),
         };
-        console.log(perfil);
         await editPerfilAction(perfil);
         toast.success('perfil editado con exito');
         PerfilesToTab();

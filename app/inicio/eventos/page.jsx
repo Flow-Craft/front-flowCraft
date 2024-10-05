@@ -3,6 +3,7 @@ import { FlowTable } from '@/app/ui/components/FlowTable/FlowTable';
 import { InputWithLabel } from '@/app/ui/components/InputWithLabel/InputWithLabel';
 import { SelectWithLabel } from '@/app/ui/components/SelectWithLabel/SelectWithLabel';
 import {
+  crearEventosAdmin,
   createTimer,
   getCategoriasActivasAdmin,
   getDisciplinasctionAction,
@@ -22,6 +23,8 @@ import {
 import { useEffect, useState } from 'react';
 import { Html5QrcodeScanner } from 'html5-qrcode';
 import toast, { Toaster } from 'react-hot-toast';
+import { FlowModal } from '@/app/ui/components/FlowModal/FlowModal';
+import { CrearEditarModalEventos } from './CrearEditarModalEventos/CrearEditarModalEventos';
 const HEADER_TABLE = [
   { name: 'Nombre' },
   { name: 'Tipo' },
@@ -49,6 +52,9 @@ function Page() {
   const [eventosToShow, setEventosToShow] = useState([]);
   const [isScannerActive, setIsScannerActive] = useState(false);
   const [eventoSeleccionado, setEventoSeleccionado] = useState({});
+  const [editCreateEvento, setEditCreateEvento] = useState(false);
+  const [errors, setErrors] = useState([]);
+  const [disciplinasSeleccionadas, setDisciplinasSeleccionadas] = useState([]);
   let scanner;
 
   const getAllFilters = async () => {
@@ -98,6 +104,8 @@ function Page() {
   };
 
   const ActionTab = (evento) => {
+    const fechaInicio = new Date(evento?.evento.fechaInicio);
+    const fechaFin = new Date(evento?.evento.fechaFinEvento);
     return (
       <div className="flex flex-row gap-4">
         {evento.activo && (
@@ -112,7 +120,7 @@ function Page() {
             />
           </Tooltip>
         )}
-        {evento.activo ? (
+        {evento.activo && new Date() < fechaInicio ? (
           <>
             <Tooltip label="Editar">
               <PencilIcon
@@ -147,7 +155,7 @@ function Page() {
             <PencilIcon className={`w-[50px] text-transparent `} />
           </>
         )}
-        {evento.activo ? (
+        {evento.activo && fechaFin > new Date() > fechaInicio ? (
           <>
             <Tooltip label="Tomar asistencia">
               <ClipboardIcon
@@ -187,6 +195,36 @@ function Page() {
         ),
       }));
     setEventosToShow(resultFilter);
+  };
+
+  const crearEvento = async (e) => {
+    try {
+      const eventoACrear = {
+        Titulo: e.target.Titulo.value,
+        FechaInicio: e.target.FechaInicio.value,
+        FechaFinEvento: e.target.FechaFinEvento.value,
+        CupoMaximo: e.target.CupoMaximo.value,
+        LinkStream: e.target.LinkStream.value,
+        Descripcion: e.target.Descripcion.value,
+        IdTipoEvento: e.target.IdTipoEvento.value,
+        IdInstalacion: e.target.IdInstalacion.value,
+        IdCategoria: e.target.IdCategoria.value,
+        IdsDisciplinas: disciplinasSeleccionadas.map((perm) => perm.value),
+        Banner: e.target.Banner.files[0],
+      };
+      console.log('eventoACrear', eventoACrear);
+
+      const result = await crearEventosAdmin(eventoACrear);
+
+      if (result?.error) {
+        setErrors(result?.errors);
+        return;
+      }
+
+      console.log('eventoACrear', eventoACrear);
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
 
   const tomarAsistencia = async (userId, eventoId) => {
@@ -318,7 +356,12 @@ function Page() {
 
           <button
             className="rounded-lg bg-blue-500 p-2 text-center text-xl text-white lg:ml-auto"
-            onClick={() => {}}
+            type="button"
+            onClick={() => {
+              setEditCreateEvento(true);
+              setErrors([]);
+              setEventoSeleccionado({});
+            }}
           >
             Crear Evento
           </button>
@@ -328,6 +371,32 @@ function Page() {
         </section>
       </section>
       <Toaster />
+      <FlowModal
+        title={eventoSeleccionado?.evento ? 'Editar Evento' : 'Crear Evento'}
+        modalBody={
+          <CrearEditarModalEventos
+            errors={errors}
+            evento={eventoSeleccionado}
+            instalacion={instalacion}
+            categoria={categoria}
+            disciplinas={disciplinas}
+            tipo={tipo}
+            setDisciplinasSeleccionadas={setDisciplinasSeleccionadas}
+          />
+        }
+        primaryTextButton={eventoSeleccionado?.evento ? 'Editar' : 'Crear'}
+        isOpen={editCreateEvento}
+        scrollBehavior="outside"
+        onAcceptModal={eventoSeleccionado?.evento ? () => {} : crearEvento}
+        onCancelModal={() => {
+          setEditCreateEvento(false);
+          setErrors([]);
+          setEventoSeleccionado({});
+          setDisciplinasSeleccionadas([]);
+        }}
+        type="submit"
+        size="full"
+      />
       {isScannerActive && (
         <div className="fixed left-0 top-0 z-50 flex h-full w-full flex-col items-center justify-center bg-black bg-opacity-75">
           <div className="flex flex-row content-center items-center gap-5">
@@ -344,7 +413,6 @@ function Page() {
               {eventoSeleccionado.titulo}
             </span>
           </div>
-
           <div id="reader" className="h-[70vh] w-[70vw] bg-white"></div>
         </div>
       )}

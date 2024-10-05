@@ -13,11 +13,9 @@ import {
   RegistryUserByAdminSchemaZod,
   CreatePerfilSchema,
 } from './models/user';
-import {
-  editCreateNewSchema,
-  editNewSchema,
-  editWithoutFotoNewSchema,
-} from './models/news';
+import { editCreateNewSchema } from './models/news';
+import { eventoSchema } from './models/eventos';
+
 import { tipoAcrearSchema, tipoAccionPartidoSchema } from './models/tipos';
 import { crearInstalacionSchema } from './models/instalaciones';
 import {
@@ -641,5 +639,26 @@ export async function getCategoriasActivasAdmin() {
 }
 
 export async function getEventosAdmin() {
+  return await FlowCraftAPI.get(`Eventos/GetEventos`);
+}
+
+export async function crearEventosAdmin(evento: any) {
+  const result = eventoSchema.safeParse(evento);
+  if (!result.success) {
+    console.log('result', result);
+    return { error: true, errors: result.error.errors };
+  }
+  const fileType = evento.Banner.type;
+  const eventToSend = JSON.parse(JSON.stringify(evento));
+  //convertir File to base 64
+  let file64 = await handleFileConversion(
+    new File([evento.Banner], evento.Banner.name, {
+      type: evento.Banner.type,
+    }),
+  );
+  eventToSend.Banner = file64;
+  eventToSend.type = fileType;
+  eventToSend.FechaInicio = eventToSend.FechaInicio + ':00';
+  eventToSend.FechaFinEvento = eventToSend.FechaFinEvento + ':00';
   return await FlowCraftAPI.get(`Eventos/GetEventos`);
 }
