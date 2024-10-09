@@ -657,11 +657,9 @@ export async function getEventosAdmin() {
 
 export async function crearEventosAdmin(evento: any) {
   const result = eventoSchema.safeParse(evento);
-  console.log("AAAAAAA")
   if (!result.success) {
     return { error: true, errors: result.error.errors };
   }
-  console.log("asdasd")
   const fileType = evento.Banner.type;
   const eventToSend = JSON.parse(JSON.stringify(evento));
   //convertir File to base 64
@@ -670,13 +668,11 @@ export async function crearEventosAdmin(evento: any) {
       type: evento.Banner.type,
     }),
   );
-  console.log("sdasdasdasdasd")
   eventToSend.Banner = file64;
   eventToSend.type = fileType;
   eventToSend.FechaInicio = eventToSend.FechaInicio + ':00';
   eventToSend.FechaFinEvento = eventToSend.FechaFinEvento + ':00';
-  console.log('eventToSend', eventToSend);
-  return await FlowCraftAPI.post(`Eventos/CrearEvento`, { eventToSend });
+  return await FlowCraftAPI.post(`Eventos/CrearEvento`, eventToSend);
 }
 
 export async function editarEventoAdmin(evento: any) {
