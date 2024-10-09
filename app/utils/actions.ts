@@ -272,6 +272,15 @@ export async function getInstalacionesAction() {
   }
 }
 
+export async function getInstalacionesActionAdmin() {
+  try {
+    return await FlowCraftAPI.get('Reservas/GetInstalacionesActivas');
+  } catch (error: any) {
+    toast.dismiss();
+    toast.error(error.message);
+  }
+}
+
 export async function getNewsByIdSimpatizante(id: any) {
   try {
     return await FlowCraftAPI.get(
@@ -608,6 +617,10 @@ export async function getInstalacionesAdmin() {
   return await FlowCraftAPI.get(`Reservas/GetInstalaciones`);
 }
 
+export async function getInstalacionesActivasAdmin() {
+  return await FlowCraftAPI.get(`Reservas/GetInstalacionesActivas`);
+}
+
 export async function getInstalacionesEstadoAdmin() {
   return await FlowCraftAPI.get(`Configuracion/GetInstalacionEstado`);
 }
@@ -644,10 +657,11 @@ export async function getEventosAdmin() {
 
 export async function crearEventosAdmin(evento: any) {
   const result = eventoSchema.safeParse(evento);
+  console.log("AAAAAAA")
   if (!result.success) {
-    console.log('result', result);
     return { error: true, errors: result.error.errors };
   }
+  console.log("asdasd")
   const fileType = evento.Banner.type;
   const eventToSend = JSON.parse(JSON.stringify(evento));
   //convertir File to base 64
@@ -656,11 +670,13 @@ export async function crearEventosAdmin(evento: any) {
       type: evento.Banner.type,
     }),
   );
+  console.log("sdasdasdasdasd")
   eventToSend.Banner = file64;
   eventToSend.type = fileType;
   eventToSend.FechaInicio = eventToSend.FechaInicio + ':00';
   eventToSend.FechaFinEvento = eventToSend.FechaFinEvento + ':00';
-  return await FlowCraftAPI.get(`Eventos/GetEventos`);
+  console.log('eventToSend', eventToSend);
+  return await FlowCraftAPI.post(`Eventos/CrearEvento`, { eventToSend });
 }
 
 export async function editarEventoAdmin(evento: any) {
@@ -687,4 +703,16 @@ export async function eliminarEventosAdmin(id: any) {
 
 export async function tomarAsistenciaAdmin(usuarioEvento: any) {
   return await FlowCraftAPI.post(`Eventos/TomarAsistencia`, usuarioEvento);
+}
+
+export async function getEventoByUsuarioByIdAdmin(eventId: any) {
+  return await FlowCraftAPI.get(`Eventos/GetEventoByIdByUsuario?id=${eventId}`);
+}
+
+export async function inscribirseAEventoAdmin(eventId: any) {
+  return await FlowCraftAPI.post(`Eventos/Inscribirse?IdEvento=${eventId}`);
+}
+
+export async function desinscribirseAEventoAdmin(eventId: any) {
+  return await FlowCraftAPI.post(`Eventos/Desinscribirse?IdEvento=${eventId}`);
 }

@@ -31,7 +31,8 @@
     "scripts/seed.js",
     "app/inicio/instalaciones/page.jsx",
     "app/inicio/eventos/page.jsx",
-    "app/inicio/config_del_sistema/page.jsx"
+    "app/inicio/config_del_sistema/page.jsx",
+    "app/inicio/partidos/page.jsx"
   ],
   "exclude": ["node_modules"]
 }

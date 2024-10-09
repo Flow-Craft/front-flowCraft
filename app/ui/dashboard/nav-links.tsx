@@ -100,7 +100,7 @@ const links = [
   },
   {
     name: 'Partidos',
-    href: '/inicio/partido',
+    href: '/inicio/partidos',
     icon: MegaphoneIcon,
     nombrePermiso: 'Partidos',
   },

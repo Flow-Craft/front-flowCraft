@@ -10,6 +10,7 @@ import {
   getCategoriasActivasAdmin,
   getDisciplinasctionAction,
   getEventosAdmin,
+  getInstalacionesActivasAdmin,
   getInstalacionesAdmin,
   getTipoEventosAdmin,
   tomarAsistenciaAdmin,
@@ -28,6 +29,8 @@ import { Html5QrcodeScanner } from 'html5-qrcode';
 import toast, { Toaster } from 'react-hot-toast';
 import { FlowModal } from '@/app/ui/components/FlowModal/FlowModal';
 import { CrearEditarModalEventos } from './CrearEditarModalEventos/CrearEditarModalEventos';
+import { useRouter } from 'next/navigation';
+
 const HEADER_TABLE = [
   { name: 'Nombre' },
   { name: 'Tipo' },
@@ -59,6 +62,8 @@ function Page() {
   const [eliminarEvento, setEliminarEvento] = useState(false);
   const [errors, setErrors] = useState([]);
   const [disciplinasSeleccionadas, setDisciplinasSeleccionadas] = useState([]);
+  const [instalacionesActivasAdmin, setInstalacionesActivasAdmin] = useState([])
+  const router = useRouter();
   let scanner;
 
   const getAllFilters = async () => {
@@ -66,12 +71,19 @@ function Page() {
     const types = await getTipoEventosAdmin();
     const categorias = await getCategoriasActivasAdmin();
     const disciplinas = await getDisciplinasctionAction();
+    const instActivas = await getInstalacionesActivasAdmin();
 
     const disOptions =
       disciplinas &&
       disciplinas.map((tp) => {
         return { label: tp.nombre, value: tp.id };
       });
+
+    const insActivasOptions =
+    instActivas &&
+    instActivas.map((tp) => {
+      return { label: tp.nombre, value: tp.id };
+    });
 
     const catOptions =
       categorias &&
@@ -105,6 +117,7 @@ function Page() {
     setInstalacion(instalacionesOptions);
     setCategoria(catOptions);
     setDisciplinas(disOptions);
+    setInstalacionesActivasAdmin(insActivasOptions)
   };
 
   const ActionTab = (evento) => {
@@ -117,9 +130,8 @@ function Page() {
             <MagnifyingGlassIcon
               className={`w-[50px] cursor-pointer text-slate-500 `}
               onClick={() => {
-                setInstalacionSeleccionada(instalacion);
-                setOpenCreateEditInstalacion(true);
-                setDisable(true);
+                router.push(`eventos/${evento.evento.id}`);
+                console.log();
               }}
             />
           </Tooltip>
@@ -215,9 +227,12 @@ function Page() {
         IdsDisciplinas: disciplinasSeleccionadas.map((perm) => perm.value),
         Banner: e.target.Banner.files[0],
       };
+      console.log("entre por aca")
+      const result = await crearEventosAdmin(eventoACrear);
 
-      const result = await editarEventoAdmin(eventoACrear);
-
+      // toast.success('Evento creado con exito');
+      // setEditCreateEvento(false);
+      // getEventos();
       if (result?.error) {
         setErrors(result?.errors);
         return;
@@ -243,7 +258,7 @@ function Page() {
         Banner: e.target.Banner.files[0] || eventoSeleccionado.Banner,
       };
 
-      const result = await crearEventosAdmin(eventoACrear);
+      const result = await editarEventoAdmin(eventoACrear);
 
       if (result?.error) {
         setErrors(result?.errors);
@@ -415,7 +430,7 @@ function Page() {
           <CrearEditarModalEventos
             errors={errors}
             evento={eventoSeleccionado}
-            instalacion={instalacion}
+            instalacion={instalacionesActivasAdmin}
             categoria={categoria}
             disciplinas={disciplinas}
             tipo={tipo}
