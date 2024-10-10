@@ -16,7 +16,7 @@ export default function MenuPrincipalMobile({
 }: any) {
   return (
     <>
-      <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
+      <Drawer isOpen={isOpen} placement="left" onClose={onClose} size={'full'}>
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />

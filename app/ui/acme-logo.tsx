@@ -1,4 +1,3 @@
-import { GlobeAltIcon } from '@heroicons/react/24/outline';
 import { monserrant } from '../ui/fonts';
 
 export default function AcmeLogo() {
@@ -6,7 +5,11 @@ export default function AcmeLogo() {
     <div
       className={`${monserrant.className} flex flex-row items-center leading-none text-white`}
     >
-      <GlobeAltIcon className="h-12 w-12 rotate-[15deg]" />
+      <img
+        src="/favicon.ico"
+        alt="Favicon"
+        className="h-[50px] w-[50px] md:h-[130px] md:w-[130px]"
+      />
       <p className="text-[38px]">FlowCraft</p>
     </div>
   );

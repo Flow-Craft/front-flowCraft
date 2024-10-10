@@ -12,6 +12,7 @@ export const CrearEditarModalEventos = ({
   setDisciplinasSeleccionadas,
 }) => {
   const [minDate, setMinDate] = useState('');
+  const [showPartido, setShowPartido] = useState(false);
 
   useEffect(() => {
     // Obtener la fecha actual
@@ -23,6 +24,7 @@ export const CrearEditarModalEventos = ({
     const formattedDate = today.toISOString().slice(0, 16);
     setMinDate(formattedDate);
   }, []);
+
   return (
     <div className="flex w-full flex-col items-center justify-center">
       <section className=" flex w-full flex-col md:flex-row md:justify-evenly">
@@ -31,7 +33,7 @@ export const CrearEditarModalEventos = ({
             label="Nombre"
             name="Titulo"
             type="text"
-            //   defaultValue={user?.nombre}
+            defaultValue={evento?.titulo}
             wrong={!!errors.find((e) => e.path[0] === 'Titulo')}
             required
           />
@@ -45,7 +47,7 @@ export const CrearEditarModalEventos = ({
               name="Descripcion"
               rows="5"
               cols="50"
-              // defaultValue={instalacionSeleccionada?.instalacion?.condiciones}
+              defaultValue={evento?.descripcion}
               className={`w-full resize-none rounded-lg border border-gray-300 p-2 focus:border-gray-500 focus:outline-none`}
             />
           </label>
@@ -54,14 +56,15 @@ export const CrearEditarModalEventos = ({
             name="LinkStream"
             type="text"
             required
+            defaultValue={evento?.linkStream}
             wrong={!!errors.find((e) => e.path[0] === 'LinkStream')}
           />
           <SelectWithLabel
             name="IdInstalacion"
             options={instalacion}
-            //   defaultValue={SEX_SELECT_OPTIONS.find(
-            //     (option) => option.value === user.sexo,
-            //   )}
+            defaultValue={instalacion.find(
+              (option) => option.value === evento?.instalacion?.id,
+            )}
             label="Instalacion"
             required
             wrong={!!errors.find((e) => e.path[0] === 'IdInstalacion')}
@@ -71,7 +74,7 @@ export const CrearEditarModalEventos = ({
             name="FechaInicio"
             type="datetime-local"
             min={minDate}
-            //   defaultValue={user?.fechaNacimiento?.split('T')[0]}
+            defaultValue={evento?.fechaInicio}
             wrong={!!errors.find((e) => e.path[0] === 'FechaInicio')}
             required
           />
@@ -80,7 +83,7 @@ export const CrearEditarModalEventos = ({
             name="FechaFinEvento"
             type="datetime-local"
             min={minDate}
-            //   defaultValue={user?.fechaNacimiento?.split('T')[0]}
+            defaultValue={evento?.fechaFinEvento}
             wrong={!!errors.find((e) => e.path[0] === 'FechaFinEvento')}
             required
           />
@@ -89,7 +92,7 @@ export const CrearEditarModalEventos = ({
             name="CupoMaximo"
             type="number"
             min={0}
-            //   defaultValue={user?.fechaNacimiento?.split('T')[0]}
+            defaultValue={evento.cupoMaximo}
             wrong={!!errors.find((e) => e.path[0] === 'CupoMaximo')}
             required
           />
@@ -105,9 +108,9 @@ export const CrearEditarModalEventos = ({
           <SelectWithLabel
             name="IdCategoria"
             options={categoria}
-            //   defaultValue={SEX_SELECT_OPTIONS.find(
-            //     (option) => option.value === user.sexo,
-            //   )}
+            defaultValue={categoria.find(
+              (option) => option.value === evento?.categoria?.id,
+            )}
             label="Categoria"
             required
             wrong={!!errors.find((e) => e.path[0] === 'IdCategoria')}
@@ -115,9 +118,9 @@ export const CrearEditarModalEventos = ({
           <SelectWithLabel
             name="IdsDisciplinas"
             options={disciplinas}
-            //   defaultValue={SEX_SELECT_OPTIONS.find(
-            //     (option) => option.value === user.sexo,
-            //   )}
+            defaultValue={evento?.disciplinas?.map((dis) => {
+              return disciplinas.find((option) => option.value === dis.id);
+            })}
             label="Disciplina"
             isMulti
             required
@@ -127,14 +130,14 @@ export const CrearEditarModalEventos = ({
           <SelectWithLabel
             name="IdTipoEvento"
             options={tipo}
-            //   defaultValue={SEX_SELECT_OPTIONS.find(
-            //     (option) => option.value === user.sexo,
-            //   )}
+            defaultValue={tipo.find(
+              (option) => option.value === evento?.tipoEvento?.id,
+            )}
             label="Tipo"
             required
             wrong={!!errors.find((e) => e.path[0] === 'IdTipoEvento')}
           />
-          {true && (
+          {showPartido && (
             <>
               <label
                 className={

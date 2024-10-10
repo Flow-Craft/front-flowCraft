@@ -676,9 +676,9 @@ export async function crearEventosAdmin(evento: any) {
 }
 
 export async function editarEventoAdmin(evento: any) {
-  const fileType = evento.Banner.type;
   const eventToSend = JSON.parse(JSON.stringify(evento));
-  if (evento.Banner.name) {
+  if (evento?.Banner?.name) {
+    const fileType = evento.Banner.type;
     //convertir File to base 64
     let file64 = await handleFileConversion(
       new File([evento.Banner], evento.Banner.name, {
@@ -690,7 +690,7 @@ export async function editarEventoAdmin(evento: any) {
   }
   eventToSend.FechaInicio = eventToSend.FechaInicio + ':00';
   eventToSend.FechaFinEvento = eventToSend.FechaFinEvento + ':00';
-  return await FlowCraftAPI.get(`Eventos/GetEventos`);
+  return await FlowCraftAPI.post(`Eventos/ActualizarEvento`, eventToSend);
 }
 
 export async function eliminarEventosAdmin(id: any) {

@@ -62,7 +62,9 @@ function Page() {
   const [eliminarEvento, setEliminarEvento] = useState(false);
   const [errors, setErrors] = useState([]);
   const [disciplinasSeleccionadas, setDisciplinasSeleccionadas] = useState([]);
-  const [instalacionesActivasAdmin, setInstalacionesActivasAdmin] = useState([])
+  const [instalacionesActivasAdmin, setInstalacionesActivasAdmin] = useState(
+    [],
+  );
   const router = useRouter();
   let scanner;
 
@@ -80,10 +82,10 @@ function Page() {
       });
 
     const insActivasOptions =
-    instActivas &&
-    instActivas.map((tp) => {
-      return { label: tp.nombre, value: tp.id };
-    });
+      instActivas &&
+      instActivas.map((tp) => {
+        return { label: tp.nombre, value: tp.id };
+      });
 
     const catOptions =
       categorias &&
@@ -117,7 +119,7 @@ function Page() {
     setInstalacion(instalacionesOptions);
     setCategoria(catOptions);
     setDisciplinas(disOptions);
-    setInstalacionesActivasAdmin(insActivasOptions)
+    setInstalacionesActivasAdmin(insActivasOptions);
   };
 
   const ActionTab = (evento) => {
@@ -143,7 +145,7 @@ function Page() {
                 className={`w-[50px] cursor-pointer text-slate-500`}
                 onClick={() => {
                   setEventoSeleccionado(evento.evento);
-                  setOpenCreateEditInstalacion(true);
+                  setEditCreateEvento(true);
                 }}
               />
             </Tooltip>
@@ -227,12 +229,11 @@ function Page() {
         IdsDisciplinas: disciplinasSeleccionadas.map((perm) => perm.value),
         Banner: e.target.Banner.files[0],
       };
-      console.log("entre por aca")
       const result = await crearEventosAdmin(eventoACrear);
 
-      // toast.success('Evento creado con exito');
-      // setEditCreateEvento(false);
-      // getEventos();
+      toast.success('Evento creado con exito');
+      setEditCreateEvento(false);
+      getEventos();
       if (result?.error) {
         setErrors(result?.errors);
         return;
@@ -245,6 +246,7 @@ function Page() {
   const editarEvento = async (e) => {
     try {
       const eventoACrear = {
+        Id: eventoSeleccionado.id,
         Titulo: e.target.Titulo.value,
         FechaInicio: e.target.FechaInicio.value,
         FechaFinEvento: e.target.FechaFinEvento.value,
@@ -259,6 +261,10 @@ function Page() {
       };
 
       const result = await editarEventoAdmin(eventoACrear);
+      toast.success('Evento editado con exito');
+      setEventoSeleccionado({});
+      setEditCreateEvento(false);
+      getEventos();
 
       if (result?.error) {
         setErrors(result?.errors);
@@ -425,7 +431,7 @@ function Page() {
       </section>
       <Toaster />
       <FlowModal
-        title={eventoSeleccionado?.evento ? 'Editar Evento' : 'Crear Evento'}
+        title={eventoSeleccionado?.id ? 'Editar Evento' : 'Crear Evento'}
         modalBody={
           <CrearEditarModalEventos
             errors={errors}
@@ -437,10 +443,10 @@ function Page() {
             setDisciplinasSeleccionadas={setDisciplinasSeleccionadas}
           />
         }
-        primaryTextButton={eventoSeleccionado?.evento ? 'Editar' : 'Crear'}
+        primaryTextButton={eventoSeleccionado?.id ? 'Editar' : 'Crear'}
         isOpen={editCreateEvento}
         scrollBehavior="outside"
-        onAcceptModal={eventoSeleccionado?.evento ? editarEvento : crearEvento}
+        onAcceptModal={eventoSeleccionado?.id ? editarEvento : crearEvento}
         onCancelModal={() => {
           setEditCreateEvento(false);
           setErrors([]);
