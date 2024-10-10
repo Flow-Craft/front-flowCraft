@@ -21,10 +21,11 @@ import { Tooltip } from '@chakra-ui/react';
 import {
   ClipboardIcon,
   MagnifyingGlassIcon,
+  PaintBrushIcon,
   PencilIcon,
   TrashIcon,
 } from '@heroicons/react/24/outline';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Html5QrcodeScanner } from 'html5-qrcode';
 import toast, { Toaster } from 'react-hot-toast';
 import { FlowModal } from '@/app/ui/components/FlowModal/FlowModal';
@@ -43,7 +44,7 @@ const HEADER_TABLE = [
 ];
 const ACTIVO_OPTIONS = [
   { label: 'SI', value: true },
-  { label: 'NO', value: true },
+  { label: 'NO', value: false },
 ];
 
 const getFecha = (fechaCompleta) => {
@@ -65,6 +66,25 @@ function Page() {
   const [instalacionesActivasAdmin, setInstalacionesActivasAdmin] = useState(
     [],
   );
+  const [instalacionesSeleccionadas, setInstalacionesSeleccionadas] = useState(
+    [],
+  );
+  const nombreRef = useRef(null);
+  const tipoRef = useRef(null);
+  const fechaRef = useRef(null);
+  const instalacionRef = useRef(null);
+  const activoRef = useRef(null);
+  const categoriaRef = useRef(null);
+  const disciplinasRef = useRef(null);
+  const limpiarFiltros = () => {
+    if (nombreRef.current) nombreRef.current.value = '';
+    if (tipoRef.current) tipoRef.current.value = '';
+    if (fechaRef.current) fechaRef.current.value = '';
+    if (instalacionRef.current) instalacionRef.current.clearValue();
+    if (activoRef.current) activoRef.current.clearValue();
+    if (categoriaRef.current) categoriaRef.current.clearValue();
+    if (disciplinasRef.current) disciplinasRef.current.clearValue(); // Si usas react-select para disciplinas
+  };
   const router = useRouter();
   let scanner;
 
@@ -172,7 +192,7 @@ function Page() {
             <PencilIcon className={`w-[50px] text-transparent `} />
           </>
         )}
-        {evento.activo && fechaFin > new Date() > fechaInicio ? (
+        {evento.activo && fechaFin > new Date() && new Date() > fechaInicio ? (
           <>
             <Tooltip label="Tomar asistencia">
               <ClipboardIcon
@@ -230,14 +250,13 @@ function Page() {
         Banner: e.target.Banner.files[0],
       };
       const result = await crearEventosAdmin(eventoACrear);
-
-      toast.success('Evento creado con exito');
-      setEditCreateEvento(false);
-      getEventos();
       if (result?.error) {
         setErrors(result?.errors);
         return;
       }
+      toast.success('Evento creado con exito');
+      setEditCreateEvento(false);
+      getEventos();
     } catch (error) {
       toast.error(error.message);
     }
@@ -261,15 +280,14 @@ function Page() {
       };
 
       const result = await editarEventoAdmin(eventoACrear);
-      toast.success('Evento editado con exito');
-      setEventoSeleccionado({});
-      setEditCreateEvento(false);
-      getEventos();
-
       if (result?.error) {
         setErrors(result?.errors);
         return;
       }
+      toast.success('Evento editado con exito');
+      setEventoSeleccionado({});
+      setEditCreateEvento(false);
+      getEventos();
     } catch (error) {
       toast.error(error.message);
     }
@@ -280,6 +298,7 @@ function Page() {
       await eliminarEventosAdmin(eventoSeleccionado.id);
       setEliminarEvento(false);
       setEventoSeleccionado({});
+      getEventos();
     } catch (error) {
       toast.error(error.message);
     }
@@ -337,6 +356,89 @@ function Page() {
     };
   }, [isScannerActive, eventoSeleccionado]);
 
+  const applyFilters = (e) => {
+    e.preventDefault();
+    const filters = {
+      nombre: e.target.nombre.value,
+      tipo: e.target.tipo.value,
+      fecha: e.target.fecha.value,
+      instalacion: e.target.instalacion.value,
+      activo: e.target.activo.value,
+      categoria: e.target.categoria.value,
+      instalaciones: instalacionesSeleccionadas,
+    };
+    const eventosFiltrados = eventos.filter((evento) => {
+      const {
+        nombre,
+        tipo,
+        fecha,
+        instalacion,
+        activo,
+        categoria,
+        instalaciones,
+      } = filters;
+
+      // Verificar nombre (parcial)
+      const coincideNombre =
+        !nombre ||
+        evento.evento.titulo.toLowerCase().includes(nombre.toLowerCase());
+
+      // Verificar tipo de evento
+      const coincideTipo =
+        !tipo || evento.evento.tipoEvento.id === Number(tipo);
+
+      // Verificar fecha de inicio
+      const coincideFecha =
+        !fecha || evento.evento.fechaInicio.startsWith(fecha);
+
+      // Verificar instalación
+      const coincideInstalacion =
+        !instalacion || evento.evento.instalacion.id === Number(instalacion);
+
+      // Verificar si el evento está activo
+      const coincideActivo = !activo || String(evento.activo) === activo;
+
+      // Verificar categoría
+      const coincideCategoria =
+        !categoria || evento.evento.categoria.id === Number(categoria);
+
+      // Verificar instalaciones
+      const coincideInstalaciones =
+        !instalaciones ||
+        instalaciones.length === 0 ||
+        instalaciones.some(
+          (inst) => inst.value === evento.evento.instalacion.id,
+        );
+
+      return (
+        coincideNombre &&
+        coincideTipo &&
+        coincideFecha &&
+        coincideInstalacion &&
+        coincideActivo &&
+        coincideCategoria &&
+        coincideInstalaciones
+      );
+    });
+
+    const resultFilter =
+      eventosFiltrados &&
+      eventosFiltrados.map((vnt) => ({
+        id: vnt.evento.id,
+        nombre: vnt.evento.titulo,
+        tipo: vnt.evento.tipoEvento.nombreTipoEvento,
+        fecha: formatDate(vnt.evento.fechaInicio),
+        hora: formatearHoras(vnt.evento.fechaInicio, vnt.evento.fechaFinEvento),
+        instalacion: vnt.evento.instalacion.nombre,
+        disciplina: vnt.evento.disciplinas.map((dis) => `|${dis.nombre}| `),
+        categoria: `${vnt.evento.categoria.genero} - ${vnt.evento.categoria.nombre}`,
+        acciones: ActionTab(
+          eventos.find((disc) => disc.evento.id === vnt.evento.id),
+        ),
+      }));
+    setEventosToShow(resultFilter);
+  };
+
   return (
     <section>
       <div className="mt-6 self-start px-9 pb-9 text-3xl font-bold">
@@ -345,7 +447,7 @@ function Page() {
       <section>
         <form
           className="flex w-full flex-wrap items-center"
-          onSubmit={() => {}}
+          onSubmit={applyFilters}
           id="filterEvents"
         >
           <div className="flex flex-row flex-wrap gap-5">
@@ -353,28 +455,32 @@ function Page() {
               <label className="mb-3 mt-5 block text-lg font-bold text-gray-900">
                 Nombre:
               </label>
-              <InputWithLabel name={'nombre'} type="text" />
+              <InputWithLabel name={'nombre'} type="text" ref={nombreRef} />
             </section>
             <div className="flex min-w-[170px] flex-row items-center gap-3">
               <label className="mb-3 mt-5 block text-lg font-bold text-gray-900">
                 Tipo:
               </label>
               <div className="min-w-[170px]">
-                <SelectWithLabel name="tipo" options={tipo} />
+                <SelectWithLabel name="tipo" options={tipo} ref={tipoRef} />
               </div>
             </div>
             <section className="flex flex-row items-center gap-3">
               <label className="mb-3 mt-5 block text-lg font-bold text-gray-900">
                 Fecha:
               </label>
-              <InputWithLabel name={'fecha'} type="date" />
+              <InputWithLabel name={'fecha'} type="date" ref={fechaRef} />
             </section>
             <div className="flex min-w-[170px] flex-row items-center gap-3">
               <label className="mb-3 mt-5 block text-lg font-bold text-gray-900">
                 Instalacion:
               </label>
               <div className="min-w-[170px]">
-                <SelectWithLabel name="instalacion" options={instalacion} />
+                <SelectWithLabel
+                  name="instalacion"
+                  options={instalacion}
+                  ref={instalacionRef}
+                />
               </div>
             </div>
             <div className="flex min-w-[170px] flex-row items-center gap-3">
@@ -382,7 +488,11 @@ function Page() {
                 Activo:
               </label>
               <div className="min-w-[170px]">
-                <SelectWithLabel name="activo" options={ACTIVO_OPTIONS} />
+                <SelectWithLabel
+                  name="activo"
+                  options={ACTIVO_OPTIONS}
+                  ref={activoRef}
+                />
               </div>
             </div>
             <div className="flex min-w-[170px] flex-row items-center gap-3">
@@ -390,7 +500,11 @@ function Page() {
                 Categoria:
               </label>
               <div className="min-w-[220px]">
-                <SelectWithLabel name="categoria" options={categoria} />
+                <SelectWithLabel
+                  name="categoria"
+                  options={categoria}
+                  ref={categoriaRef}
+                />
               </div>
             </div>
             <div className="flex min-w-[170px] flex-row items-center gap-3">
@@ -401,10 +515,47 @@ function Page() {
                 <SelectWithLabel
                   name="disciplinas"
                   options={disciplinas}
+                  value={instalacionesSeleccionadas}
+                  ref={disciplinasRef}
+                  onChange={(e) => {
+                    setInstalacionesSeleccionadas(e);
+                  }}
                   isMulti
                 />
               </div>
             </div>
+            <Tooltip label="Limpiar Filtros">
+              <PaintBrushIcon
+                className="w-[50px] rounded-lg bg-blue-300 p-2 text-center text-xl text-white"
+                type="button"
+                onClick={(e) => {
+                  limpiarFiltros();
+                  const resultFilter =
+                    eventos &&
+                    eventos.map((vnt) => ({
+                      id: vnt.evento.id,
+                      nombre: vnt.evento.titulo,
+                      tipo: vnt.evento.tipoEvento.nombreTipoEvento,
+                      fecha: formatDate(vnt.evento.fechaInicio),
+                      hora: formatearHoras(
+                        vnt.evento.fechaInicio,
+                        vnt.evento.fechaFinEvento,
+                      ),
+                      instalacion: vnt.evento.instalacion.nombre,
+                      disciplina: vnt.evento.disciplinas.map(
+                        (dis) => `|${dis.nombre}| `,
+                      ),
+                      categoria: `${vnt.evento.categoria.genero} - ${vnt.evento.categoria.nombre}`,
+                      acciones: ActionTab(
+                        eventos.find(
+                          (disc) => disc.evento.id === vnt.evento.id,
+                        ),
+                      ),
+                    }));
+                  setEventosToShow(resultFilter);
+                }}
+              />
+            </Tooltip>
             <button
               className="rounded-lg bg-blue-600 p-2 text-center text-xl text-white"
               type="submit"
@@ -412,7 +563,6 @@ function Page() {
               Buscar
             </button>
           </div>
-
           <button
             className="rounded-lg bg-blue-500 p-2 text-center text-xl text-white lg:ml-auto"
             type="button"

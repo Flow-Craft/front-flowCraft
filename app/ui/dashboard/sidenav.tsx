@@ -21,11 +21,9 @@ export default function SideNav() {
     <ChakraProvider>
       <div className="mix-w-full flex h-full w-full flex-col px-3 py-4 md:px-2">
         <div className="h-50 mb-2 flex w-full flex-row justify-between gap-2 rounded-md bg-blue-600 p-4 text-white md:h-60 md:flex-col">
-          <Link href="/">
-            <div className=" text-white md:w-40">
-              <AcmeLogo />
-            </div>
-          </Link>
+          <div className=" text-white md:w-40">
+            <AcmeLogo />
+          </div>
           <div className="hidden md:block">
             <UserName />
           </div>

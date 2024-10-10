@@ -3,7 +3,7 @@ import { monserrant } from '../ui/fonts';
 export default function AcmeLogo() {
   return (
     <div
-      className={`${monserrant.className} flex flex-row items-center leading-none text-white`}
+      className={`${monserrant.className} flex flex-wrap items-center leading-none text-white`}
     >
       <img
         src="/favicon.ico"

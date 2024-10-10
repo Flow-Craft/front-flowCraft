@@ -13,6 +13,10 @@ export const CrearEditarModalEventos = ({
 }) => {
   const [minDate, setMinDate] = useState('');
   const [showPartido, setShowPartido] = useState(false);
+  const handleSelectTipo = (e) => {
+    console.log(e);
+    setShowPartido(e.label === 'Partido');
+  };
 
   useEffect(() => {
     // Obtener la fecha actual
@@ -24,6 +28,11 @@ export const CrearEditarModalEventos = ({
     const formattedDate = today.toISOString().slice(0, 16);
     setMinDate(formattedDate);
   }, []);
+
+  useEffect(() => {
+    if (evento?.tipoEvento?.nombreTipoEvento)
+      setShowPartido(evento?.tipoEvento?.nombreTipoEvento === 'Partido');
+  }, [evento]);
 
   return (
     <div className="flex w-full flex-col items-center justify-center">
@@ -116,18 +125,6 @@ export const CrearEditarModalEventos = ({
             wrong={!!errors.find((e) => e.path[0] === 'IdCategoria')}
           />
           <SelectWithLabel
-            name="IdsDisciplinas"
-            options={disciplinas}
-            defaultValue={evento?.disciplinas?.map((dis) => {
-              return disciplinas.find((option) => option.value === dis.id);
-            })}
-            label="Disciplina"
-            isMulti
-            required
-            onChange={(selected) => setDisciplinasSeleccionadas(selected)}
-            wrong={!!errors.find((e) => e.path[0] === 'IdsDisciplinas')}
-          />
-          <SelectWithLabel
             name="IdTipoEvento"
             options={tipo}
             defaultValue={tipo.find(
@@ -135,8 +132,25 @@ export const CrearEditarModalEventos = ({
             )}
             label="Tipo"
             required
+            onChange={(e) => {
+              handleSelectTipo(e);
+            }}
             wrong={!!errors.find((e) => e.path[0] === 'IdTipoEvento')}
           />
+          {!showPartido && (
+            <SelectWithLabel
+              name="IdsDisciplinas"
+              options={disciplinas}
+              defaultValue={evento?.disciplinas?.map((dis) => {
+                return disciplinas.find((option) => option.value === dis.id);
+              })}
+              label="Disciplina del evento"
+              isMulti
+              required
+              onChange={(selected) => setDisciplinasSeleccionadas(selected)}
+              wrong={!!errors.find((e) => e.path[0] === 'IdsDisciplinas')}
+            />
+          )}
           {showPartido && (
             <>
               <label
@@ -146,6 +160,16 @@ export const CrearEditarModalEventos = ({
               >
                 Datos del partido
               </label>
+              <SelectWithLabel
+                name="IdsDisciplinaPartido"
+                options={disciplinas}
+                defaultValue={evento?.disciplinas?.map((dis) => {
+                  return disciplinas.find((option) => option.value === dis.id);
+                })}
+                label="Disciplina del partido"
+                required
+                // wrong={!!errors.find((e) => e.path[0] === 'IdsDisciplinas')}
+              />
               <SelectWithLabel
                 name="equipoLocal"
                 options={[]}

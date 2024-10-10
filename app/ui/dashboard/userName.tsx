@@ -17,9 +17,9 @@ export default function UserName() {
   }, []);
 
   return (
-    <>
+    <div className="mb-8">
       <div>{`Hola ${name}!!!`}</div>
       <div className="font-bold">{perfil}</div>
-    </>
+    </div>
   );
 }
