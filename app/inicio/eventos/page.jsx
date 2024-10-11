@@ -47,9 +47,6 @@ const ACTIVO_OPTIONS = [
   { label: 'NO', value: false },
 ];
 
-const getFecha = (fechaCompleta) => {
-  return fechaCompleta.split('T')[0];
-};
 function Page() {
   const [tipo, setTipo] = useState([]);
   const [instalacion, setInstalacion] = useState([]);
@@ -563,6 +560,15 @@ function Page() {
               Buscar
             </button>
           </div>
+          <button
+            className="rounded-lg bg-blue-600 p-2 text-center text-xl text-white"
+            type="button"
+            onClick={() => {
+              router.push('eventos/equipos');
+            }}
+          >
+            Equipos
+          </button>
           <button
             className="rounded-lg bg-blue-500 p-2 text-center text-xl text-white lg:ml-auto"
             type="button"

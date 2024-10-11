@@ -712,3 +712,11 @@ export async function inscribirseAEventoAdmin(eventId: any) {
 export async function desinscribirseAEventoAdmin(eventId: any) {
   return await FlowCraftAPI.post(`Eventos/Desinscribirse?IdEvento=${eventId}`);
 }
+
+export async function getEquiposActivos() {
+  return await FlowCraftAPI.get(`Partidos/GetEquiposActivos`);
+}
+
+export async function crearNuevoEquipo(equipo: any) {
+  return await FlowCraftAPI.post(`Partidos/CrearEquipo`, equipo);
+}
