@@ -720,3 +720,8 @@ export async function getEquiposActivos() {
 export async function crearNuevoEquipo(equipo: any) {
   return await FlowCraftAPI.post(`Partidos/CrearEquipo`, equipo);
 }
+
+
+export async function getEquipoByDisciplinaYCategoria(idDisciplina:any,idCategoria:any) {
+  return await FlowCraftAPI.get(`Partidos/GetEquiposByCategoriaAndDisciplinaActivos?IdCategoria=${idCategoria}&IdDisciplina=${idDisciplina}`);
+}

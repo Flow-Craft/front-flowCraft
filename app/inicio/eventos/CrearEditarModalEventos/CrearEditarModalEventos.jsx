@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { InputWithLabel } from '@/app/ui/components/InputWithLabel/InputWithLabel';
 import { SelectWithLabel } from '@/app/ui/components/SelectWithLabel/SelectWithLabel';
+import toast from 'react-hot-toast';
+import { getEquipoByDisciplinaYCategoria } from '@/app/utils/actions';
 
 export const CrearEditarModalEventos = ({
   errors = [],
@@ -13,10 +15,52 @@ export const CrearEditarModalEventos = ({
 }) => {
   const [minDate, setMinDate] = useState('');
   const [showPartido, setShowPartido] = useState(false);
+  const [categoriaSeleccionada, setCategoriaSeleccionada] = useState({})
+  const [tipoSeleccionado, setTipoSeleccionado] = useState("")
+  const [equipoLocal, setEquipoLocal] = useState([]);
+  const [equipoLocalOpciones, setEquipoLocalOpciones] = useState([]);
+  const [equipoVisitante, setEquipoVisitante] = useState({});
+  const [equipoVisitanteOpciones, setEquipoVisitanteOpciones] = useState([])
   const handleSelectTipo = (e) => {
-    console.log(e);
-    setShowPartido(e.label === 'Partido');
+    if(e.label === 'Partido' && !categoriaSeleccionada?.value){
+      toast.error("por favor seleccione la categoria para poder mostrar las opciones del partido");
+      setTipoSeleccionado("Partido");
+    }else{
+      setShowPartido(e.label === 'Partido');
+      setTipoSeleccionado("")
+    }
+    
   };
+
+  const handleChangeCategoria = (e) =>{
+    setCategoriaSeleccionada(e);
+    if(tipoSeleccionado === "Partido") setShowPartido(true)
+  }
+
+  const mappearEquipos = (equipos)=>{
+    return equipos.map((eq)=>({
+      value:eq.id,
+      label:eq.nombre
+    }))
+  }
+
+  const getEquiposByCategoriaDisciplina = async(e) =>{
+    const result  = await getEquipoByDisciplinaYCategoria(e.value,categoriaSeleccionada.value)
+    setEquipoLocal(result)
+    setEquipoVisitante(result)
+    setEquipoLocalOpciones(mappearEquipos(result))
+    setEquipoVisitanteOpciones(mappearEquipos(result))
+  }
+
+  const handleChangeEquipoLocal = (e) =>{
+    const nuevoEquipoVisitante = equipoVisitante.filter((eq)=>eq.id !== e.value )
+    setEquipoVisitanteOpciones(mappearEquipos(nuevoEquipoVisitante))
+  }
+
+  const handleChangeEquipoVisitante = (e) =>{
+    const nuevoEquipoLocal = equipoLocal.filter((eq)=>eq.id !== e.value )
+    setEquipoLocalOpciones(mappearEquipos(nuevoEquipoLocal))
+  }
 
   useEffect(() => {
     // Obtener la fecha actual
@@ -123,6 +167,9 @@ export const CrearEditarModalEventos = ({
             label="Categoria"
             required
             wrong={!!errors.find((e) => e.path[0] === 'IdCategoria')}
+            onChange={(e)=>{
+              handleChangeCategoria(e);
+            }}
           />
           <SelectWithLabel
             name="IdTipoEvento"
@@ -168,24 +215,33 @@ export const CrearEditarModalEventos = ({
                 })}
                 label="Disciplina del partido"
                 required
+                onChange={(e)=>{
+                  getEquiposByCategoriaDisciplina(e);
+                }}
                 // wrong={!!errors.find((e) => e.path[0] === 'IdsDisciplinas')}
               />
               <SelectWithLabel
                 name="equipoLocal"
-                options={[]}
+                options={equipoLocalOpciones}
                 //   defaultValue={SEX_SELECT_OPTIONS.find(
                 //     (option) => option.value === user.sexo,
                 //   )}
+                onChange={(e)=>{
+                  handleChangeEquipoLocal(e);
+                }}
                 label="Equipo Local"
                 required
                 wrong={!!errors.find((e) => e.path[0] === 'Sexo')}
               />
               <SelectWithLabel
                 name="equipoVisitante"
-                options={[]}
+                options={equipoVisitanteOpciones}
                 //   defaultValue={SEX_SELECT_OPTIONS.find(
                 //     (option) => option.value === user.sexo,
                 //   )}
+                onChange={(e)=>{
+                  handleChangeEquipoVisitante(e)
+                }}
                 label="Equipo Visitante"
                 required
                 wrong={!!errors.find((e) => e.path[0] === 'Sexo')}

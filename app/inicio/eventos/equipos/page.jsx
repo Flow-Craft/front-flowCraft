@@ -60,7 +60,7 @@ function Page() {
         id: equipo.id,
         nombre: equipo.nombre,
         disciplina: equipo.disciplina.nombre,
-        categoria: equipo.categoria.nombre,
+        categoria: `${equipo.categoria.genero} - ${equipo.categoria.nombre}`,
         jugadores: (
           <ul>
             {equipo.jugadores.map((jugador, i) => (
