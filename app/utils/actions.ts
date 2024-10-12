@@ -14,7 +14,8 @@ import {
   CreatePerfilSchema,
 } from './models/user';
 import { editCreateNewSchema } from './models/news';
-import { eventoPartidoSchema, eventoSchema } from './models/eventos';
+import { eventoSchema } from './models/eventos';
+import { eventoPartidoSchema } from './models/eventoPartido'
 
 import { tipoAcrearSchema, tipoAccionPartidoSchema } from './models/tipos';
 import { crearInstalacionSchema } from './models/instalaciones';

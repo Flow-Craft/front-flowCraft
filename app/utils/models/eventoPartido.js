@@ -1,6 +1,6 @@
-import { z } from 'zod';
+import { z } from "zod";
 
-export const eventoSchema = z
+export const eventoPartidoSchema = z
   .object({
     Titulo: z.string().min(1, 'El título es obligatorio.'),
     FechaInicio: z.string().min(1, 'La fecha inicio es obligatoria.'),
@@ -11,9 +11,11 @@ export const eventoSchema = z
     IdTipoEvento: z.string().min(1, 'El tipo de evento es obligatorio.'),
     IdInstalacion: z.string().min(1, 'La instalación es obligatoria.'),
     IdCategoria: z.string().min(1, 'La categoría es obligatoria.'),
-    IdsDisciplinas: z
-      .array(z.number())
-      .min(1, 'Debe haber al menos una disciplina.'),
+    EquipoLocal: z.string().min(1, 'El equipo local es obligatorio.'),
+    EquipoVisitante: z.string().min(1, 'El equipo visitante es obligatorio.'),
+    Planillero: z.string().min(1, 'Debe seleccionar un planillero'),
+    Arbitro: z.string().min(1, 'Debe seleccionar un arbitro'),
+    IdsDisciplinas: z.string().min(1, 'Debe seleccionar un arbitro'),
     Banner: z.instanceof(File, { message: 'La imagen no fue enviada' }).refine(
       (value) => {
         console.log('value', value);
@@ -35,4 +37,3 @@ export const eventoSchema = z
       path: ['FechaFinEvento'], // Indica el campo que está causando el error
     },
   );
-
