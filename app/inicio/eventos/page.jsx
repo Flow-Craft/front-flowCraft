@@ -4,6 +4,7 @@ import { InputWithLabel } from '@/app/ui/components/InputWithLabel/InputWithLabe
 import { SelectWithLabel } from '@/app/ui/components/SelectWithLabel/SelectWithLabel';
 import {
   crearEventosAdmin,
+  crearEventosPartidoAdmin,
   createTimer,
   editarEventoAdmin,
   eliminarEventosAdmin,
@@ -233,23 +234,55 @@ function Page() {
 
   const crearEvento = async (e) => {
     try {
-      const eventoACrear = {
-        Titulo: e.target.Titulo.value,
-        FechaInicio: e.target.FechaInicio.value,
-        FechaFinEvento: e.target.FechaFinEvento.value,
-        CupoMaximo: e.target.CupoMaximo.value,
-        LinkStream: e.target.LinkStream.value,
-        Descripcion: e.target.Descripcion.value,
-        IdTipoEvento: e.target.IdTipoEvento.value,
-        IdInstalacion: e.target.IdInstalacion.value,
-        IdCategoria: e.target.IdCategoria.value,
-        IdsDisciplinas: disciplinasSeleccionadas.map((perm) => perm.value),
-        Banner: e.target.Banner.files[0],
-      };
-      const result = await crearEventosAdmin(eventoACrear);
-      if (result?.error) {
-        setErrors(result?.errors);
+      const tipoSeleccionado = tipo.find(
+        (el) => el.value === Number(e.target.IdTipoEvento.value),
+      );
+      if (!tipoSeleccionado) {
+        setErrors([{ error: true, path: [''] }]);
         return;
+      }
+      if (tipoSeleccionado.label === 'Partido') {
+        const eventoACrear = {
+          Titulo: e.target.Titulo.value,
+          FechaInicio: e.target.FechaInicio.value,
+          FechaFinEvento: e.target.FechaFinEvento.value,
+          CupoMaximo: e.target.CupoMaximo.value,
+          LinkStream: e.target.LinkStream.value,
+          Descripcion: e.target.Descripcion.value,
+          IdTipoEvento: e.target.IdTipoEvento.value,
+          IdInstalacion: e.target.IdInstalacion.value,
+          IdCategoria: e.target.IdCategoria.value,
+          IdsDisciplinas: e.target.IdsDisciplinaPartido.value,
+          Banner: e.target.Banner.files[0],
+          EquipoLocal: e.target.equipoLocal.value,
+          EquipoVisitante: e.target.equipoVisitante.value,
+          Arbitro: e.target.arbitro.value,
+          Planillero: e.target.planillero.value,
+        };
+        const result = await crearEventosPartidoAdmin(eventoACrear);
+        if (result?.error) {
+          setErrors(result?.errors);
+          return;
+        }
+      } else {
+        const eventoACrear = {
+          Titulo: e.target.Titulo.value,
+          FechaInicio: e.target.FechaInicio.value,
+          FechaFinEvento: e.target.FechaFinEvento.value,
+          CupoMaximo: e.target.CupoMaximo.value,
+          LinkStream: e.target.LinkStream.value,
+          Descripcion: e.target.Descripcion.value,
+          IdTipoEvento: e.target.IdTipoEvento.value,
+          IdInstalacion: e.target.IdInstalacion.value,
+          IdCategoria: e.target.IdCategoria.value,
+          IdsDisciplinas: disciplinasSeleccionadas.map((perm) => perm.value),
+          Banner: e.target.Banner.files[0],
+        };
+        const result = await crearEventosAdmin(eventoACrear);
+        if (result?.error) {
+          setErrors(result?.errors);
+          return;
+        }
       }
       toast.success('Evento creado con exito');
       setEditCreateEvento(false);

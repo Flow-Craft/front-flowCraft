@@ -2,7 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { InputWithLabel } from '@/app/ui/components/InputWithLabel/InputWithLabel';
 import { SelectWithLabel } from '@/app/ui/components/SelectWithLabel/SelectWithLabel';
 import toast from 'react-hot-toast';
-import { getEquipoByDisciplinaYCategoria } from '@/app/utils/actions';
+import {
+  getEquipoByDisciplinaYCategoria,
+  getPartidoByIdAdmin,
+  getPerfilByNombreAdmin,
+} from '@/app/utils/actions';
 
 export const CrearEditarModalEventos = ({
   errors = [],
@@ -21,6 +25,12 @@ export const CrearEditarModalEventos = ({
   const [equipoLocalOpciones, setEquipoLocalOpciones] = useState([]);
   const [equipoVisitante, setEquipoVisitante] = useState({});
   const [equipoVisitanteOpciones, setEquipoVisitanteOpciones] = useState([]);
+  const [planilleros, setPlanilleros] = useState([]);
+  const [arbitros, setArbitros] = useState([]);
+  const [disableEventoPartido, setDisableEventoPartido] = useState(false);
+  const [defaultValueLocal, setDefaultValueLocal] = useState({});
+  const [defaultValueVisitante, setDefaultValueVisitante] = useState({});
+  const [arbitroDefault, setArbitroDefault] = useState({});
   const handleSelectTipo = (e) => {
     if (e.label === 'Partido' && !categoriaSeleccionada?.value) {
       toast.error(
@@ -46,14 +56,33 @@ export const CrearEditarModalEventos = ({
   };
 
   const getEquiposByCategoriaDisciplina = async (e) => {
-    const result = await getEquipoByDisciplinaYCategoria(
-      e.value,
-      categoriaSeleccionada.value,
+    if (!evento.id) {
+      const result = await getEquipoByDisciplinaYCategoria(
+        e.value,
+        categoriaSeleccionada.value,
+      );
+      setEquipoLocal(result);
+      setEquipoVisitante(result);
+      setEquipoLocalOpciones(mappearEquipos(result));
+      setEquipoVisitanteOpciones(mappearEquipos(result));
+    }
+  };
+
+  const getPlanillerosArbitros = async () => {
+    const planilleros = await getPerfilByNombreAdmin('Planillero');
+    setPlanilleros(
+      planilleros.map((plan) => ({
+        value: plan.id,
+        label: `${plan.dni} - ${plan.nombre} ${plan.apellido}`,
+      })),
     );
-    setEquipoLocal(result);
-    setEquipoVisitante(result);
-    setEquipoLocalOpciones(mappearEquipos(result));
-    setEquipoVisitanteOpciones(mappearEquipos(result));
+    const arbitros = await getPerfilByNombreAdmin('Arbitro');
+    setArbitros(
+      arbitros.map((plan) => ({
+        value: plan.id,
+        label: `${plan.dni} - ${plan.nombre} ${plan.apellido}`,
+      })),
+    );
   };
 
   const handleChangeEquipoLocal = (e) => {
@@ -79,10 +108,42 @@ export const CrearEditarModalEventos = ({
     setMinDate(formattedDate);
   }, []);
 
+  const getDataDelPartido = async (id) => {
+    const result = await getPartidoByIdAdmin(id);
+    const equipos = await getEquipoByDisciplinaYCategoria(
+      result?.disciplinas?.[0]?.id,
+      result?.categoria?.id,
+    );
+    setEquipoLocal(equipos);
+    setEquipoVisitante(equipos);
+    setEquipoLocalOpciones(mappearEquipos(equipos));
+    setEquipoVisitanteOpciones(mappearEquipos(equipos));
+    const equipoLocal = {
+      value: result?.local?.equipo?.id,
+      label: result?.local?.equipo?.nombre,
+    };
+    const equipoVisitante = {
+      value: result?.visitante?.equipo?.id,
+      label: result?.visitante?.equipo?.nombre,
+    };
+    setDefaultValueLocal(equipoLocal);
+    setDefaultValueVisitante(equipoVisitante);
+  };
+
   useEffect(() => {
-    if (evento?.tipoEvento?.nombreTipoEvento)
+    if (evento?.tipoEvento?.nombreTipoEvento) {
       setShowPartido(evento?.tipoEvento?.nombreTipoEvento === 'Partido');
+    }
+
+    if (evento?.tipoEvento?.nombreTipoEvento === 'Partido') {
+      setDisableEventoPartido(true);
+      getDataDelPartido(evento.id);
+    }
   }, [evento]);
+
+  useEffect(() => {
+    getPlanillerosArbitros();
+  }, []);
 
   return (
     <div className="flex w-full flex-col items-center justify-center">
@@ -185,6 +246,7 @@ export const CrearEditarModalEventos = ({
             )}
             label="Tipo"
             required
+            isDisabled={disableEventoPartido}
             onChange={(e) => {
               handleSelectTipo(e);
             }}
@@ -224,67 +286,63 @@ export const CrearEditarModalEventos = ({
                 onChange={(e) => {
                   getEquiposByCategoriaDisciplina(e);
                 }}
-                // wrong={!!errors.find((e) => e.path[0] === 'IdsDisciplinas')}
+                wrong={!!errors.find((e) => e.path[0] === 'IdsDisciplinas')}
               />
               <SelectWithLabel
                 name="equipoLocal"
                 options={equipoLocalOpciones}
-                //   defaultValue={SEX_SELECT_OPTIONS.find(
-                //     (option) => option.value === user.sexo,
-                //   )}
+                defaultValue={equipoLocalOpciones.find(
+                  (option) => option.value === defaultValueLocal.value,
+                )}
                 onChange={(e) => {
                   handleChangeEquipoLocal(e);
                 }}
                 label="Equipo Local"
                 required
-                wrong={!!errors.find((e) => e.path[0] === 'Sexo')}
+                wrong={!!errors.find((e) => e.path[0] === 'EquipoLocal')}
               />
               <SelectWithLabel
                 name="equipoVisitante"
                 options={equipoVisitanteOpciones}
-                //   defaultValue={SEX_SELECT_OPTIONS.find(
-                //     (option) => option.value === user.sexo,
-                //   )}
+                // defaultValue={equipoLocalOpciones.find(
+                //   (option) => option.value === defaultValueLocal.value,
+                // )}
                 onChange={(e) => {
                   handleChangeEquipoVisitante(e);
                 }}
                 label="Equipo Visitante"
                 required
-                wrong={!!errors.find((e) => e.path[0] === 'Sexo')}
+                wrong={!!errors.find((e) => e.path[0] === 'EquipoVisitante')}
               />
               <SelectWithLabel
                 name="arbitro"
-                options={[]}
+                options={arbitros}
                 //   defaultValue={SEX_SELECT_OPTIONS.find(
                 //     (option) => option.value === user.sexo,
                 //   )}
                 label="Arbitro"
                 required
-                wrong={!!errors.find((e) => e.path[0] === 'Sexo')}
+                wrong={!!errors.find((e) => e.path[0] === 'Arbitro')}
               />
               <SelectWithLabel
                 name="planillero"
-                options={[]}
+                options={planilleros}
                 //   defaultValue={SEX_SELECT_OPTIONS.find(
                 //     (option) => option.value === user.sexo,
                 //   )}
                 label="Planillero"
                 required
-                wrong={!!errors.find((e) => e.path[0] === 'Sexo')}
+                wrong={!!errors.find((e) => e.path[0] === 'Planillero')}
               />
             </>
           )}
           <div className="mt-9 flex w-full content-between justify-between">
             <div aria-live="polite" aria-atomic="true" className="mr-4">
-              {errors &&
-                errors.map((error) => (
-                  <p
-                    className="mt-2 text-sm font-bold text-red-500"
-                    key={error.message}
-                  >
-                    {error.message}
-                  </p>
-                ))}
+              {errors.length > 0 && (
+                <p className="mt-2 text-sm font-bold text-red-500">
+                  Alguno de los campos no fue enviado o tiene un error.
+                </p>
+              )}
             </div>
           </div>
         </div>

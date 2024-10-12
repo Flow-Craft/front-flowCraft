@@ -14,7 +14,7 @@ import {
   CreatePerfilSchema,
 } from './models/user';
 import { editCreateNewSchema } from './models/news';
-import { eventoSchema } from './models/eventos';
+import { eventoPartidoSchema, eventoSchema } from './models/eventos';
 
 import { tipoAcrearSchema, tipoAccionPartidoSchema } from './models/tipos';
 import { crearInstalacionSchema } from './models/instalaciones';
@@ -675,6 +675,27 @@ export async function crearEventosAdmin(evento: any) {
   return await FlowCraftAPI.post(`Eventos/CrearEvento`, eventToSend);
 }
 
+export async function crearEventosPartidoAdmin(evento: any) {
+  const result = eventoPartidoSchema.safeParse(evento);
+  if (!result.success) {
+    return { error: true, errors: result.error.errors };
+  }
+  const fileType = evento.Banner.type;
+  const eventToSend = JSON.parse(JSON.stringify(evento));
+  //convertir File to base 64
+  let file64 = await handleFileConversion(
+    new File([evento.Banner], evento.Banner.name, {
+      type: evento.Banner.type,
+    }),
+  );
+  eventToSend.Banner = file64;
+  eventToSend.type = fileType;
+  eventToSend.FechaInicio = eventToSend.FechaInicio + ':00';
+  eventToSend.FechaFinEvento = eventToSend.FechaFinEvento + ':00';
+  eventToSend.IdsDisciplinas = [Number(eventToSend.IdsDisciplinas)];
+  return await FlowCraftAPI.post(`Eventos/CrearEvento`, eventToSend);
+}
+
 export async function editarEventoAdmin(evento: any) {
   const eventToSend = JSON.parse(JSON.stringify(evento));
   if (evento?.Banner?.name) {
@@ -732,4 +753,14 @@ export async function getEquipoByDisciplinaYCategoria(
   return await FlowCraftAPI.get(
     `Partidos/GetEquiposByCategoriaAndDisciplinaActivos?IdCategoria=${idCategoria}&IdDisciplina=${idDisciplina}`,
   );
+}
+
+export async function getPerfilByNombreAdmin(nombrePerfil: any) {
+  return await FlowCraftAPI.get(
+    `Users/GetUsuariosByPerfil?perfil=${nombrePerfil}`,
+  );
+}
+
+export async function getPartidoByIdAdmin(id: any) {
+  return await FlowCraftAPI.get(`Partidos/GetPartidoById?id=${id}`);
 }
