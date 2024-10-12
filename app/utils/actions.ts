@@ -26,7 +26,6 @@ import {
 } from './manageFile';
 
 export async function loginUser(formData: any) {
-  console.log('formData', formData)
   try {
     const { Email, Contrasena } = loginUserSchema.parse({
       Email: formData.email,
