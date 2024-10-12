@@ -706,11 +706,15 @@ export async function getEventoByUsuarioByIdAdmin(eventId: any) {
 }
 
 export async function inscribirseAEventoAdmin(eventId: any) {
-  return await FlowCraftAPI.post(`Eventos/Inscribirse?IdEvento=${eventId}`);
+  return await FlowCraftAPI.post(
+    `Eventos/InscribirseByUsuario?IdEvento=${eventId}`,
+  );
 }
 
 export async function desinscribirseAEventoAdmin(eventId: any) {
-  return await FlowCraftAPI.post(`Eventos/Desinscribirse?IdEvento=${eventId}`);
+  return await FlowCraftAPI.post(
+    `Eventos/DesinscribirseByUsuario?IdEvento=${eventId}`,
+  );
 }
 
 export async function getEquiposActivos() {
@@ -721,7 +725,11 @@ export async function crearNuevoEquipo(equipo: any) {
   return await FlowCraftAPI.post(`Partidos/CrearEquipo`, equipo);
 }
 
-
-export async function getEquipoByDisciplinaYCategoria(idDisciplina:any,idCategoria:any) {
-  return await FlowCraftAPI.get(`Partidos/GetEquiposByCategoriaAndDisciplinaActivos?IdCategoria=${idCategoria}&IdDisciplina=${idDisciplina}`);
+export async function getEquipoByDisciplinaYCategoria(
+  idDisciplina: any,
+  idCategoria: any,
+) {
+  return await FlowCraftAPI.get(
+    `Partidos/GetEquiposByCategoriaAndDisciplinaActivos?IdCategoria=${idCategoria}&IdDisciplina=${idDisciplina}`,
+  );
 }

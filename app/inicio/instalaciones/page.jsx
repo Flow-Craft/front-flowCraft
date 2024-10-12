@@ -46,7 +46,6 @@ function Page() {
   const getInstalacionesAction = async () => {
     try {
       const result = await getInstalacionesAdmin();
-      console.log('result', result);
       setInstalaciones(result);
       const newtipoEventosToShow =
         result &&
@@ -89,13 +88,13 @@ function Page() {
     try {
       setErrors([]);
       const instalacionAEditar = {
-        Id: instalacionSeleccionada.instalacion.Id,
+        Id: instalacionSeleccionada.instalacion.id,
         Nombre: e.target.nombre.value,
         Ubicacion: e.target.ubicacion.value,
         Precio: e.target.precio.value,
         Condiciones: e.target.condiciones.value,
-        HoraInicio: `${e.target.inicio.value}:00`,
-        HoraCierre: `${e.target.cierre.value}:00`,
+        HoraInicio: `${e.target.inicio.value.split(':').length === 2 ? `${e.target.inicio.value}:00` : e.target.inicio.value}`,
+        HoraCierre: `${e.target.cierre.value.split(':').length === 2 ? `${e.target.cierre.value}:00` : e.target.cierre.value}`,
         EstadoId: Number(e.target.estadoInstalacion.value),
       };
       const result = await editarInstalacionAction(instalacionAEditar);

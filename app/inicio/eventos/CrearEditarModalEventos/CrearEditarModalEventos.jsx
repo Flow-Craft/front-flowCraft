@@ -15,52 +15,58 @@ export const CrearEditarModalEventos = ({
 }) => {
   const [minDate, setMinDate] = useState('');
   const [showPartido, setShowPartido] = useState(false);
-  const [categoriaSeleccionada, setCategoriaSeleccionada] = useState({})
-  const [tipoSeleccionado, setTipoSeleccionado] = useState("")
+  const [categoriaSeleccionada, setCategoriaSeleccionada] = useState({});
+  const [tipoSeleccionado, setTipoSeleccionado] = useState('');
   const [equipoLocal, setEquipoLocal] = useState([]);
   const [equipoLocalOpciones, setEquipoLocalOpciones] = useState([]);
   const [equipoVisitante, setEquipoVisitante] = useState({});
-  const [equipoVisitanteOpciones, setEquipoVisitanteOpciones] = useState([])
+  const [equipoVisitanteOpciones, setEquipoVisitanteOpciones] = useState([]);
   const handleSelectTipo = (e) => {
-    if(e.label === 'Partido' && !categoriaSeleccionada?.value){
-      toast.error("por favor seleccione la categoria para poder mostrar las opciones del partido");
-      setTipoSeleccionado("Partido");
-    }else{
+    if (e.label === 'Partido' && !categoriaSeleccionada?.value) {
+      toast.error(
+        'por favor seleccione la categoria para poder mostrar las opciones del partido',
+      );
+      setTipoSeleccionado('Partido');
+    } else {
       setShowPartido(e.label === 'Partido');
-      setTipoSeleccionado("")
+      setTipoSeleccionado('');
     }
-    
   };
 
-  const handleChangeCategoria = (e) =>{
+  const handleChangeCategoria = (e) => {
     setCategoriaSeleccionada(e);
-    if(tipoSeleccionado === "Partido") setShowPartido(true)
-  }
+    if (tipoSeleccionado === 'Partido') setShowPartido(true);
+  };
 
-  const mappearEquipos = (equipos)=>{
-    return equipos.map((eq)=>({
-      value:eq.id,
-      label:eq.nombre
-    }))
-  }
+  const mappearEquipos = (equipos) => {
+    return equipos.map((eq) => ({
+      value: eq.id,
+      label: eq.nombre,
+    }));
+  };
 
-  const getEquiposByCategoriaDisciplina = async(e) =>{
-    const result  = await getEquipoByDisciplinaYCategoria(e.value,categoriaSeleccionada.value)
-    setEquipoLocal(result)
-    setEquipoVisitante(result)
-    setEquipoLocalOpciones(mappearEquipos(result))
-    setEquipoVisitanteOpciones(mappearEquipos(result))
-  }
+  const getEquiposByCategoriaDisciplina = async (e) => {
+    const result = await getEquipoByDisciplinaYCategoria(
+      e.value,
+      categoriaSeleccionada.value,
+    );
+    setEquipoLocal(result);
+    setEquipoVisitante(result);
+    setEquipoLocalOpciones(mappearEquipos(result));
+    setEquipoVisitanteOpciones(mappearEquipos(result));
+  };
 
-  const handleChangeEquipoLocal = (e) =>{
-    const nuevoEquipoVisitante = equipoVisitante.filter((eq)=>eq.id !== e.value )
-    setEquipoVisitanteOpciones(mappearEquipos(nuevoEquipoVisitante))
-  }
+  const handleChangeEquipoLocal = (e) => {
+    const nuevoEquipoVisitante = equipoVisitante.filter(
+      (eq) => eq.id !== e.value,
+    );
+    setEquipoVisitanteOpciones(mappearEquipos(nuevoEquipoVisitante));
+  };
 
-  const handleChangeEquipoVisitante = (e) =>{
-    const nuevoEquipoLocal = equipoLocal.filter((eq)=>eq.id !== e.value )
-    setEquipoLocalOpciones(mappearEquipos(nuevoEquipoLocal))
-  }
+  const handleChangeEquipoVisitante = (e) => {
+    const nuevoEquipoLocal = equipoLocal.filter((eq) => eq.id !== e.value);
+    setEquipoLocalOpciones(mappearEquipos(nuevoEquipoLocal));
+  };
 
   useEffect(() => {
     // Obtener la fecha actual
@@ -167,7 +173,7 @@ export const CrearEditarModalEventos = ({
             label="Categoria"
             required
             wrong={!!errors.find((e) => e.path[0] === 'IdCategoria')}
-            onChange={(e)=>{
+            onChange={(e) => {
               handleChangeCategoria(e);
             }}
           />
@@ -215,7 +221,7 @@ export const CrearEditarModalEventos = ({
                 })}
                 label="Disciplina del partido"
                 required
-                onChange={(e)=>{
+                onChange={(e) => {
                   getEquiposByCategoriaDisciplina(e);
                 }}
                 // wrong={!!errors.find((e) => e.path[0] === 'IdsDisciplinas')}
@@ -226,7 +232,7 @@ export const CrearEditarModalEventos = ({
                 //   defaultValue={SEX_SELECT_OPTIONS.find(
                 //     (option) => option.value === user.sexo,
                 //   )}
-                onChange={(e)=>{
+                onChange={(e) => {
                   handleChangeEquipoLocal(e);
                 }}
                 label="Equipo Local"
@@ -239,8 +245,8 @@ export const CrearEditarModalEventos = ({
                 //   defaultValue={SEX_SELECT_OPTIONS.find(
                 //     (option) => option.value === user.sexo,
                 //   )}
-                onChange={(e)=>{
-                  handleChangeEquipoVisitante(e)
+                onChange={(e) => {
+                  handleChangeEquipoVisitante(e);
                 }}
                 label="Equipo Visitante"
                 required
