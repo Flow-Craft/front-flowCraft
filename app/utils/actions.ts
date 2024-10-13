@@ -15,7 +15,7 @@ import {
 } from './models/user';
 import { editCreateNewSchema } from './models/news';
 import { eventoSchema } from './models/eventos';
-import { eventoPartidoSchema } from './models/eventoPartido'
+import { eventoPartidoSchema } from './models/eventoPartido';
 
 import { tipoAcrearSchema, tipoAccionPartidoSchema } from './models/tipos';
 import { crearInstalacionSchema } from './models/instalaciones';
@@ -764,4 +764,8 @@ export async function getPerfilByNombreAdmin(nombrePerfil: any) {
 
 export async function getPartidoByIdAdmin(id: any) {
   return await FlowCraftAPI.get(`Partidos/GetPartidoById?id=${id}`);
+}
+
+export async function getEventosActivos() {
+  return await FlowCraftAPI.get(`Eventos/GetEventosActivos`);
 }

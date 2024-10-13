@@ -35,4 +35,3 @@ export const eventoSchema = z
       path: ['FechaFinEvento'], // Indica el campo que está causando el error
     },
   );
-

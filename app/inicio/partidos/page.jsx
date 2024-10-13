@@ -3,76 +3,32 @@ import { useEffect, useState } from 'react';
 import withAuthorization from '../../../app/utils/autorization';
 import { InputWithLabel } from '@/app/ui/components/InputWithLabel/InputWithLabel';
 import { SelectWithLabel } from '@/app/ui/components/SelectWithLabel/SelectWithLabel';
-import { getInstalacionesActionAdmin } from '@/app/utils/actions';
-import MatchCard from './matchCard/matchCard';
-
-const partidosEjemplo = [
-  {
-    id: 1,
-    equipoLocal: 'Equipo A',
-    equipoVisitante: 'Equipo B',
-    nombrePartido: 'Partido Amistoso',
-    fechaPartido: new Date(),
-    estadoPartido: 'Creado',
-    totalEquipoLocal: 2,
-    totalEquipoVisitante: 1,
-  },
-  {
-    id: 2,
-    equipoLocal: 'Equipo C',
-    equipoVisitante: 'Equipo D',
-    nombrePartido: 'Partido de Liga',
-    fechaPartido: new Date(),
-    estadoPartido: 'En Progreso',
-    totalEquipoLocal: 0,
-    totalEquipoVisitante: 0,
-  },
-  {
-    id: 3,
-    equipoLocal: 'Equipo E',
-    equipoVisitante: 'Equipo F',
-    nombrePartido: 'Semifinal',
-    fechaPartido: new Date(),
-    estadoPartido: 'Finalizado',
-    totalEquipoLocal: 3,
-    totalEquipoVisitante: 2,
-  },
-  {
-    id: 4,
-    equipoLocal: 'Equipo G',
-    equipoVisitante: 'Equipo H',
-    nombrePartido: 'Final del Torneo',
-    fechaPartido: new Date(),
-    estadoPartido: 'Cancelado',
-    totalEquipoLocal: 0,
-    totalEquipoVisitante: 0,
-  },
-  {
-    id: 5,
-    equipoLocal: 'Equipo I',
-    equipoVisitante: 'Equipo J',
-    nombrePartido: 'Partido Amistoso',
-    fechaPartido: new Date(),
-    estadoPartido: 'Pospuesto',
-    totalEquipoLocal: 1,
-    totalEquipoVisitante: 1,
-  },
-];
+import {
+  getEventosActivos,
+  getInstalacionesActionAdmin,
+  getPartidoByIdAdmin,
+} from '@/app/utils/actions';
+import MatchCard from './components/matchCard/matchCard';
+import { FormDetallePartido } from './components/formDetallePartido/formDetallePartido';
+import { FlowModal } from '@/app/ui/components/FlowModal/FlowModal';
 
 function Page() {
-  const [fechaPartido, setFechaPartido] = useState(
-    () => new Date().toISOString().split('T')[0],
-  );
+  const [fechaPartido, setFechaPartido] = useState(null);
   const [asignado, setAsignado] = useState(false);
   const [instalacion, setInstalacion] = useState([]);
   const [instalacionSeleccionada, setInstalacionSeleccionada] = useState({
     value: 0,
     label: 'Todas las instalaciones',
   });
-  const [partidoAver, setPartidoAver] = useState({});
+  const [eventosSeleccionado, setEventosSeleccionado] = useState({});
+  const [partidos, setPartidos] = useState([]);
+  const [partidoAver, setPartidoAver] = useState([]);
+  const [detallesDelPartido, setDetallesDelPartido] = useState(false);
 
   const handleGetMatchDetails = (partido) => {
-    console.log('partido', partido);
+    const partidoSeleccionado = partidos.find((part) => partido.id === part.id);
+    setEventosSeleccionado(partidoSeleccionado);
+    setDetallesDelPartido(true);
   };
   const getInstalaciones = async () => {
     const result = await getInstalacionesActionAdmin();
@@ -87,8 +43,35 @@ function Page() {
     console.log(fechaPartido, asignado, instalacionSeleccionada);
   };
 
+  const getTodosLosPartidos = async () => {
+    const eventos = await getEventosActivos();
+    const partidos = eventos
+      .filter((ev) => ev?.tipoEvento?.nombreTipoEvento === 'Partido')
+      .map((part) => part.id);
+    const promises = partidos.map((part) => getPartidoByIdAdmin(part));
+    const result = await Promise.all(promises);
+    setPartidos(result);
+    const partidosAVer = result.map((partido) => ({
+      id: partido.id,
+      equipoLocal: partido?.local?.equipo?.nombre,
+      equipoVisitante: partido?.visitante?.equipo?.nombre,
+      nombrePartido: partido?.titulo,
+      fechaPartido: partido?.fechaInicio,
+      estadoPartido:
+        partido?.historialEventoList?.[0]?.estadoEvento?.nombreEstado,
+      totalEquipoLocal: partido?.resultadoLocal || 0,
+      totalEquipoVisitante: partido?.resultadoVisitante || 0,
+    }));
+    setPartidoAver(partidosAVer);
+  };
+
+  const prepararPartido = () => {
+    console.log('hola');
+  };
+
   useEffect(() => {
     getInstalaciones();
+    getTodosLosPartidos();
   }, []);
 
   useEffect(() => {
@@ -146,9 +129,9 @@ function Page() {
       <section className="items-centerbg-gray-100 flex justify-center p-4">
         <div className="w-full max-w-4xl">
           <div className="space-y-4 overflow-y-auto">
-            {partidosEjemplo.map((partido, index) => (
+            {partidoAver.map((partido) => (
               <MatchCard
-                key={index}
+                key={partido.id}
                 handleGetMatchDetails={handleGetMatchDetails}
                 partido={partido}
               />
@@ -156,6 +139,22 @@ function Page() {
           </div>
         </div>
       </section>
+      <FlowModal
+        title={`Detalles del partido`}
+        modalBody={
+          <>
+            <FormDetallePartido partido={eventosSeleccionado} />
+          </>
+        }
+        primaryTextButton={'Preparar Partido'}
+        isOpen={detallesDelPartido}
+        scrollBehavior="outside"
+        onAcceptModal={prepararPartido}
+        onCancelModal={() => {
+          setDetallesDelPartido(false);
+          setEventosSeleccionado({});
+        }}
+      />
     </section>
   );
 }
