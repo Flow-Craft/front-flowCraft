@@ -202,6 +202,7 @@ export const UserTab = () => {
         await registrarUsuarioAdmin(result.data);
         setEditCreateUser(false);
         toast.success('Usuario creado con exito');
+        userToTab();
       }
     } catch (error: any) {
       toast.error(error.message);

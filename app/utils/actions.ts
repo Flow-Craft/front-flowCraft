@@ -362,6 +362,7 @@ export async function changePasswordWithoutCode(
 ) {
   try {
     const result = verifyPasswords.safeParse({ Contrasena, OtraContrasena });
+    console.log('result', result)
     if (!result.success) {
       return { error: true, errors: result.error.errors };
     }
