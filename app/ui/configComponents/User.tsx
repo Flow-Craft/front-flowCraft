@@ -362,7 +362,7 @@ export const UserTab = () => {
         type="submit"
       />
       <FlowModal
-        title={userSelected ? 'Editar Usuario' : 'Crear Usuario'}
+        title={userSelected?.id ? 'Editar Usuario' : 'Crear Usuario'}
         modalBody={
           <ModalCreateEditUser
             errors={errors}
@@ -370,10 +370,10 @@ export const UserTab = () => {
             perfiles={perfiles}
           />
         }
-        primaryTextButton={userSelected ? 'Editar' : 'Crear'}
+        primaryTextButton={userSelected?.id  ? 'Editar' : 'Crear'}
         isOpen={editCreateUser}
         scrollBehavior="outside"
-        onAcceptModal={userSelected ? editUserAction : createUser}
+        onAcceptModal={userSelected?.id ? editUserAction : createUser}
         onCancelModal={() => {
           setEditCreateUser(false);
           setErrors([]);
