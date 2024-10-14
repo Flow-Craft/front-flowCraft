@@ -11,8 +11,8 @@ export const FormDetallePartido = ({ partido }) => {
         <div className="min-w-[200px] flex-1 ">
           <h2 className="text-xl font-bold">Equipo Local</h2>
           <ul>
-            {partido?.local?.equipo?.equipoUsuarios.map((usuario) => {
-              return <li key={usuario.id}>{usuario?.numCamiseta}</li>;
+            {partido?.local?.equipo?.equipoUsuarios.map((user) => {
+              return <li key={user.id}>{user?.numCamiseta} - {user.usuario?.nombre} {user.usuario?.apellido}</li>;
             })}
           </ul>
         </div>
@@ -20,8 +20,8 @@ export const FormDetallePartido = ({ partido }) => {
       <div className="min-w-[200px] flex-1 ">
         <h2 className="text-xl font-bold">Equipo Local</h2>
         <ul>
-          {partido?.visitante?.equipo?.equipoUsuarios.map((usuario) => {
-            return <li key={usuario.id}>{usuario?.numCamiseta}</li>;
+          {partido?.visitante?.equipo?.equipoUsuarios.map((user) => {
+            return <li key={user.id}>{user?.numCamiseta} - {user.usuario?.nombre} {user.usuario?.apellido}</li>;
           })}
         </ul>
       </div>
