@@ -110,12 +110,6 @@ const links = [
     icon: ChartBarIcon,
     nombrePermiso: 'Estadisticas',
   },
-  {
-    name: 'Disciplinas',
-    href: '/inicio/estadisticas',
-    icon: PaperAirplaneIcon,
-    nombrePermiso: 'Disciplina',
-  },
 ];
 
 export default function NavLinks({ onClose = () => {} }) {

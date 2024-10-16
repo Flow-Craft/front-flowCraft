@@ -214,12 +214,12 @@ export default function Page() {
                     <>
                       <Button
                         variant="outline"
-                          size="sm"
-                          textColor={'white'}
-                          bg={'blue.300'}
-                          _hover={{
-                            bg: 'blue.400',
-                          }}
+                        size="sm"
+                        textColor={'white'}
+                        bg={'blue.300'}
+                        _hover={{
+                          bg: 'blue.400',
+                        }}
                         onClick={handleButtonClick}
                       >
                         GENERAR BACKUP.PDF
@@ -279,12 +279,12 @@ export default function Page() {
                     <>
                       <Button
                         variant="outline"
-                          size="sm"
-                          textColor={'white'}
-                          bg={'blue.300'}
-                          _hover={{
-                            bg: 'blue.400',
-                          }}
+                        size="sm"
+                        textColor={'white'}
+                        bg={'blue.300'}
+                        _hover={{
+                          bg: 'blue.400',
+                        }}
                         onClick={handleButtonClick2}
                       >
                         RESTAURAR BACKUP.PDF
@@ -301,8 +301,8 @@ export default function Page() {
                 </Flex>
                 <Flex align="start">
                   <Text color="tomato" fontSize="xs" as="b">
-                    Nota: 
-                  </Text> 
+                    Nota:
+                  </Text>
                   <Text color="tomato" fontSize="xs" ml={2}>
                     Los PDF deben tener el nombre "GENERAR_BACKUP.pdf" y
                     "RESTAURAR_BACKUP.pdf"

@@ -371,7 +371,7 @@ export const UserTab = () => {
             perfiles={perfiles}
           />
         }
-        primaryTextButton={userSelected?.id  ? 'Editar' : 'Crear'}
+        primaryTextButton={userSelected?.id ? 'Editar' : 'Crear'}
         isOpen={editCreateUser}
         scrollBehavior="outside"
         onAcceptModal={userSelected?.id ? editUserAction : createUser}

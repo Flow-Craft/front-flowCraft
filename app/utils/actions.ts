@@ -14,7 +14,7 @@ import {
   CreatePerfilSchema,
 } from './models/user';
 import { editCreateNewSchema } from './models/news';
-import { eventoSchema } from './models/eventos';
+import { categoriaSchema, eventoSchema } from './models/eventos';
 import { eventoPartidoSchema } from './models/eventoPartido';
 
 import { tipoAcrearSchema, tipoAccionPartidoSchema } from './models/tipos';
@@ -362,7 +362,7 @@ export async function changePasswordWithoutCode(
 ) {
   try {
     const result = verifyPasswords.safeParse({ Contrasena, OtraContrasena });
-    console.log('result', result)
+    console.log('result', result);
     if (!result.success) {
       return { error: true, errors: result.error.errors };
     }
@@ -446,6 +446,10 @@ export async function getPerfilesAdmin() {
   return await FlowCraftAPI.get('Configuracion/GetPerfiles');
 }
 
+export async function getCategoriaAdmin() {
+  return await FlowCraftAPI.get('DisciplinasYLecciones/GetCategorias');
+}
+
 export async function getPermisosAdmin() {
   return await FlowCraftAPI.get('Configuracion/GetPermisos');
 }
@@ -466,6 +470,30 @@ export async function createPerfilAction(dis: any, setErrors: any) {
   setErrors([]);
   return await FlowCraftAPI.post(`Configuracion/CrearPerfil`, dis);
 }
+
+export async function crearCategoriaAdmin(dis: any, setErrors: any) {
+  const result = categoriaSchema.safeParse(dis);
+
+  if (!result.success) {
+    return { error: true, errors: result.error.errors };
+  }
+  setErrors([]);
+  return await FlowCraftAPI.post(`DisciplinasYLecciones/CrearCategoria`, dis);
+}
+
+export async function editarCategoriaAdmin(dis: any) {
+  return await FlowCraftAPI.post(
+    `DisciplinasYLecciones/ActualizarCategoria`,
+    dis,
+  );
+}
+
+export async function eliminarCategoriaAdmin(idCategoria: any) {
+  return await FlowCraftAPI.post(`DisciplinasYLecciones/EliminarCategoria`, {
+    Id: idCategoria,
+  });
+}
+
 export async function editPerfilAction(dis: any) {
   return await FlowCraftAPI.post(`Configuracion/ActualizarPerfil`, dis);
 }

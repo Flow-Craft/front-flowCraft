@@ -27,7 +27,7 @@ export default function LoginForm() {
   const [tyC, setTyC] = useState<{ tyc: string }>({ tyc: '' });
   const [openModal, setOpenModal] = useState(false);
   const [openModalfindUser, setOpenModalfindUser] = useState(false);
-  const [debeCambiarContraseña, setDebeCambiarContraseña] = useState(false)
+  const [debeCambiarContraseña, setDebeCambiarContraseña] = useState(false);
   const [openChangePassword, setOpenChangePassword] = useState(false);
   const [userName, setUserName] = useState<string>('');
   const [userEmail, setUserEmail] = useState<any>('');
@@ -39,14 +39,16 @@ export default function LoginForm() {
   }, []);
   const LoginAgain = async () => {
     try {
-      if(openModal){
-        setOpenModal(false)
-        toast.success("AC aceptados con exito por favor vuelva a presionar el boton iniciar sesion");
+      if (openModal) {
+        setOpenModal(false);
+        toast.success(
+          'AC aceptados con exito por favor vuelva a presionar el boton iniciar sesion',
+        );
       }
-      if(debeCambiarContraseña){
+      if (debeCambiarContraseña) {
         setOpenModal(false);
         setOpenChangePassword(true);
-        return
+        return;
       }
       const response = await loginUser({ ...userLoged, ReaceptarTyC: true });
       if (response?.nombre) {
@@ -149,11 +151,10 @@ export default function LoginForm() {
     }
 
     if (response?.error === 'Contraseña vencida') {
-      setDebeCambiarContraseña(true)
+      setDebeCambiarContraseña(true);
       setOpenChangePassword(true);
       setUserEmail({ email: e.target.email.value, jwt: response.JWT });
     }
-    
   };
   useEffect(() => {
     getTyC();
