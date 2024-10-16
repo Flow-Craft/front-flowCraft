@@ -16,7 +16,7 @@ import {
 import { editCreateNewSchema } from './models/news';
 import { categoriaSchema, eventoSchema } from './models/eventos';
 import { eventoPartidoSchema } from './models/eventoPartido';
-
+import { equipoEstadoSchema } from './models/estados';
 import { tipoAcrearSchema, tipoAccionPartidoSchema } from './models/tipos';
 import { crearInstalacionSchema } from './models/instalaciones';
 import {
@@ -673,6 +673,155 @@ export async function editarInstalacionAction(instalacion: any) {
 
 export async function eliminarInstalacionAdmin(instalacion: any) {
   return await FlowCraftAPI.post(`Reservas/EliminarInstalacion/${instalacion}`);
+}
+
+// Estados
+
+export async function getEquipoEstadoAdmin() {
+  return await FlowCraftAPI.get(`Configuracion/GetEquipoEstado`);
+}
+
+export async function crearEquipoAdmin(equipo: any) {
+  const result = equipoEstadoSchema.safeParse(equipo);
+  if (!result.success) {
+    return { error: true, errors: result.error.errors };
+  }
+  return await FlowCraftAPI.post(`Configuracion/CrearEquipoEstado`, equipo);
+}
+
+export async function editarEquipoAdmin(equipo: any) {
+  return await FlowCraftAPI.post(
+    `Configuracion/ActualizarEquipoEstado`,
+    equipo,
+  );
+}
+
+export async function eliminarEquipoEstadoAdmin(id: any) {
+  return await FlowCraftAPI.post(`Configuracion/EliminarEquipoEstado/${id}`);
+}
+
+export async function getEventosEstadoAdmin() {
+  return await FlowCraftAPI.get(`Configuracion/GetEventoEstado`);
+}
+
+export async function crearEventoAdmin(equipo: any) {
+  const result = equipoEstadoSchema.safeParse(equipo);
+  if (!result.success) {
+    return { error: true, errors: result.error.errors };
+  }
+  console.log('result', result);
+  return await FlowCraftAPI.post(`Configuracion/CrearEventoEstado`, equipo);
+}
+
+export async function editarEventoEstadoAdmin(equipo: any) {
+  return await FlowCraftAPI.post(
+    `Configuracion/ActualizarEventoEstado`,
+    equipo,
+  );
+}
+
+export async function eliminarEventoEstadoAdmin(id: any) {
+  return await FlowCraftAPI.post(`Configuracion/EliminarEventoEstado/${id}`);
+}
+
+export async function getUsuarioEstadoAdmin() {
+  return await FlowCraftAPI.get(`Configuracion/GetUsuarioEstado`);
+}
+
+export async function crearUsuarioEstadoAdmin(equipo: any) {
+  const result = equipoEstadoSchema.safeParse(equipo);
+  if (!result.success) {
+    return { error: true, errors: result.error.errors };
+  }
+  return await FlowCraftAPI.post(`Configuracion/CrearUsuarioEstado`, equipo);
+}
+
+export async function editarUsuarioEstadoAdmin(equipo: any) {
+  return await FlowCraftAPI.post(
+    `Configuracion/ActualizarUsuarioEstado`,
+    equipo,
+  );
+}
+
+export async function eliminarUsuarioEstadoAdmin(id: any) {
+  return await FlowCraftAPI.post(`Configuracion/EliminarUsuarioEstado/${id}`);
+}
+
+export async function getLeccionEstadoAdmin() {
+  return await FlowCraftAPI.get(`DisciplinasYLecciones/GetLeccionesEstados`);
+}
+
+export async function crearLeccionEstadoAdmin(equipo: any) {
+  const result = equipoEstadoSchema.safeParse(equipo);
+  if (!result.success) {
+    return { error: true, errors: result.error.errors };
+  }
+  return await FlowCraftAPI.post(
+    `DisciplinasYLecciones/CrearLeccionEstado`,
+    equipo,
+  );
+}
+
+export async function editarLeccionEstadoAdmin(equipo: any) {
+  return await FlowCraftAPI.post(
+    `DisciplinasYLecciones/ActualizarLeccionEstado`,
+    equipo,
+  );
+}
+
+export async function eliminarLeccionEstadoAdmin(id: any) {
+  return await FlowCraftAPI.post(
+    `DisciplinasYLecciones/EliminarLeccionEstado`,
+    { Id: id },
+  );
+}
+
+export async function getInstalacionEstadoAdmin() {
+  return await FlowCraftAPI.get(`Configuracion/GetInstalacionEstado`);
+}
+
+export async function crearInstalacionEstadoAdmin(equipo: any) {
+  const result = equipoEstadoSchema.safeParse(equipo);
+  if (!result.success) {
+    return { error: true, errors: result.error.errors };
+  }
+  return await FlowCraftAPI.post(
+    `Configuracion/CrearInstalacionEstado`,
+    equipo,
+  );
+}
+
+export async function editarInstalacionEstadoAdmin(equipo: any) {
+  return await FlowCraftAPI.post(
+    `Configuracion/ActualizarInstalacionEstado`,
+    equipo,
+  );
+}
+
+export async function eliminarInstalacionEstadoAdmin(id: any) {
+  return await FlowCraftAPI.post(
+    `Configuracion/EliminarInstalacionEstado/${id}`,
+  );
+}
+
+export async function getTorneoEstadoAdmin() {
+  return await FlowCraftAPI.get(`Torneos/GetTorneoEstados`);
+}
+
+export async function crearTorneoEstadoAdmin(equipo: any) {
+  const result = equipoEstadoSchema.safeParse(equipo);
+  if (!result.success) {
+    return { error: true, errors: result.error.errors };
+  }
+  return await FlowCraftAPI.post(`Torneos/CrearTorneoEstado`, equipo);
+}
+
+export async function editarTorneoEstadoAdmin(equipo: any) {
+  return await FlowCraftAPI.post(`Torneos/ActualizarTorneoEstado`, equipo);
+}
+
+export async function eliminarTorneoEstadoAdmin(id: any) {
+  return await FlowCraftAPI.post(`Torneos/EliminarTorneoEstado`, { Id: id });
 }
 
 // EVENTOS
