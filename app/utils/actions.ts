@@ -947,3 +947,11 @@ export async function getPartidoByIdAdmin(id: any) {
 export async function getEventosActivos() {
   return await FlowCraftAPI.get(`Eventos/GetEventosActivos`);
 }
+
+
+
+
+//PARTIDOS
+export async function suspenderPartidoAdmin(idEquipo:any,motivo:any) {
+  return await FlowCraftAPI.post(`Partidos/SuspenderPartido`, {Id:idEquipo, Motivo:motivo});
+}

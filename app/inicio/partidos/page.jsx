@@ -7,10 +7,12 @@ import {
   getEventosActivos,
   getInstalacionesActionAdmin,
   getPartidoByIdAdmin,
+  suspenderPartidoAdmin,
 } from '@/app/utils/actions';
 import MatchCard from './components/matchCard/matchCard';
 import { FormDetallePartido } from './components/formDetallePartido/formDetallePartido';
 import { FlowModal } from '@/app/ui/components/FlowModal/FlowModal';
+import toast, { Toaster } from 'react-hot-toast';
 
 function Page() {
   const [fechaPartido, setFechaPartido] = useState(null);
@@ -24,6 +26,7 @@ function Page() {
   const [partidos, setPartidos] = useState([]);
   const [partidoAver, setPartidoAver] = useState([]);
   const [detallesDelPartido, setDetallesDelPartido] = useState(false);
+  const [suspenderPartidoModal, setSuspenderPartidoModal] = useState(false);
 
   const handleGetMatchDetails = (partido) => {
     const partidoSeleccionado = partidos.find((part) => partido.id === part.id);
@@ -40,7 +43,7 @@ function Page() {
   };
 
   const handleSearchMatches = () => {
-    console.log(fechaPartido, asignado, instalacionSeleccionada);
+    
   };
 
   const getTodosLosPartidos = async () => {
@@ -69,6 +72,25 @@ function Page() {
     console.log('hola');
   };
 
+  const handleSuspenderPartido = () =>{
+    setDetallesDelPartido(false);
+    setSuspenderPartidoModal(true)
+  }
+
+  const suspenderPartido = async(e) => {
+    try {
+      await suspenderPartidoAdmin(eventosSeleccionado.id,e.target.descripcion.value);
+      toast.success("Partido suspendido con exito");
+      getInstalaciones();
+      getTodosLosPartidos();
+      setEventosSeleccionado({})
+      setSuspenderPartidoModal(false)
+    } catch (error) {
+      toast.error(error?.message)
+    }
+
+  }
+
   useEffect(() => {
     getInstalaciones();
     getTodosLosPartidos();
@@ -80,6 +102,7 @@ function Page() {
 
   return (
     <section>
+      <Toaster/>
       <div className="mt-6 self-start px-9 pb-9 text-3xl font-bold">
         Partidos
       </div>
@@ -143,7 +166,7 @@ function Page() {
         title={`Detalles del partido`}
         modalBody={
           <>
-            <FormDetallePartido partido={eventosSeleccionado} />
+            <FormDetallePartido partido={eventosSeleccionado} handleSuspenderPartido={handleSuspenderPartido} />
           </>
         }
         primaryTextButton={'Preparar Partido'}
@@ -153,6 +176,34 @@ function Page() {
         onCancelModal={() => {
           setDetallesDelPartido(false);
           setEventosSeleccionado({});
+        }}
+      />
+      <FlowModal
+        title={`¿Por que quiere suspender este partido?`}
+        modalBody={
+          <div>
+            <label
+              className="mb-3 mt-5 block text-lg font-medium text-gray-900"
+              htmlFor={'descripcion'}
+            >
+              Descripcion
+              <textarea
+                name="descripcion"
+                rows="5"
+                cols="50"
+                className={`w-full resize-none rounded-lg border border-gray-300 p-2 focus:border-gray-500 focus:outline-none`}
+              />
+            </label>
+          </div>
+        }
+        primaryTextButton={'Suspender Partido'}
+        isOpen={suspenderPartidoModal}
+        scrollBehavior="outside"
+        onAcceptModal={suspenderPartido}
+        type="submit"
+        onCancelModal={() => {
+          setSuspenderPartidoModal(false);
+          setEventosSeleccionado({})
         }}
       />
     </section>
