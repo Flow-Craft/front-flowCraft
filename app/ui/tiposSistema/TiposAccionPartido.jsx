@@ -201,13 +201,13 @@ export const TiposAccionPartido = () => {
       </section>
       <Toaster />
       <FlowModal
-        title={`${tipoAccionPartidoToDelte ? 'Editar' : 'Crear'} Tipo Evento`}
+        title={`${tipoAccionPartidoToDelte ? 'Editar' : 'Crear'} Tipo accion partido`}
         modalBody={
           <div>
             <InputWithLabel
               name={'nombre'}
               type="text"
-              label="Nombre tipo evento"
+              label="Nombre accion partido"
               defaultValue={tipoAccionPartidoToDelte?.nombreTipoAccion}
               required
             />

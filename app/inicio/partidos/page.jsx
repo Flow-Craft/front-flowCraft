@@ -4,15 +4,19 @@ import withAuthorization from '../../../app/utils/autorization';
 import { InputWithLabel } from '@/app/ui/components/InputWithLabel/InputWithLabel';
 import { SelectWithLabel } from '@/app/ui/components/SelectWithLabel/SelectWithLabel';
 import {
+  createTimer,
   getEventosActivos,
   getInstalacionesActionAdmin,
   getPartidoByIdAdmin,
+  IniciarPartidoAdmin,
   suspenderPartidoAdmin,
 } from '@/app/utils/actions';
 import MatchCard from './components/matchCard/matchCard';
 import { FormDetallePartido } from './components/formDetallePartido/formDetallePartido';
 import { FlowModal } from '@/app/ui/components/FlowModal/FlowModal';
 import toast, { Toaster } from 'react-hot-toast';
+import { ModalOverlay } from '@chakra-ui/react';
+import { useRouter } from 'next/navigation';
 
 function Page() {
   const [fechaPartido, setFechaPartido] = useState(null);
@@ -27,6 +31,13 @@ function Page() {
   const [partidoAver, setPartidoAver] = useState([]);
   const [detallesDelPartido, setDetallesDelPartido] = useState(false);
   const [suspenderPartidoModal, setSuspenderPartidoModal] = useState(false);
+  const [modalPrepararPartido, setModalPrepararPartido] = useState(false);
+  const [equipoLocalSeleccionado, setEquipoLocalSeleccionado] = useState([]);
+  const [equipoVisitanteSeleccionado, setEquipoVisitanteSeleccionado] =
+    useState([]);
+  const [confirmacionInicioPartido, setConfirmacionInicioPartido] =
+    useState(false);
+  const router = useRouter();
 
   const handleGetMatchDetails = (partido) => {
     const partidoSeleccionado = partidos.find((part) => partido.id === part.id);
@@ -42,9 +53,7 @@ function Page() {
     setInstalacion(instalaciones);
   };
 
-  const handleSearchMatches = () => {
-    
-  };
+  const handleSearchMatches = () => {};
 
   const getTodosLosPartidos = async () => {
     const eventos = await getEventosActivos();
@@ -69,27 +78,59 @@ function Page() {
   };
 
   const prepararPartido = () => {
-    console.log('hola');
+    setDetallesDelPartido(false);
+    setModalPrepararPartido(true);
   };
 
-  const handleSuspenderPartido = () =>{
-    setDetallesDelPartido(false);
-    setSuspenderPartidoModal(true)
-  }
-
-  const suspenderPartido = async(e) => {
+  const iniciarPartido = async () => {
     try {
-      await suspenderPartidoAdmin(eventosSeleccionado.id,e.target.descripcion.value);
-      toast.success("Partido suspendido con exito");
+      if (
+        equipoLocalSeleccionado.length === 0 ||
+        equipoVisitanteSeleccionado.length === 0
+      ) {
+        toast.error('Debe seleccionar los jugadores que iran a cancha');
+        return;
+      }
+      const partidoAIniciar = {
+        Id: eventosSeleccionado.id,
+        jugadoresCanchaEquipLoc: equipoLocalSeleccionado.map(
+          (jug) => jug.value,
+        ),
+        jugadoresCanchaEquipVis: equipoVisitanteSeleccionado.map(
+          (jug) => jug.value,
+        ),
+      };
+      await IniciarPartidoAdmin(partidoAIniciar);
+      setModalPrepararPartido(false);
+      setConfirmacionInicioPartido(true);
+      await createTimer(15000);
+      setConfirmacionInicioPartido(false);
+      router.push(`partidos/arbitro/${eventosSeleccionado.id}`);
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  const handleSuspenderPartido = () => {
+    setDetallesDelPartido(false);
+    setSuspenderPartidoModal(true);
+  };
+
+  const suspenderPartido = async (e) => {
+    try {
+      await suspenderPartidoAdmin(
+        eventosSeleccionado.id,
+        e.target.descripcion.value,
+      );
+      toast.success('Partido suspendido con exito');
       getInstalaciones();
       getTodosLosPartidos();
-      setEventosSeleccionado({})
-      setSuspenderPartidoModal(false)
+      setEventosSeleccionado({});
+      setSuspenderPartidoModal(false);
     } catch (error) {
-      toast.error(error?.message)
+      toast.error(error?.message);
     }
-
-  }
+  };
 
   useEffect(() => {
     getInstalaciones();
@@ -100,9 +141,50 @@ function Page() {
     handleSearchMatches();
   }, [asignado, fechaPartido, instalacionSeleccionada]);
 
+  const estaHabilitadoElEvento = (evento) => {
+    return (
+      evento?.historialEventoList?.[0]?.estadoEvento?.nombreEstado ===
+        'Suspendido' ||
+      !(
+        new Date() >= new Date(evento?.fechaInicio) &&
+        new Date() <= new Date(evento?.fechaFinEvento)
+      )
+    );
+  };
+
+  const handlePartidos = () => {
+    if (
+      eventosSeleccionado?.historialEventoList?.[0]?.estadoEvento
+        ?.nombreEstado === 'Iniciado'
+    ) {
+      router.push(`partidos/arbitro/${eventosSeleccionado.id}`);
+    }
+    if (
+      eventosSeleccionado?.historialEventoList?.[0]?.estadoEvento
+        ?.nombreEstado === 'Creado'
+    ) {
+      return prepararPartido();
+    }
+  };
+
+  const handlePartidosNombre = () => {
+    if (
+      eventosSeleccionado?.historialEventoList?.[0]?.estadoEvento
+        ?.nombreEstado === 'Iniciado'
+    ) {
+      return 'Continuar Partido';
+    }
+    if (
+      eventosSeleccionado?.historialEventoList?.[0]?.estadoEvento
+        ?.nombreEstado === 'Creado'
+    ) {
+      return 'Preparar Partido';
+    }
+  };
+
   return (
     <section>
-      <Toaster/>
+      <Toaster />
       <div className="mt-6 self-start px-9 pb-9 text-3xl font-bold">
         Partidos
       </div>
@@ -166,13 +248,17 @@ function Page() {
         title={`Detalles del partido`}
         modalBody={
           <>
-            <FormDetallePartido partido={eventosSeleccionado} handleSuspenderPartido={handleSuspenderPartido} />
+            <FormDetallePartido
+              partido={eventosSeleccionado}
+              handleSuspenderPartido={handleSuspenderPartido}
+            />
           </>
         }
-        primaryTextButton={'Preparar Partido'}
+        primaryTextButton={handlePartidosNombre()}
+        disabled={estaHabilitadoElEvento(eventosSeleccionado)}
         isOpen={detallesDelPartido}
         scrollBehavior="outside"
-        onAcceptModal={prepararPartido}
+        onAcceptModal={handlePartidos}
         onCancelModal={() => {
           setDetallesDelPartido(false);
           setEventosSeleccionado({});
@@ -203,8 +289,93 @@ function Page() {
         type="submit"
         onCancelModal={() => {
           setSuspenderPartidoModal(false);
-          setEventosSeleccionado({})
+          setEventosSeleccionado({});
         }}
+      />
+      <FlowModal
+        title={`Preparar partido`}
+        sx={{ minWidth: '900px' }}
+        modalBody={
+          <div className="w-full">
+            <section className="flex w-full flex-row justify-between gap-10">
+              <div className="flex-1">
+                <span className="text-xl font-bold">Disciplina: </span>
+                <span>{eventosSeleccionado?.disciplinas?.[0]?.nombre}</span>
+              </div>
+              <div className="flex-1">
+                <span className="text-xl font-bold">Categoria: </span>
+                <span>{eventosSeleccionado?.categoria?.nombre}</span>
+              </div>
+              <div className="flex-1">
+                <span className="text-xl font-bold">Fecha de partido: </span>
+                <span>
+                  {new Date(
+                    eventosSeleccionado.fechaInicio,
+                  ).toLocaleDateString()}
+                </span>
+              </div>
+            </section>
+
+            <section className="flex-full z-50 mt-4 flex w-full gap-10">
+              <div className="mb-16 flex-1  ">
+                <SelectWithLabel
+                  name="IdsDisciplinas"
+                  options={eventosSeleccionado?.local?.equipo?.equipoUsuarios?.map(
+                    (user) => ({
+                      value: user.id,
+                      label: `${user.numCamiseta} -  ${user.usuario.apellido} ${user.usuario.nombre}`,
+                    }),
+                  )}
+                  label="Equipo Local"
+                  isMulti
+                  onChange={(seleccionado) => {
+                    setEquipoLocalSeleccionado(seleccionado);
+                  }}
+                />
+              </div>
+              <div className="min-h-12 flex-1">
+                <SelectWithLabel
+                  name="IdsDisciplinas"
+                  options={eventosSeleccionado?.visitante?.equipo?.equipoUsuarios?.map(
+                    (user) => ({
+                      value: user.id,
+                      label: `${user.numCamiseta} -  ${user.usuario.apellido} ${user.usuario.nombre}`,
+                    }),
+                  )}
+                  label="Equipo Visitante"
+                  isMulti
+                  onChange={(selection) => {
+                    setEquipoVisitanteSeleccionado(selection);
+                  }}
+                />
+              </div>
+            </section>
+          </div>
+        }
+        primaryTextButton={'Iniciar Partido'}
+        isOpen={modalPrepararPartido}
+        onAcceptModal={iniciarPartido}
+        scrollBehavior="outside"
+        type="submit"
+        onCancelModal={() => {
+          setModalPrepararPartido(false);
+          setEventosSeleccionado({});
+        }}
+      />
+      <FlowModal
+        sx={{ minWidth: '700px' }}
+        modalBody={
+          <div className="mb-6">
+            <span className="text-3xl font-bold text-blue-600">
+              Partido Iniciado Correctamente
+            </span>
+          </div>
+        }
+        isOpen={confirmacionInicioPartido}
+        primaryTextButton={null}
+        scrollBehavior="outside"
+        overlay={<ModalOverlay bg="#3182ce.300" backdropFilter="blur(10px)" />}
+        onCancelModal={() => {}}
       />
     </section>
   );

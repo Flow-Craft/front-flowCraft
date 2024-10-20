@@ -4,7 +4,7 @@ export const FormDetallePartido = ({ partido, handleSuspenderPartido }) => {
   return (
     <section className="flex w-full flex-wrap gap-4">
       <div>
-        <div className="min-w-[300px] p-6 flex-1 ">
+        <div className="min-w-[300px] flex-1 p-6 ">
           <h2 className="text-xl font-bold">Equipo Local</h2>
           <ul>
             {partido?.local?.equipo?.equipoUsuarios.map((user) => {
@@ -18,7 +18,7 @@ export const FormDetallePartido = ({ partido, handleSuspenderPartido }) => {
           </ul>
         </div>
       </div>
-      <div className="min-w-[300px] p-6  flex-1 ">
+      <div className="min-w-[300px] flex-1  p-6 ">
         <h2 className="text-xl font-bold">Equipo Local</h2>
         <ul>
           {partido?.visitante?.equipo?.equipoUsuarios.map((user) => {
@@ -31,7 +31,7 @@ export const FormDetallePartido = ({ partido, handleSuspenderPartido }) => {
           })}
         </ul>
       </div>
-      <div className="min-w-[300px] p-6 flex-1 ">
+      <div className="min-w-[300px] flex-1 p-6 ">
         <div>
           <span className="text-xl font-bold">Disciplina: </span>
           <span>{partido?.disciplinas?.[0]?.nombre}</span>
@@ -47,15 +47,22 @@ export const FormDetallePartido = ({ partido, handleSuspenderPartido }) => {
           <span>{new Date(partido.fechaInicio).toLocaleDateString()}</span>
         </div>
         <div>
-          <button
-            className="rounded-lg bg-blue-500 p-2 mt-8 text-center text-xl text-white lg:ml-auto"
-            type="button"
-            onClick={() => {
-              handleSuspenderPartido()
-            }}
-          >
-            Suspender Partido
-          </button>
+          {partido?.historialEventoList?.[0]?.estadoEvento?.nombreEstado !==
+          'Suspendido' ? (
+            <button
+              className="mt-8 rounded-lg bg-blue-500 p-2 text-center text-xl text-white lg:ml-auto"
+              type="button"
+              onClick={() => {
+                handleSuspenderPartido();
+              }}
+            >
+              Suspender Partido
+            </button>
+          ) : (
+            <span className="mt-7 text-xl font-bold">
+              {partido?.historialEventoList?.[0]?.detalleCambioEstado}
+            </span>
+          )}
         </div>
       </div>
     </section>

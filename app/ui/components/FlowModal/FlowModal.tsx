@@ -22,6 +22,8 @@ export const FlowModal = ({
   scrollBehavior = 'inside',
   disabled = false,
   type = 'button',
+  sx = null,
+  overlay = null,
 }: any) => {
   const onSubmitForm = (e: any) => {
     e.preventDefault();
@@ -37,28 +39,31 @@ export const FlowModal = ({
         isCentered
         blockScrollOnMount={false}
       >
+        {overlay}
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent sx={sx}>
           <ModalHeader>{title}</ModalHeader>
           <ModalCloseButton />
           <form onSubmit={type === 'submit' ? onSubmitForm : undefined}>
             <ModalBody>{modalBody}</ModalBody>
-            <ModalFooter>
-              <Button
-                colorScheme="blue"
-                isDisabled={disabled}
-                mr={3}
-                type={type}
-                onClick={type === 'submit' ? undefined : onAcceptModal}
-              >
-                {primaryTextButton}
-              </Button>
-              {secondaryTextButton && (
-                <Button variant="ghost" onClick={onCancelModal}>
-                  {secondaryTextButton}
+            {primaryTextButton && (
+              <ModalFooter>
+                <Button
+                  colorScheme="blue"
+                  isDisabled={disabled}
+                  mr={3}
+                  type={type}
+                  onClick={type === 'submit' ? undefined : onAcceptModal}
+                >
+                  {primaryTextButton}
                 </Button>
-              )}
-            </ModalFooter>
+                {secondaryTextButton && (
+                  <Button variant="ghost" onClick={onCancelModal}>
+                    {secondaryTextButton}
+                  </Button>
+                )}
+              </ModalFooter>
+            )}
           </form>
         </ModalContent>
       </Modal>
