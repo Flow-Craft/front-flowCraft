@@ -5,6 +5,10 @@ import {
   getUsersAdmin,
   getEventosAdmin,
   getTipoEventosAdmin,
+  getReporteByUsuarioYPeriodo,
+  getReporteByEvento,
+  getReporteByPeriodoTipoEvento,
+  getReporteByPeriodoInstalacion,
 } from '@/app/utils/actions';
 import React, { useEffect, useMemo, useState } from 'react';
 
@@ -184,7 +188,7 @@ export const Eventos = () => {
     const usuariosToShow = usuarios.usuarios.map((user) => {
       return {
         label: `${user.dni} - ${user.apellido} ${user.nombre}`,
-        value: user.dni,
+        value: user.id,
       };
     });
     const instalacionesToShow = instalaciones.map((ins) => {
@@ -198,11 +202,37 @@ export const Eventos = () => {
     setEventos(eventosToShow);
     setTiposEvento(tipoEventoShow);
   };
-  const handlePedirReporte = () => {
-    console.log('usuarioSeleccionado', usuarioSeleccionado);
-    console.log('instalacionSeleccionada', instalacionSeleccionada);
-    console.log('fechaInicio', fechaInicio);
-    console.log('fechaInicio', fechaFin);
+  const handlePedirReporte = async() => {
+    let pdf
+    switch(opcionSeleccionada.value){
+      case 1:
+        pdf = await getReporteByUsuarioYPeriodo({
+          idUsuario: usuarioSeleccionado.value.toString(),
+          periodoInicio: `${fechaInicio}T00:00:00`,
+          periodoFin: `${fechaFin}T23:59:59`
+        })
+        break;
+      case 2:
+        pdf = await getReporteByEvento({
+          idEvento: eventoSeleccionado.value.toString(),
+        })
+        break;
+      case 3:
+        pdf = await getReporteByPeriodoTipoEvento({
+          idTipoEvento: tipoEventoSeleccionado.value.toString(),
+          periodoInicio: `${fechaInicio}T00:00:00`,
+          periodoFin: `${fechaFin}T23:59:59`
+        })
+        break;
+      case 4:
+        pdf = await getReporteByPeriodoInstalacion({
+          idInstalacion: instalacionSeleccionada.value.toString(),
+          periodoInicio: `${fechaInicio}T00:00:00`,
+          periodoFin: `${fechaFin}T23:59:59`
+        })
+        break;
+    }
+    window.open(pdf, '_blank');
   };
 
   const isDisable = () => {

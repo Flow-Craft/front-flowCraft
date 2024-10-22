@@ -10,6 +10,7 @@ import {
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { getActionPartidoByIdAdmin, getActionPartidoPanelAdmin, getPartidoByIdAdmin } from '@/app/utils/actions';
 
 const PartidoScreen = () => {
   const [partido, setPartido] = useState({
@@ -28,12 +29,25 @@ const PartidoScreen = () => {
     ],
   });
   const [partidoId, setPartidoId] = useState('');
+  const [isLoading, setIsLoading] = useState(true)
+
+  const getDataDelPatido = async(partidoId) =>{
+    const partido = await getPartidoByIdAdmin(partidoId);
+    console.log('partido', partido)
+    const result = await getActionPartidoPanelAdmin();
+    console.log('result', result)
+  }
 
   useEffect(() => {
     const path = window.location.pathname;
     const idFromPath = path.split('/').pop();
     setPartidoId(idFromPath);
+    getDataDelPatido(idFromPath)
   }, []);
+
+  if(isLoading){
+    return <></>
+  }
 
   return (
     <section className="w-full">

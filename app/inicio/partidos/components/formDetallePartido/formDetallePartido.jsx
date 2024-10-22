@@ -34,7 +34,7 @@ export const FormDetallePartido = ({ partido, handleSuspenderPartido }) => {
       <div className="min-w-[300px] flex-1 p-6 ">
         <div>
           <span className="text-xl font-bold">Disciplina: </span>
-          <span>{partido?.disciplinas?.[0]?.nombre}</span>
+          <span>{partido?.disciplina?.nombre}</span>
         </div>
         <div>
           <span className="text-xl font-bold">Categoria: </span>

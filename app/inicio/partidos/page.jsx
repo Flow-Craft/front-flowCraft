@@ -104,7 +104,7 @@ function Page() {
       await IniciarPartidoAdmin(partidoAIniciar);
       setModalPrepararPartido(false);
       setConfirmacionInicioPartido(true);
-      await createTimer(15000);
+      await createTimer(5000);
       setConfirmacionInicioPartido(false);
       router.push(`partidos/arbitro/${eventosSeleccionado.id}`);
     } catch (error) {

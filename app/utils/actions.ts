@@ -856,7 +856,6 @@ export async function crearEventosAdmin(evento: any) {
 
 export async function crearEventosPartidoAdmin(evento: any) {
   const result = eventoPartidoSchema.safeParse(evento);
-  console.log('result', result)
   if (!result.success) {
     return { error: true, errors: result.error.errors };
   }
@@ -960,3 +959,46 @@ export async function suspenderPartidoAdmin(idEquipo: any, motivo: any) {
 export async function IniciarPartidoAdmin(partido: any) {
   return await FlowCraftAPI.post(`Partidos/IniciarPartido`, partido);
 }
+
+
+export async function getActionPartidoByIdAdmin(id: any) {
+  return await FlowCraftAPI.get(`Partidos/GetAccionPartidoByPartido?IdPartido=${id}`);
+}
+
+export async function getActionPartidoPanelAdmin() {
+  return await FlowCraftAPI.get(`Partidos/GetTiposAccionPaneles`);
+}
+
+
+
+//REPORTES
+
+export async function getReporteByUsuarioYPeriodo(body:any) {
+  const queryString = new URLSearchParams(body).toString();
+  return await FlowCraftAPI.get(`Reportes/ReporteEventoByUsuarioPeriodo?${queryString}`,true,{
+    'Content-Type': 'application/pdf',
+  })
+}
+
+export async function getReporteByEvento(body:any) {
+  const queryString = new URLSearchParams(body).toString();
+  return await FlowCraftAPI.get(`Reportes/ReporteEventoByEvento?${queryString}`,true,{
+    'Content-Type': 'application/pdf',
+  })
+}
+
+export async function getReporteByPeriodoTipoEvento(body:any) {
+  const queryString = new URLSearchParams(body).toString();
+  return await FlowCraftAPI.get(`Reportes/ReporteEventoByTipoEventoPeriodo?${queryString}`,true,{
+    'Content-Type': 'application/pdf',
+  })
+}
+
+export async function getReporteByPeriodoInstalacion(body:any) {
+  const queryString = new URLSearchParams(body).toString();
+  return await FlowCraftAPI.get(`Reportes/ReporteEventoByInstalacionPeriodo?${queryString}`,true,{
+    'Content-Type': 'application/pdf',
+  })
+}
+
+

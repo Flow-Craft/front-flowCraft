@@ -26,7 +26,7 @@ class FlowCraftAPIMethod {
     data: any = null,
     headers: HeadersInit = {},
     saveJWT: boolean = true,
-  ): Promise<T> {
+  ): Promise<any> {
     const url = `${this.baseURL}${endpoint}`;
     const options: any = {
       method,
@@ -70,6 +70,12 @@ class FlowCraftAPIMethod {
             const rst = await response.json();
             return { JWT: returnJWT, ...rst };
           }
+          const contentType = response.headers.get('Content-Type');
+          if (contentType && contentType.includes('application/pdf')) {
+            const pdfBlob = await response.blob(); 
+            const pdfUrl = window.URL.createObjectURL(pdfBlob);
+            return pdfUrl;
+          }
           return await response.json();
         } catch (e) {
           return null as unknown as T;
@@ -86,6 +92,7 @@ class FlowCraftAPIMethod {
   public get<T>(
     endpoint: string,
     requireAuth: boolean = true,
+    customeHeader:any = {}
   ): Promise<T> | void {
     let auth;
     if (requireAuth) {
@@ -94,7 +101,7 @@ class FlowCraftAPIMethod {
         Authorization: `Bearer ${token}`,
       };
     }
-    return this.request<T>('GET', endpoint, null, { ...auth });
+    return this.request<T>('GET', endpoint, null, { ...auth, ...customeHeader });
   }
 
   public post<T>(
