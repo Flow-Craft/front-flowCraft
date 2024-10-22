@@ -27,17 +27,16 @@ const PartidoScreen = () => {
       { id: 6, entrada: '16 - B. NOMBRE', salida: '07 - B. NOMBRE' },
     ],
   });
-  const [partidoId, setPartidoId] = useState("")
+  const [partidoId, setPartidoId] = useState('');
 
-  useEffect(()=>{
+  useEffect(() => {
     const path = window.location.pathname;
     const idFromPath = path.split('/').pop();
-    setPartidoId(idFromPath)
-  },[])
-
+    setPartidoId(idFromPath);
+  }, []);
 
   return (
-    <section className='w-full'>
+    <section className="w-full">
       <h1 className="mb-6 text-left text-3xl font-bold">Partido Iniciado</h1>
       <Box className="mx-auto space-y-8 p-6">
         {/* Botones de acciones */}
