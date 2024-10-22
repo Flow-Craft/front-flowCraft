@@ -856,6 +856,7 @@ export async function crearEventosAdmin(evento: any) {
 
 export async function crearEventosPartidoAdmin(evento: any) {
   const result = eventoPartidoSchema.safeParse(evento);
+  console.log('result', result)
   if (!result.success) {
     return { error: true, errors: result.error.errors };
   }

@@ -15,7 +15,7 @@ export const eventoPartidoSchema = z
     EquipoVisitante: z.string().min(1, 'El equipo visitante es obligatorio.'),
     Planillero: z.string().min(1, 'Debe seleccionar un planillero'),
     Arbitro: z.string().min(1, 'Debe seleccionar un arbitro'),
-    IdsDisciplinas: z.string().min(1, 'Debe seleccionar un arbitro'),
+    IdDisciplina: z.string().min(1, 'Debe seleccionar un arbitro'),
     Banner: z.instanceof(File, { message: 'La imagen no fue enviada' }).refine(
       (value) => {
         console.log('value', value);

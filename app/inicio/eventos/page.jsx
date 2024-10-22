@@ -60,7 +60,7 @@ function Page() {
   const [editCreateEvento, setEditCreateEvento] = useState(false);
   const [eliminarEvento, setEliminarEvento] = useState(false);
   const [errors, setErrors] = useState([]);
-  const [disciplinasSeleccionadas, setDisciplinasSeleccionadas] = useState([]);
+  const [disciplinasSeleccionadas, setDisciplinasSeleccionadas] = useState({});
   const [instalacionesActivasAdmin, setInstalacionesActivasAdmin] = useState(
     [],
   );
@@ -213,6 +213,7 @@ function Page() {
 
   const getEventos = async () => {
     const result = await getEventosAdmin();
+    console.log('result', result)
     setEventos(result);
     const resultFilter =
       result &&
@@ -223,7 +224,7 @@ function Page() {
         fecha: formatDate(vnt.evento.fechaInicio),
         hora: formatearHoras(vnt.evento.fechaInicio, vnt.evento.fechaFinEvento),
         instalacion: vnt.evento.instalacion.nombre,
-        disciplina: vnt.evento.disciplinas.map((dis) => `|${dis.nombre}| `),
+        disciplina: vnt.evento.disciplina.nombre,
         categoria: `${vnt.evento.categoria.genero} - ${vnt.evento.categoria.nombre}`,
         acciones: ActionTab(
           result.find((disc) => disc.evento.id === vnt.evento.id),
@@ -252,13 +253,14 @@ function Page() {
           IdTipoEvento: e.target.IdTipoEvento.value,
           IdInstalacion: e.target.IdInstalacion.value,
           IdCategoria: e.target.IdCategoria.value,
-          IdsDisciplinas: e.target.IdsDisciplinaPartido.value,
+          IdDisciplina: e.target.IdsDisciplinaPartido.value,
           Banner: e.target.Banner.files[0],
           EquipoLocal: e.target.equipoLocal.value,
           EquipoVisitante: e.target.equipoVisitante.value,
           Arbitro: e.target.arbitro.value,
           Planillero: e.target.planillero.value,
         };
+        console.log('eventoACrear', eventoACrear)
         const result = await crearEventosPartidoAdmin(eventoACrear);
         if (result?.error) {
           setErrors(result?.errors);
@@ -275,7 +277,7 @@ function Page() {
           IdTipoEvento: e.target.IdTipoEvento.value,
           IdInstalacion: e.target.IdInstalacion.value,
           IdCategoria: e.target.IdCategoria.value,
-          IdsDisciplinas: disciplinasSeleccionadas.map((perm) => perm.value),
+          IdDisciplina: disciplinasSeleccionadas.value,
           Banner: e.target.Banner.files[0],
         };
         const result = await crearEventosAdmin(eventoACrear);
@@ -305,9 +307,10 @@ function Page() {
         IdTipoEvento: e.target.IdTipoEvento.value,
         IdInstalacion: e.target.IdInstalacion.value,
         IdCategoria: e.target.IdCategoria.value,
-        IdsDisciplinas: disciplinasSeleccionadas.map((perm) => perm.value),
+        IdDisciplina: disciplinasSeleccionadas.value,
         Banner: e.target.Banner.files[0] || eventoSeleccionado.Banner,
       };
+      console.log('eventoACrear', eventoACrear)
 
       const result = await editarEventoAdmin(eventoACrear);
       if (result?.error) {
@@ -572,9 +575,7 @@ function Page() {
                         vnt.evento.fechaFinEvento,
                       ),
                       instalacion: vnt.evento.instalacion.nombre,
-                      disciplina: vnt.evento.disciplinas.map(
-                        (dis) => `|${dis.nombre}| `,
-                      ),
+                      disciplina: vnt.evento.disciplina.nombre,
                       categoria: `${vnt.evento.categoria.genero} - ${vnt.evento.categoria.nombre}`,
                       acciones: ActionTab(
                         eventos.find(
@@ -640,7 +641,7 @@ function Page() {
           setEditCreateEvento(false);
           setErrors([]);
           setEventoSeleccionado({});
-          setDisciplinasSeleccionadas([]);
+          setDisciplinasSeleccionadas({});
         }}
         type="submit"
         size="full"

@@ -11,14 +11,12 @@ export const eventoSchema = z
     IdTipoEvento: z.string().min(1, 'El tipo de evento es obligatorio.'),
     IdInstalacion: z.string().min(1, 'La instalación es obligatoria.'),
     IdCategoria: z.string().min(1, 'La categoría es obligatoria.'),
-    IdsDisciplinas: z
-      .array(z.number())
+    IdDisciplina: z
+      .number()
       .min(1, 'Debe haber al menos una disciplina.'),
     Banner: z.instanceof(File, { message: 'La imagen no fue enviada' }).refine(
       (value) => {
-        console.log('value', value);
         const extension = value.type.split('/').pop()?.toLowerCase();
-        console.log('extension', extension);
         return (
           extension === 'jpg' || extension === 'png' || extension === 'jpeg'
         );
