@@ -117,10 +117,10 @@ const EventoPage = () => {
         {/* Disciplinas */}
         <h2 className="mt-6 font-semibold">Disciplinas:</h2>
         <ul className="list-disc pl-5">
-        <li key={evento.disciplina?.id} className="mb-2">
-              <h3 className="font-semibold">{evento.disciplina?.nombre}</h3>
-              <p>{evento.disciplina?.descripcion}</p>
-            </li>
+          <li key={evento.disciplina?.id} className="mb-2">
+            <h3 className="font-semibold">{evento.disciplina?.nombre}</h3>
+            <p>{evento.disciplina?.descripcion}</p>
+          </li>
         </ul>
 
         {/* Botón para inscribirse */}

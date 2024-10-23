@@ -213,7 +213,7 @@ function Page() {
 
   const getEventos = async () => {
     const result = await getEventosAdmin();
-    console.log('result', result)
+    console.log('result', result);
     setEventos(result);
     const resultFilter =
       result &&
@@ -260,7 +260,7 @@ function Page() {
           Arbitro: e.target.arbitro.value,
           Planillero: e.target.planillero.value,
         };
-        console.log('eventoACrear', eventoACrear)
+        console.log('eventoACrear', eventoACrear);
         const result = await crearEventosPartidoAdmin(eventoACrear);
         if (result?.error) {
           setErrors(result?.errors);
@@ -310,7 +310,7 @@ function Page() {
         IdDisciplina: disciplinasSeleccionadas.value,
         Banner: e.target.Banner.files[0] || eventoSeleccionado.Banner,
       };
-      console.log('eventoACrear', eventoACrear)
+      console.log('eventoACrear', eventoACrear);
 
       const result = await editarEventoAdmin(eventoACrear);
       if (result?.error) {

@@ -72,7 +72,7 @@ class FlowCraftAPIMethod {
           }
           const contentType = response.headers.get('Content-Type');
           if (contentType && contentType.includes('application/pdf')) {
-            const pdfBlob = await response.blob(); 
+            const pdfBlob = await response.blob();
             const pdfUrl = window.URL.createObjectURL(pdfBlob);
             return pdfUrl;
           }
@@ -92,7 +92,7 @@ class FlowCraftAPIMethod {
   public get<T>(
     endpoint: string,
     requireAuth: boolean = true,
-    customeHeader:any = {}
+    customeHeader: any = {},
   ): Promise<T> | void {
     let auth;
     if (requireAuth) {
@@ -101,7 +101,10 @@ class FlowCraftAPIMethod {
         Authorization: `Bearer ${token}`,
       };
     }
-    return this.request<T>('GET', endpoint, null, { ...auth, ...customeHeader });
+    return this.request<T>('GET', endpoint, null, {
+      ...auth,
+      ...customeHeader,
+    });
   }
 
   public post<T>(

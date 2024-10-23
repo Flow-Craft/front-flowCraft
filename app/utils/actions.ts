@@ -960,45 +960,67 @@ export async function IniciarPartidoAdmin(partido: any) {
   return await FlowCraftAPI.post(`Partidos/IniciarPartido`, partido);
 }
 
-
 export async function getActionPartidoByIdAdmin(id: any) {
-  return await FlowCraftAPI.get(`Partidos/GetAccionPartidoByPartido?IdPartido=${id}`);
+  return await FlowCraftAPI.get(
+    `Partidos/GetAccionPartidoByPartido?IdPartido=${id}`,
+  );
 }
 
-export async function getActionPartidoPanelAdmin() {
-  return await FlowCraftAPI.get(`Partidos/GetTiposAccionPaneles`);
+export async function getActionPartidoPanelAdmin(body: any) {
+  const queryString = new URLSearchParams(body).toString();
+  return await FlowCraftAPI.get(
+    `Partidos/GetTiposAccionPaneles?${queryString}`,
+  );
 }
 
-
+export async function finalizarPartidoAdmin(idPartido: any) {
+  return await FlowCraftAPI.post(
+    `Partidos/FinalizarPartido?partidoId=${idPartido}`,
+  );
+}
 
 //REPORTES
 
-export async function getReporteByUsuarioYPeriodo(body:any) {
+export async function getReporteByUsuarioYPeriodo(body: any) {
   const queryString = new URLSearchParams(body).toString();
-  return await FlowCraftAPI.get(`Reportes/ReporteEventoByUsuarioPeriodo?${queryString}`,true,{
-    'Content-Type': 'application/pdf',
-  })
+  return await FlowCraftAPI.get(
+    `Reportes/ReporteEventoByUsuarioPeriodo?${queryString}`,
+    true,
+    {
+      'Content-Type': 'application/pdf',
+    },
+  );
 }
 
-export async function getReporteByEvento(body:any) {
+export async function getReporteByEvento(body: any) {
   const queryString = new URLSearchParams(body).toString();
-  return await FlowCraftAPI.get(`Reportes/ReporteEventoByEvento?${queryString}`,true,{
-    'Content-Type': 'application/pdf',
-  })
+  return await FlowCraftAPI.get(
+    `Reportes/ReporteEventoByEvento?${queryString}`,
+    true,
+    {
+      'Content-Type': 'application/pdf',
+    },
+  );
 }
 
-export async function getReporteByPeriodoTipoEvento(body:any) {
+export async function getReporteByPeriodoTipoEvento(body: any) {
   const queryString = new URLSearchParams(body).toString();
-  return await FlowCraftAPI.get(`Reportes/ReporteEventoByTipoEventoPeriodo?${queryString}`,true,{
-    'Content-Type': 'application/pdf',
-  })
+  return await FlowCraftAPI.get(
+    `Reportes/ReporteEventoByTipoEventoPeriodo?${queryString}`,
+    true,
+    {
+      'Content-Type': 'application/pdf',
+    },
+  );
 }
 
-export async function getReporteByPeriodoInstalacion(body:any) {
+export async function getReporteByPeriodoInstalacion(body: any) {
   const queryString = new URLSearchParams(body).toString();
-  return await FlowCraftAPI.get(`Reportes/ReporteEventoByInstalacionPeriodo?${queryString}`,true,{
-    'Content-Type': 'application/pdf',
-  })
+  return await FlowCraftAPI.get(
+    `Reportes/ReporteEventoByInstalacionPeriodo?${queryString}`,
+    true,
+    {
+      'Content-Type': 'application/pdf',
+    },
+  );
 }
-
-

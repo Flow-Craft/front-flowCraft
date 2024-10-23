@@ -10,7 +10,16 @@ import {
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { getActionPartidoByIdAdmin, getActionPartidoPanelAdmin, getPartidoByIdAdmin } from '@/app/utils/actions';
+import {
+  getActionPartidoPanelAdmin,
+  getPartidoByIdAdmin,
+  finalizarPartidoAdmin,
+  createTimer,
+  suspenderPartidoAdmin,
+} from '@/app/utils/actions';
+import { FlowModal } from '@/app/ui/components/FlowModal/FlowModal';
+import { ModalOverlay } from '@chakra-ui/react';
+import toast, { Toaster } from 'react-hot-toast';
 
 const PartidoScreen = () => {
   const [partido, setPartido] = useState({
@@ -29,24 +38,60 @@ const PartidoScreen = () => {
     ],
   });
   const [partidoId, setPartidoId] = useState('');
-  const [isLoading, setIsLoading] = useState(true)
+  const [partidoData, setPartidoData] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
+  const [accionPartido, setAccionPartido] = useState([]);
+  const [modalFinalizarPartido, setModalFinalizarPartido] = useState(false);
+  const [confirmacionFinalizacionPartido, setConfirmacionFinalizacionPartido] =
+    useState(false);
+  const [modalSuspenderPartido, setModalSuspenderPartido] = useState(false);
+  const [timeDifference, setTimeDifference] = useState(0);
+  const router = useRouter();
 
-  const getDataDelPatido = async(partidoId) =>{
+  const getDataDelPatido = async (partidoId) => {
     const partido = await getPartidoByIdAdmin(partidoId);
-    console.log('partido', partido)
-    const result = await getActionPartidoPanelAdmin();
-    console.log('result', result)
-  }
+    console.log('partido', partido);
+    setPartidoData(partido);
+    const result = await getActionPartidoPanelAdmin({
+      IdDisciplina: partido?.disciplina?.id,
+      Estadistica: false,
+      Partido: true,
+    });
+    setPartidoId(partido.id);
+    setAccionPartido(result);
+    setIsLoading(false);
+  };
+
+  const finalizarPartido = async () => {
+    try {
+      await finalizarPartidoAdmin(partidoId);
+      setConfirmacionFinalizacionPartido(true);
+      await createTimer(1500);
+      router.back();
+    } catch (error) {
+      console.error(error.message.title);
+    }
+  };
+
+  const suspenderPartido = async (e) => {
+    try {
+      await suspenderPartidoAdmin(partidoId, e.target.descripcion.value);
+      toast.success('Partido suspendido con exito');
+      router.back();
+    } catch (error) {
+      toast.error(error?.message);
+    }
+  };
 
   useEffect(() => {
     const path = window.location.pathname;
     const idFromPath = path.split('/').pop();
     setPartidoId(idFromPath);
-    getDataDelPatido(idFromPath)
+    getDataDelPatido(idFromPath);
   }, []);
 
-  if(isLoading){
-    return <></>
+  if (isLoading) {
+    return <></>;
   }
 
   return (
@@ -55,9 +100,23 @@ const PartidoScreen = () => {
       <Box className="mx-auto space-y-8 p-6">
         {/* Botones de acciones */}
         <div className="mt-4 flex justify-between">
-          <Button colorScheme="green">Suspender Partido</Button>
+          <Button
+            colorScheme="green"
+            onClick={() => {
+              setModalSuspenderPartido(true);
+            }}
+          >
+            Suspender Partido
+          </Button>
           <Button colorScheme="gray">Finalizar Tiempo</Button>
-          <Button colorScheme="green">Finalizar Partido</Button>
+          <Button
+            colorScheme="green"
+            onClick={() => {
+              setModalFinalizarPartido(true);
+            }}
+          >
+            Finalizar Partido
+          </Button>
         </div>
         <h1 className="mb-6 text-center text-3xl font-bold">Primer tiempo</h1>
 
@@ -158,223 +217,67 @@ const PartidoScreen = () => {
 
           {/* Acciones (en el centro) */}
           <div className="flex h-full flex-col items-center justify-center space-y-4">
-            <div className="flex items-center justify-center space-x-4">
-              {/* Botones para equipo1 */}
-              <Button
-                onClick={() =>
-                  setPartido({ ...partido, equipo1: partido.equipo1 + 1 })
-                }
-              >
-                +
-              </Button>
-              <Button
-                onClick={() =>
-                  setPartido({ ...partido, equipo1: partido.equipo1 - 1 })
-                }
-              >
-                -
-              </Button>
-
-              {/* Texto de la acción en el medio */}
-              <span className="text-xl font-semibold">Acción 1</span>
-
-              {/* Botones para equipo2 */}
-              <Button
-                onClick={() =>
-                  setPartido({ ...partido, equipo2: partido.equipo2 + 1 })
-                }
-              >
-                +
-              </Button>
-              <Button
-                onClick={() =>
-                  setPartido({ ...partido, equipo2: partido.equipo2 - 1 })
-                }
-              >
-                -
-              </Button>
-            </div>
-
-            <div className="flex items-center justify-center space-x-4">
-              {/* Botones para equipo1 */}
-              <Button
-                onClick={() =>
-                  setPartido({ ...partido, equipo1: partido.equipo1 + 1 })
-                }
-              >
-                +
-              </Button>
-              <Button
-                onClick={() =>
-                  setPartido({ ...partido, equipo1: partido.equipo1 - 1 })
-                }
-              >
-                -
-              </Button>
-
-              {/* Texto de la acción en el medio */}
-              <span className="text-xl font-semibold">Acción 1</span>
-
-              {/* Botones para equipo2 */}
-              <Button
-                onClick={() =>
-                  setPartido({ ...partido, equipo2: partido.equipo2 + 1 })
-                }
-              >
-                +
-              </Button>
-              <Button
-                onClick={() =>
-                  setPartido({ ...partido, equipo2: partido.equipo2 - 1 })
-                }
-              >
-                -
-              </Button>
-            </div>
-            <div className="flex items-center justify-center space-x-4">
-              {/* Botones para equipo1 */}
-              <Button
-                onClick={() =>
-                  setPartido({ ...partido, equipo1: partido.equipo1 + 1 })
-                }
-              >
-                +
-              </Button>
-              <Button
-                onClick={() =>
-                  setPartido({ ...partido, equipo1: partido.equipo1 - 1 })
-                }
-              >
-                -
-              </Button>
-
-              {/* Texto de la acción en el medio */}
-              <span className="text-xl font-semibold">Acción 1</span>
-
-              {/* Botones para equipo2 */}
-              <Button
-                onClick={() =>
-                  setPartido({ ...partido, equipo2: partido.equipo2 + 1 })
-                }
-              >
-                +
-              </Button>
-              <Button
-                onClick={() =>
-                  setPartido({ ...partido, equipo2: partido.equipo2 - 1 })
-                }
-              >
-                -
-              </Button>
-            </div>
-            <div className="flex items-center justify-center space-x-4">
-              {/* Botones para equipo1 */}
-              <Button
-                onClick={() =>
-                  setPartido({ ...partido, equipo1: partido.equipo1 + 1 })
-                }
-              >
-                +
-              </Button>
-              <Button
-                onClick={() =>
-                  setPartido({ ...partido, equipo1: partido.equipo1 - 1 })
-                }
-              >
-                -
-              </Button>
-
-              {/* Texto de la acción en el medio */}
-              <span className="text-xl font-semibold">Acción 1</span>
-
-              {/* Botones para equipo2 */}
-              <Button
-                onClick={() =>
-                  setPartido({ ...partido, equipo2: partido.equipo2 + 1 })
-                }
-              >
-                +
-              </Button>
-              <Button
-                onClick={() =>
-                  setPartido({ ...partido, equipo2: partido.equipo2 - 1 })
-                }
-              >
-                -
-              </Button>
-            </div>
-            <div className="flex items-center justify-center space-x-4">
-              {/* Botones para equipo1 */}
-              <Button
-                onClick={() =>
-                  setPartido({ ...partido, equipo1: partido.equipo1 + 1 })
-                }
-              >
-                +
-              </Button>
-              <Button
-                onClick={() =>
-                  setPartido({ ...partido, equipo1: partido.equipo1 - 1 })
-                }
-              >
-                -
-              </Button>
-
-              {/* Texto de la acción en el medio */}
-              <span className="text-xl font-semibold">Acción 1</span>
-
-              {/* Botones para equipo2 */}
-              <Button
-                onClick={() =>
-                  setPartido({ ...partido, equipo2: partido.equipo2 + 1 })
-                }
-              >
-                +
-              </Button>
-              <Button
-                onClick={() =>
-                  setPartido({ ...partido, equipo2: partido.equipo2 - 1 })
-                }
-              >
-                -
-              </Button>
-            </div>
-            <div className="flex items-center justify-center space-x-4">
-              {/* Botones para equipo1 */}
-              <Button
-                onClick={() =>
-                  setPartido({ ...partido, equipo1: partido.equipo1 + 1 })
-                }
-              >
-                +
-              </Button>
-              <Button
-                onClick={() =>
-                  setPartido({ ...partido, equipo1: partido.equipo1 - 1 })
-                }
-              >
-                -
-              </Button>
-
-              {/* Texto de la acción en el medio */}
-              <span className="text-xl font-semibold">Acción 1</span>
-
-              {/* Botones para equipo2 */}
-              <Button
-                onClick={() =>
-                  setPartido({ ...partido, equipo2: partido.equipo2 + 1 })
-                }
-              >
-                +
-              </Button>
-              <Button
-                onClick={() =>
-                  setPartido({ ...partido, equipo2: partido.equipo2 - 1 })
-                }
-              >
-                -
-              </Button>
-            </div>
+            {accionPartido.map((accion) => {
+              if (accion.nombreTipoAccion.includes('Cambio Jugador')) {
+                return <></>;
+              }
+              return (
+                <div
+                  className="flex items-center justify-center space-x-4"
+                  key={accion.id}
+                >
+                  <Button
+                    onClick={() =>
+                      setPartido({ ...partido, equipo1: partido.equipo1 + 1 })
+                    }
+                  >
+                    +
+                  </Button>
+                  {!accion.secuencial && (
+                    <Button
+                      onClick={() =>
+                        setPartido({ ...partido, equipo1: partido.equipo1 + 1 })
+                      }
+                    >
+                      /
+                    </Button>
+                  )}
+                  <Button
+                    onClick={() =>
+                      setPartido({ ...partido, equipo1: partido.equipo1 + 1 })
+                    }
+                  >
+                    -
+                  </Button>
+                  <span className="min-w-[180px] whitespace-normal break-words text-center  text-xl font-semibold">
+                    {accion.nombreTipoAccion}
+                  </span>
+                  <Button
+                    onClick={() =>
+                      setPartido({ ...partido, equipo1: partido.equipo1 + 1 })
+                    }
+                  >
+                    -
+                  </Button>
+                  {!accion.secuencial && (
+                    <Button
+                      onClick={() =>
+                        setPartido({ ...partido, equipo1: partido.equipo1 + 1 })
+                      }
+                    >
+                      /
+                    </Button>
+                  )}
+                  <Button
+                    onClick={() =>
+                      setPartido({ ...partido, equipo1: partido.equipo1 + 1 })
+                    }
+                  >
+                    +
+                  </Button>
+                </div>
+              );
+            })}
           </div>
 
           {/* Equipo Visitante */}
@@ -431,6 +334,60 @@ const PartidoScreen = () => {
           {partido.tiempo}
         </div>
       </Box>
+      <FlowModal
+        title={`Seguro que desea finalizar el partido`}
+        modalBody={<></>}
+        primaryTextButton={'Si'}
+        isOpen={modalFinalizarPartido}
+        scrollBehavior="outside"
+        onAcceptModal={finalizarPartido}
+        onCancelModal={() => {
+          setModalFinalizarPartido(false);
+        }}
+      />
+      <FlowModal
+        sx={{ minWidth: '700px' }}
+        modalBody={
+          <div className="mb-6">
+            <span className="text-3xl font-bold text-blue-600">
+              Partido Finalizado Correctamente
+            </span>
+          </div>
+        }
+        isOpen={confirmacionFinalizacionPartido}
+        primaryTextButton={null}
+        scrollBehavior="outside"
+        overlay={<ModalOverlay bg="#3182ce.300" backdropFilter="blur(10px)" />}
+        onCancelModal={() => {}}
+      />
+      <FlowModal
+        title={`¿Por que quiere suspender este partido?`}
+        modalBody={
+          <div>
+            <label
+              className="mb-3 mt-5 block text-lg font-medium text-gray-900"
+              htmlFor={'descripcion'}
+            >
+              Descripcion
+              <textarea
+                name="descripcion"
+                rows="5"
+                cols="50"
+                className={`w-full resize-none rounded-lg border border-gray-300 p-2 focus:border-gray-500 focus:outline-none`}
+              />
+            </label>
+          </div>
+        }
+        primaryTextButton={'Suspender Partido'}
+        isOpen={modalSuspenderPartido}
+        scrollBehavior="outside"
+        onAcceptModal={suspenderPartido}
+        type="submit"
+        onCancelModal={() => {
+          setModalSuspenderPartido(false);
+        }}
+      />
+      <Toaster />
     </section>
   );
 };

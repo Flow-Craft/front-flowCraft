@@ -6,6 +6,7 @@ import { SelectWithLabel } from '@/app/ui/components/SelectWithLabel/SelectWithL
 import {
   createTimer,
   getEventosActivos,
+  getEventosAdmin,
   getInstalacionesActionAdmin,
   getPartidoByIdAdmin,
   IniciarPartidoAdmin,
@@ -57,10 +58,10 @@ function Page() {
   const handleSearchMatches = () => {};
 
   const getTodosLosPartidos = async () => {
-    const eventos = await getEventosActivos();
+    const eventos = await getEventosAdmin();
     const partidos = eventos
-      .filter((ev) => ev?.tipoEvento?.nombreTipoEvento === 'Partido')
-      .map((part) => part.id);
+      .filter((ev) => ev?.evento?.tipoEvento?.nombreTipoEvento === 'Partido')
+      .map((part) => part.evento.id);
     const promises = partidos.map((part) => getPartidoByIdAdmin(part));
     const result = await Promise.all(promises);
     setPartidos(result);
@@ -166,6 +167,7 @@ function Page() {
     ) {
       return prepararPartido();
     }
+    return setDetallesDelPartido(false);
   };
 
   const handlePartidosNombre = () => {

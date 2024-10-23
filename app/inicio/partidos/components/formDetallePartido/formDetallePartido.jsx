@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 
 export const FormDetallePartido = ({ partido, handleSuspenderPartido }) => {
+  const estado = partido?.historialEventoList?.[0]?.estadoEvento?.nombreEstado;
+
   return (
     <section className="flex w-full flex-wrap gap-4">
       <div>
@@ -47,8 +49,7 @@ export const FormDetallePartido = ({ partido, handleSuspenderPartido }) => {
           <span>{new Date(partido.fechaInicio).toLocaleDateString()}</span>
         </div>
         <div>
-          {partido?.historialEventoList?.[0]?.estadoEvento?.nombreEstado !==
-          'Suspendido' ? (
+          {estado !== 'Suspendido' && estado !== 'Finalizado' ? (
             <button
               className="mt-8 rounded-lg bg-blue-500 p-2 text-center text-xl text-white lg:ml-auto"
               type="button"

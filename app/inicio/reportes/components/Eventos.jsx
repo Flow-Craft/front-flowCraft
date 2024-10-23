@@ -202,34 +202,34 @@ export const Eventos = () => {
     setEventos(eventosToShow);
     setTiposEvento(tipoEventoShow);
   };
-  const handlePedirReporte = async() => {
-    let pdf
-    switch(opcionSeleccionada.value){
+  const handlePedirReporte = async () => {
+    let pdf;
+    switch (opcionSeleccionada.value) {
       case 1:
         pdf = await getReporteByUsuarioYPeriodo({
           idUsuario: usuarioSeleccionado.value.toString(),
           periodoInicio: `${fechaInicio}T00:00:00`,
-          periodoFin: `${fechaFin}T23:59:59`
-        })
+          periodoFin: `${fechaFin}T23:59:59`,
+        });
         break;
       case 2:
         pdf = await getReporteByEvento({
           idEvento: eventoSeleccionado.value.toString(),
-        })
+        });
         break;
       case 3:
         pdf = await getReporteByPeriodoTipoEvento({
           idTipoEvento: tipoEventoSeleccionado.value.toString(),
           periodoInicio: `${fechaInicio}T00:00:00`,
-          periodoFin: `${fechaFin}T23:59:59`
-        })
+          periodoFin: `${fechaFin}T23:59:59`,
+        });
         break;
       case 4:
         pdf = await getReporteByPeriodoInstalacion({
           idInstalacion: instalacionSeleccionada.value.toString(),
           periodoInicio: `${fechaInicio}T00:00:00`,
-          periodoFin: `${fechaFin}T23:59:59`
-        })
+          periodoFin: `${fechaFin}T23:59:59`,
+        });
         break;
     }
     window.open(pdf, '_blank');

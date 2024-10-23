@@ -256,7 +256,9 @@ export const CrearEditarModalEventos = ({
             <SelectWithLabel
               name="IdsDisciplinas"
               options={disciplinas}
-              defaultValue={disciplinas.find((option) => option.value === evento?.disciplina?.id)}
+              defaultValue={disciplinas.find(
+                (option) => option.value === evento?.disciplina?.id,
+              )}
               label="Disciplina del evento"
               required
               onChange={(selected) => setDisciplinasSeleccionadas(selected)}
