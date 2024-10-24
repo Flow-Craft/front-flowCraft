@@ -979,6 +979,12 @@ export async function finalizarPartidoAdmin(idPartido: any) {
   );
 }
 
+export async function finalizarTiempoAdmin(idPartido: any) {
+  return await FlowCraftAPI.post(
+    `Partidos/FinalizarTiempo?partidoId=${idPartido}`,
+  );
+}
+
 //REPORTES
 
 export async function getReporteByUsuarioYPeriodo(body: any) {

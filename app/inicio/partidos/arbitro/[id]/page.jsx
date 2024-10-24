@@ -16,10 +16,26 @@ import {
   finalizarPartidoAdmin,
   createTimer,
   suspenderPartidoAdmin,
+  finalizarTiempoAdmin,
 } from '@/app/utils/actions';
 import { FlowModal } from '@/app/ui/components/FlowModal/FlowModal';
 import { ModalOverlay } from '@chakra-ui/react';
 import toast, { Toaster } from 'react-hot-toast';
+
+const periodos = {
+  1: "Primero",
+  2: "Segundo",
+  3: "Tercero",
+  4: "Cuarto",
+  5: "Quinto",
+  6: "Sexto",
+  7: "Séptimo",
+  8: "Octavo",
+  9: "Noveno",
+  10: "Décimo"
+};
+
+const ENTRETIEMPO_CONST = "Entretiempo"
 
 const PartidoScreen = () => {
   const [partido, setPartido] = useState({
@@ -39,9 +55,13 @@ const PartidoScreen = () => {
   });
   const [partidoId, setPartidoId] = useState('');
   const [partidoData, setPartidoData] = useState({});
+  console.log('partidoData', partidoData)
+  const [estadoDelPartido, setEstadoDelPartido] = useState("")
+  console.log('estadoDelPartido', estadoDelPartido)
   const [isLoading, setIsLoading] = useState(true);
   const [accionPartido, setAccionPartido] = useState([]);
   const [modalFinalizarPartido, setModalFinalizarPartido] = useState(false);
+  const [modalFinalizarTiempo, setModalFinalizarTiempo] = useState(false)
   const [confirmacionFinalizacionPartido, setConfirmacionFinalizacionPartido] =
     useState(false);
   const [modalSuspenderPartido, setModalSuspenderPartido] = useState(false);
@@ -51,6 +71,7 @@ const PartidoScreen = () => {
   const getDataDelPatido = async (partidoId) => {
     const partido = await getPartidoByIdAdmin(partidoId);
     setPartidoData(partido);
+    setEstadoDelPartido(partido?.historialEventoList?.[0]?.estadoEvento?.nombreEstado)
     const result = await getActionPartidoPanelAdmin({
       IdDisciplina: partido?.disciplina?.id,
       Estadistica: false,
@@ -82,6 +103,16 @@ const PartidoScreen = () => {
     }
   };
 
+  const finalizarTiempo = async() =>{
+    try {
+      await finalizarTiempoAdmin(partidoId);
+      toast.success('Tiempo finalizado con exito');
+      getDataDelPatido(partidoId);
+    } catch (error) {
+      toast.error(error?.message);
+    }
+  }
+
   const formatTime = (ms) => {
     const totalSeconds = Math.floor(ms / 1000);
     const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, "0");
@@ -96,24 +127,24 @@ const PartidoScreen = () => {
     getDataDelPatido(idFromPath);
   }, []);
 
-  useEffect(() => {
-    // Obtener la hora actual y la hora objetivo
-    const targetDate = new Date(partidoData.fechaInicio);
-    // Calcular la diferencia inicial
-    const calculateDifference = () => {
-      const now = new Date();
-      const difference = Math.max(0, now - targetDate); // Evita diferencias negativas
-      setTimeDifference(difference);
-    };
+  // useEffect(() => {
+  //   // Obtener la hora actual y la hora objetivo
+  //   const targetDate = new Date(partidoData.historialEventoList[0].fechaInicio);
+  //   // Calcular la diferencia inicial
+  //   const calculateDifference = () => {
+  //     const now = new Date();
+  //     const difference = Math.max(0, now - targetDate); // Evita diferencias negativas
+  //     setTimeDifference(difference);
+  //   };
 
-    // Actualizar cada segundo
-    const interval = setInterval(() => {
-      calculateDifference();
-    }, 1000);
+  //   // Actualizar cada segundo
+  //   const interval = setInterval(() => {
+  //     calculateDifference();
+  //   }, 1000);
 
-    // Limpiar intervalo al desmontar el componente
-    return () => clearInterval(interval);
-  }, [partidoData]);
+  //   // Limpiar intervalo al desmontar el componente
+  //   return () => clearInterval(interval);
+  // }, [partidoData]);
 
   if (isLoading) {
     return <></>;
@@ -133,7 +164,16 @@ const PartidoScreen = () => {
           >
             Suspender Partido
           </Button>
-          <Button colorScheme="gray">Finalizar Tiempo</Button>
+          <Button 
+            colorScheme="gray"
+            onClick={() => {
+              if(estadoDelPartido === ENTRETIEMPO_CONST){
+                iniciarTiempo();
+              }else{
+                setModalFinalizarTiempo(true);
+              }
+            }}
+            >{estadoDelPartido === ENTRETIEMPO_CONST ? "Iniciar Tiempo" : "Finalizar Tiempo"}</Button>
           <Button
             colorScheme="green"
             onClick={() => {
@@ -143,14 +183,17 @@ const PartidoScreen = () => {
             Finalizar Partido
           </Button>
         </div>
-        <h1 className="mb-6 text-center text-3xl font-bold">Primer tiempo</h1>
+        <h1 className="mb-6 text-center text-3xl font-bold">{periodos[partidoData?.periodo]} tiempo</h1>
 
         {/* Marcador de los equipos */}
         <div className="mb-8 grid grid-cols-3 items-center gap-8">
           <div className="text-center">
-            <p className="text-xl font-semibold">Equipo Local</p>
+            <p className="text-xl font-semibold">Equipo Local: {partidoData?.local?.equipo?.nombre}
+              
+            </p>
             <div className="mt-4 flex justify-center space-x-4">
               <Button
+                isDisabled={estadoDelPartido === ENTRETIEMPO_CONST}
                 onClick={() =>
                   setPartido({ ...partido, equipo1: partido.equipo1 + 1 })
                 }
@@ -158,6 +201,7 @@ const PartidoScreen = () => {
                 +
               </Button>
               <Button
+                isDisabled={estadoDelPartido === ENTRETIEMPO_CONST}
                 onClick={() =>
                   setPartido({ ...partido, equipo1: partido.equipo1 - 1 })
                 }
@@ -168,13 +212,14 @@ const PartidoScreen = () => {
           </div>
 
           <div className="text-center text-5xl font-bold">
-            {partido.equipo1} - {partido.equipo2}
+            {partidoData.resultadoLocal} - {partidoData.resultadoVisitante}
           </div>
 
           <div className="text-center">
-            <p className="text-xl font-semibold">Equipo Visitante</p>
+            <p className="text-xl font-semibold">Equipo Visitante: {partidoData?.visitante?.equipo?.nombre}</p>
             <div className="mt-4 flex justify-center space-x-4">
               <Button
+                isDisabled={estadoDelPartido === ENTRETIEMPO_CONST}
                 onClick={() =>
                   setPartido({ ...partido, equipo2: partido.equipo2 + 1 })
                 }
@@ -182,6 +227,7 @@ const PartidoScreen = () => {
                 +
               </Button>
               <Button
+                isDisabled={estadoDelPartido === ENTRETIEMPO_CONST}
                 onClick={() =>
                   setPartido({ ...partido, equipo2: partido.equipo2 - 1 })
                 }
@@ -252,14 +298,16 @@ const PartidoScreen = () => {
                   key={accion.id}
                 >
                   <Button
+                    isDisabled={estadoDelPartido === ENTRETIEMPO_CONST}
                     onClick={() =>
-                      setPartido({ ...partido, equipo1: partido.equipo1 + 1 })
+                      console.log("test")
                     }
                   >
                     +
                   </Button>
                   {!accion.secuencial && (
                     <Button
+                      isDisabled={estadoDelPartido === ENTRETIEMPO_CONST}
                       onClick={() =>
                         setPartido({ ...partido, equipo1: partido.equipo1 + 1 })
                       }
@@ -268,6 +316,7 @@ const PartidoScreen = () => {
                     </Button>
                   )}
                   <Button
+                    isDisabled={estadoDelPartido === ENTRETIEMPO_CONST}
                     onClick={() =>
                       setPartido({ ...partido, equipo1: partido.equipo1 + 1 })
                     }
@@ -278,6 +327,7 @@ const PartidoScreen = () => {
                     {accion.nombreTipoAccion}
                   </span>
                   <Button
+                    isDisabled={estadoDelPartido === ENTRETIEMPO_CONST}
                     onClick={() =>
                       setPartido({ ...partido, equipo1: partido.equipo1 + 1 })
                     }
@@ -286,6 +336,7 @@ const PartidoScreen = () => {
                   </Button>
                   {!accion.secuencial && (
                     <Button
+                      isDisabled={estadoDelPartido === ENTRETIEMPO_CONST}
                       onClick={() =>
                         setPartido({ ...partido, equipo1: partido.equipo1 + 1 })
                       }
@@ -294,6 +345,7 @@ const PartidoScreen = () => {
                     </Button>
                   )}
                   <Button
+                    isDisabled={estadoDelPartido === ENTRETIEMPO_CONST}
                     onClick={() =>
                       setPartido({ ...partido, equipo1: partido.equipo1 + 1 })
                     }
@@ -356,7 +408,7 @@ const PartidoScreen = () => {
 
         {/* Tiempo */}
         <div className="mt-8 text-center text-4xl font-bold">
-          {formatTime(timeDifference)}
+          {/* {formatTime(timeDifference)} */}
         </div>
       </Box>
       <FlowModal
@@ -368,6 +420,17 @@ const PartidoScreen = () => {
         onAcceptModal={finalizarPartido}
         onCancelModal={() => {
           setModalFinalizarPartido(false);
+        }}
+      />
+      <FlowModal
+        title={`Finalizar Tiempo`}
+        modalBody={<>Esta por finalizar el tiempo {partidoData.periodo} ¿Esta seguro?</>}
+        primaryTextButton={'Finalizar'}
+        isOpen={modalFinalizarTiempo}
+        scrollBehavior="outside"
+        onAcceptModal={finalizarTiempo}
+        onCancelModal={() => {
+          setModalFinalizarTiempo(false);
         }}
       />
       <FlowModal
