@@ -50,7 +50,6 @@ const PartidoScreen = () => {
 
   const getDataDelPatido = async (partidoId) => {
     const partido = await getPartidoByIdAdmin(partidoId);
-    console.log('partido', partido);
     setPartidoData(partido);
     const result = await getActionPartidoPanelAdmin({
       IdDisciplina: partido?.disciplina?.id,
@@ -83,12 +82,38 @@ const PartidoScreen = () => {
     }
   };
 
+  const formatTime = (ms) => {
+    const totalSeconds = Math.floor(ms / 1000);
+    const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, "0");
+    const seconds = String(totalSeconds % 60).padStart(2, "0");
+    return `${minutes}:${seconds}`;
+  };
+
   useEffect(() => {
     const path = window.location.pathname;
     const idFromPath = path.split('/').pop();
     setPartidoId(idFromPath);
     getDataDelPatido(idFromPath);
   }, []);
+
+  useEffect(() => {
+    // Obtener la hora actual y la hora objetivo
+    const targetDate = new Date(partidoData.fechaInicio);
+    // Calcular la diferencia inicial
+    const calculateDifference = () => {
+      const now = new Date();
+      const difference = Math.max(0, now - targetDate); // Evita diferencias negativas
+      setTimeDifference(difference);
+    };
+
+    // Actualizar cada segundo
+    const interval = setInterval(() => {
+      calculateDifference();
+    }, 1000);
+
+    // Limpiar intervalo al desmontar el componente
+    return () => clearInterval(interval);
+  }, [partidoData]);
 
   if (isLoading) {
     return <></>;
@@ -331,7 +356,7 @@ const PartidoScreen = () => {
 
         {/* Tiempo */}
         <div className="mt-8 text-center text-4xl font-bold">
-          {partido.tiempo}
+          {formatTime(timeDifference)}
         </div>
       </Box>
       <FlowModal
