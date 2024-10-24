@@ -17,13 +17,15 @@ import {
   createTimer,
   suspenderPartidoAdmin,
   finalizarTiempoAdmin,
+  iniciarTiempoAdmin,
 } from '@/app/utils/actions';
 import { FlowModal } from '@/app/ui/components/FlowModal/FlowModal';
 import { ModalOverlay } from '@chakra-ui/react';
 import toast, { Toaster } from 'react-hot-toast';
+import { SelectWithLabel } from '@/app/ui/components/SelectWithLabel/SelectWithLabel';
 
 const periodos = {
-  1: "Primero",
+  1: "Primer",
   2: "Segundo",
   3: "Tercero",
   4: "Cuarto",
@@ -61,7 +63,12 @@ const PartidoScreen = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [accionPartido, setAccionPartido] = useState([]);
   const [modalFinalizarPartido, setModalFinalizarPartido] = useState(false);
-  const [modalFinalizarTiempo, setModalFinalizarTiempo] = useState(false)
+  const [modalFinalizarTiempo, setModalFinalizarTiempo] = useState(false);
+  const [modalIniciarTiempo, setModalIniciarTiempo] = useState(false);
+  const [modalAltaAccion, setModalAltaAccion] = useState(false);
+  const [modalBajaAccion, setModalBajaAccion] = useState(false);
+  const [accionSeleccionada, setAccionSeleccionada] = useState({accion:{},esLocal:true});
+  const [usuarioSeleccionado, setUsuarioSeleccionado] = useState({})
   const [confirmacionFinalizacionPartido, setConfirmacionFinalizacionPartido] =
     useState(false);
   const [modalSuspenderPartido, setModalSuspenderPartido] = useState(false);
@@ -103,14 +110,41 @@ const PartidoScreen = () => {
     }
   };
 
+  const iniciarTiempo = async() =>{
+    try {
+      await iniciarTiempoAdmin(partidoId);
+      toast.success('Tiempo iniciado con exito');
+      getDataDelPatido(partidoId);
+      setModalIniciarTiempo(false);
+    } catch (error) {
+      toast.error(error?.message);
+    }
+  }
+
   const finalizarTiempo = async() =>{
     try {
       await finalizarTiempoAdmin(partidoId);
       toast.success('Tiempo finalizado con exito');
       getDataDelPatido(partidoId);
+      setModalFinalizarTiempo(false);
     } catch (error) {
       toast.error(error?.message);
     }
+  }
+
+  const getJugadores = () =>{
+    let opciones
+    if(accionSeleccionada.esLocal){
+      opciones = partidoData.local.equipo.equipoUsuarios.filter(usuario =>
+        partidoData.local.jugadoresEnBanca.includes(usuario.numCamiseta.toString())
+      );
+    }else{
+      opciones = partidoData.visitante.equipo.equipoUsuarios.filter(usuario =>
+        partidoData.visitante.jugadoresEnBanca.includes(usuario.numCamiseta.toString())
+      );
+    }
+    opciones = opciones.map((us)=>({value:us.usuario.id, label:`${us.numCamiseta} - ${us.usuario.apellido} ${us.usuario.apellido} `}))
+    return opciones
   }
 
   const formatTime = (ms) => {
@@ -129,7 +163,7 @@ const PartidoScreen = () => {
 
   // useEffect(() => {
   //   // Obtener la hora actual y la hora objetivo
-  //   const targetDate = new Date(partidoData.historialEventoList[0].fechaInicio);
+  //   const targetDate = new Date(partidoData?.historialEventoList?.[0]?.fechaInicio);
   //   // Calcular la diferencia inicial
   //   const calculateDifference = () => {
   //     const now = new Date();
@@ -164,16 +198,16 @@ const PartidoScreen = () => {
           >
             Suspender Partido
           </Button>
-          <Button 
+          {partidoData?.periodo < partidoData?.disciplina?.periodosMax &&   <Button 
             colorScheme="gray"
             onClick={() => {
               if(estadoDelPartido === ENTRETIEMPO_CONST){
-                iniciarTiempo();
+                setModalIniciarTiempo(true);
               }else{
                 setModalFinalizarTiempo(true);
               }
             }}
-            >{estadoDelPartido === ENTRETIEMPO_CONST ? "Iniciar Tiempo" : "Finalizar Tiempo"}</Button>
+            >{estadoDelPartido === ENTRETIEMPO_CONST ? "Iniciar Tiempo" : "Finalizar Tiempo"}</Button>}
           <Button
             colorScheme="green"
             onClick={() => {
@@ -194,9 +228,11 @@ const PartidoScreen = () => {
             <div className="mt-4 flex justify-center space-x-4">
               <Button
                 isDisabled={estadoDelPartido === ENTRETIEMPO_CONST}
-                onClick={() =>
-                  setPartido({ ...partido, equipo1: partido.equipo1 + 1 })
-                }
+                onClick={() =>{
+                  const accionSeleccionada = accionPartido.find((acc)=> acc.nombreTipoAccion.includes('Gol'))
+                  setModalAltaAccion(true);
+                  setAccionSeleccionada({accion:accionSeleccionada, esLocal:true});
+                }}
               >
                 +
               </Button>
@@ -220,9 +256,11 @@ const PartidoScreen = () => {
             <div className="mt-4 flex justify-center space-x-4">
               <Button
                 isDisabled={estadoDelPartido === ENTRETIEMPO_CONST}
-                onClick={() =>
-                  setPartido({ ...partido, equipo2: partido.equipo2 + 1 })
-                }
+                onClick={() =>{
+                  const accionSeleccionada = accionPartido.find((acc)=> acc.nombreTipoAccion.includes('Gol'))
+                  setModalAltaAccion(true);
+                  setAccionSeleccionada({accion:accionSeleccionada, esLocal:false});
+                }}
               >
                 +
               </Button>
@@ -289,6 +327,9 @@ const PartidoScreen = () => {
           {/* Acciones (en el centro) */}
           <div className="flex h-full flex-col items-center justify-center space-y-4">
             {accionPartido.map((accion) => {
+              if (accion.nombreTipoAccion.includes('Gol')) {
+                return <></>;
+              }
               if (accion.nombreTipoAccion.includes('Cambio Jugador')) {
                 return <></>;
               }
@@ -299,9 +340,10 @@ const PartidoScreen = () => {
                 >
                   <Button
                     isDisabled={estadoDelPartido === ENTRETIEMPO_CONST}
-                    onClick={() =>
-                      console.log("test")
-                    }
+                    onClick={() =>{
+                      setModalAltaAccion(true);
+                      setAccionSeleccionada({accion, esLocal:true});
+                    }}
                   >
                     +
                   </Button>
@@ -346,9 +388,10 @@ const PartidoScreen = () => {
                   )}
                   <Button
                     isDisabled={estadoDelPartido === ENTRETIEMPO_CONST}
-                    onClick={() =>
-                      setPartido({ ...partido, equipo1: partido.equipo1 + 1 })
-                    }
+                    onClick={() =>{
+                      setModalAltaAccion(true);
+                      setAccionSeleccionada({accion, esLocal:false});
+                    }}
                   >
                     +
                   </Button>
@@ -434,6 +477,17 @@ const PartidoScreen = () => {
         }}
       />
       <FlowModal
+        title={`Iniciar Tiempo`}
+        modalBody={<>Esta por iniciar el tiempo {partidoData.periodo + 1} ¿Esta seguro?</>}
+        primaryTextButton={'Iniciar'}
+        isOpen={modalIniciarTiempo}
+        scrollBehavior="outside"
+        onAcceptModal={iniciarTiempo}
+        onCancelModal={() => {
+          setModalIniciarTiempo(false);
+        }}
+      />
+      <FlowModal
         sx={{ minWidth: '700px' }}
         modalBody={
           <div className="mb-6">
@@ -473,6 +527,49 @@ const PartidoScreen = () => {
         type="submit"
         onCancelModal={() => {
           setModalSuspenderPartido(false);
+        }}
+      />
+      <FlowModal
+      title={`${accionSeleccionada.accion.nombreTipoAccion}`}
+        sx={{ minWidth: '700px' }}
+        modalBody={
+          <section className="flex-full z-50 mt-4 flex w-full gap-10">
+          <div className="mb-16 flex-1  ">
+            <SelectWithLabel
+              name="IdsDisciplinas"
+              options={getJugadores()}
+              label="Seleccione el jugador que hizo la accion"
+              onChange={(seleccionado) => {
+                setUsuarioSeleccionado(seleccionado);
+              }}
+            />
+          </div>
+          {accionPartido?.accion?.nombreTipoAccion?.includes("Cambio") && 
+          <div className="min-h-12 flex-1">
+            {/* <SelectWithLabel
+              name="IdsDisciplinas"
+              options={eventosSeleccionado?.visitante?.equipo?.equipoUsuarios?.map(
+                (user) => ({
+                  value: user.id,
+                  label: `${user.numCamiseta} -  ${user.usuario.apellido} ${user.usuario.nombre}`,
+                }),
+              )}
+              label="Equipo Visitante"
+              isMulti
+              onChange={(selection) => {
+                setEquipoVisitanteSeleccionado(selection);
+              }}
+            /> */}
+          </div>}
+        </section>
+        }
+        isOpen={modalAltaAccion}
+        primaryTextButton={"Aceptar"}
+        scrollBehavior="outside"
+        onCancelModal={() => {
+          setModalAltaAccion(false);
+          setAccionSeleccionada({accion:{}, esLocal:true});
+          setUsuarioSeleccionado({});
         }}
       />
       <Toaster />

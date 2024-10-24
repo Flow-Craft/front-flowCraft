@@ -985,6 +985,15 @@ export async function finalizarTiempoAdmin(idPartido: any) {
   );
 }
 
+export async function iniciarTiempoAdmin(idPartido: any) {
+  return await FlowCraftAPI.post(
+    `Partidos/IniciarTiempo?partidoId=${idPartido}`,
+  );
+}
+
+
+
+
 //REPORTES
 
 export async function getReporteByUsuarioYPeriodo(body: any) {
