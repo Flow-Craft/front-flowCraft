@@ -991,9 +991,6 @@ export async function iniciarTiempoAdmin(idPartido: any) {
   );
 }
 
-
-
-
 //REPORTES
 
 export async function getReporteByUsuarioYPeriodo(body: any) {
