@@ -995,6 +995,10 @@ export async function cargarAccionPartidoAdmin(body: any) {
   return await FlowCraftAPI.post(`Partidos/AltaAccionPartido`, body);
 }
 
+export async function eliminarAccionPartidoAdmin(body: any) {
+  return await FlowCraftAPI.post(`Partidos/BajaAccionPartido`, body);
+}
+
 //REPORTES
 
 export async function getReporteByUsuarioYPeriodo(body: any) {

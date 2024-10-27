@@ -20,11 +20,13 @@ import {
   iniciarTiempoAdmin,
   cargarAccionPartidoAdmin,
   getActionPartidoByIdAdmin,
+  eliminarAccionPartidoAdmin,
 } from '@/app/utils/actions';
 import { FlowModal } from '@/app/ui/components/FlowModal/FlowModal';
 import { ModalOverlay } from '@chakra-ui/react';
 import toast, { Toaster } from 'react-hot-toast';
 import { SelectWithLabel } from '@/app/ui/components/SelectWithLabel/SelectWithLabel';
+import { set } from 'zod';
 
 const periodos = {
   1: 'Primer',
@@ -73,7 +75,6 @@ const PartidoScreen = () => {
     accion: {},
     esLocal: true,
   });
-  console.log('accionSeleccionada', accionSeleccionada);
   const [usuarioSeleccionado, setUsuarioSeleccionado] = useState({});
   const [accionADarDeBaja, setAccionADarDeBaja] = useState({});
   const [usuarioParaCambio, setUsuarioParaCambio] = useState({});
@@ -87,18 +88,15 @@ const PartidoScreen = () => {
 
   const getDataDelPatido = async (partidoId) => {
     const partido = await getPartidoByIdAdmin(partidoId);
-    console.log('partido', partido);
     const listaAccionPartido = await getActionPartidoByIdAdmin(partidoId);
     const accionesLocal = listaAccionPartido.filter(
       (accion) => accion.equipoLocal === true,
     );
-    console.log('accionesLocal', accionesLocal);
     setAccionesLocal(accionesLocal);
     const accionesVisitantes = listaAccionPartido.filter(
       (accion) => accion.equipoLocal === false,
     );
     setAccionesVisitantes(accionesVisitantes);
-    console.log('accionesVisitantes', accionesVisitantes);
     if (
       partido?.historialEventoList?.[0]?.estadoEvento?.nombreEstado !==
         'Iniciado' &&
@@ -254,6 +252,22 @@ const PartidoScreen = () => {
     }
   };
 
+  const bajaAccionPartido = async () => {
+    try {
+      await eliminarAccionPartidoAdmin({
+        IdPartido:partidoId,
+        Id:accionADarDeBaja.value
+      })
+      toast.success('accion eliminada exitosamente');
+      getDataDelPatido(partidoId);
+      setModalBajaAccion(false);
+      setAccionSeleccionada({ accion: {}, esLocal: true });
+      setAccionADarDeBaja({});
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
   const getDataJugador = (numeroJugador, isLocal, numeroCambio) => {
     if (numeroCambio) {
       const dataJugador = partidoData?.[
@@ -277,9 +291,21 @@ const PartidoScreen = () => {
   };
 
   const getAcciones = () => {
-    console.log(accionSeleccionada);
-    return [];
+    const esLocal = accionSeleccionada.esLocal;
+    const acciones = esLocal ? accionesLocal : accionesVisitantes;
+    const jugadoresEquipo = esLocal ? partidoData?.local?.equipo?.equipoUsuarios : partidoData?.visitante?.equipo?.equipoUsuarios;
+  
+    return acciones
+      .filter((acc) => acc.tipoAccionPartido.id === accionSeleccionada.accion.id)
+      .map((acc) => {
+        const jugador = jugadoresEquipo.find((user) => user.numCamiseta === acc.nroJugador);
+        return {
+          value: acc.id,
+          label: `${jugador.numCamiseta} - ${jugador.usuario.apellido} ${jugador.usuario.nombre}`
+        };
+      });
   };
+  
 
   const formatTime = (ms) => {
     const totalSeconds = Math.floor(ms / 1000);
@@ -389,9 +415,16 @@ const PartidoScreen = () => {
               </Button>
               <Button
                 isDisabled={estadoDelPartido === ENTRETIEMPO_CONST}
-                onClick={() =>
-                  setPartido({ ...partido, equipo1: partido.equipo1 - 1 })
-                }
+                onClick={() => {
+                  const accionSeleccionada = accionPartido.find((acc) =>
+                    acc.nombreTipoAccion.includes('Gol'),
+                  );
+                  setModalBajaAccion(true)
+                  setAccionSeleccionada({
+                    accion: accionSeleccionada,
+                    esLocal: true,
+                  });
+                }}
               >
                 -
               </Button>
@@ -424,9 +457,16 @@ const PartidoScreen = () => {
               </Button>
               <Button
                 isDisabled={estadoDelPartido === ENTRETIEMPO_CONST}
-                onClick={() =>
-                  setPartido({ ...partido, equipo2: partido.equipo2 - 1 })
-                }
+                onClick={() => {
+                  const accionSeleccionada = accionPartido.find((acc) =>
+                    acc.nombreTipoAccion.includes('Gol'),
+                  );
+                  setModalBajaAccion(true)
+                  setAccionSeleccionada({
+                    accion: accionSeleccionada,
+                    esLocal: false,
+                  });
+                }}
               >
                 -
               </Button>
@@ -551,9 +591,10 @@ const PartidoScreen = () => {
                       +
                     </Button>
                     <Button
-                      onClick={() =>
-                        setPartido({ ...partido, equipo1: partido.equipo1 + 1 })
-                      }
+                      onClick={() => {
+                        setModalBajaAccion(true);
+                        setAccionSeleccionada({ accion, esLocal: true });
+                      }}
                     >
                       -
                     </Button>
@@ -561,9 +602,10 @@ const PartidoScreen = () => {
                       {accion.nombreTipoAccion}
                     </span>
                     <Button
-                      onClick={() =>
-                        setPartido({ ...partido, equipo1: partido.equipo1 + 1 })
-                      }
+                      onClick={() => {
+                        setModalBajaAccion(true);
+                        setAccionSeleccionada({ accion, esLocal: false });
+                      }}
                     >
                       -
                     </Button>
@@ -604,9 +646,10 @@ const PartidoScreen = () => {
                   )}
                   <Button
                     isDisabled={estadoDelPartido === ENTRETIEMPO_CONST}
-                    onClick={() =>
-                      setPartido({ ...partido, equipo1: partido.equipo1 + 1 })
-                    }
+                    onClick={() => {
+                      setModalBajaAccion(true);
+                      setAccionSeleccionada({ accion, esLocal: true });
+                    }}
                   >
                     -
                   </Button>
@@ -874,6 +917,34 @@ const PartidoScreen = () => {
           setUsuarioParaCambio({});
         }}
         onAcceptModal={altaAccionPartido}
+      />
+      <FlowModal
+        title={`${accionSeleccionada.accion.nombreTipoAccion}`}
+        sx={{ minWidth: '800px' }}
+        modalBody={
+          <section className="flex-full z-50 mt-4 flex w-full gap-10">
+            <div className="mb-16 flex-1  ">
+              <SelectWithLabel
+                name="IdsDisciplinas"
+                options={getAcciones()}
+                label="Seleccione el jugador"
+                onChange={(seleccionado) => {
+                  setAccionADarDeBaja(seleccionado);
+                }}
+              />
+            </div>
+          </section>
+        }
+        isOpen={modalBajaAccion}
+        disabled={!accionADarDeBaja.value}
+        primaryTextButton={'Aceptar'}
+        scrollBehavior="outside"
+        onCancelModal={() => {
+          setModalBajaAccion(false);
+          setAccionSeleccionada({ accion: {}, esLocal: true });
+          setAccionADarDeBaja({});
+        }}
+        onAcceptModal={bajaAccionPartido}
       />
       <Toaster />
     </section>
