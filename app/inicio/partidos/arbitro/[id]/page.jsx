@@ -46,21 +46,6 @@ const TIEMPO_FUTBOL = 45;
 const TIEMPO_VOLEY = 10;
 
 const PartidoScreen = () => {
-  const [partido, setPartido] = useState({
-    equipo1: 1,
-    equipo2: 0,
-    tiempo: '00:00',
-    golesEquipo1: [{ id: 1, jugador: '08 - A. NOMBRE (A)' }],
-    faltasEquipo1: [{ id: 2, jugador: '08 - A. NOMBRE (A)' }],
-    cambiosEquipo1: [
-      { id: 3, entrada: '17 - A. NOMBRE', salida: '07 - A. NOMBRE' },
-    ],
-    golesEquipo2: [{ id: 4, jugador: '07 - A. NOMBRE (B)' }],
-    faltasEquipo2: [{ id: 5, jugador: '07 - A. NOMBRE (B)' }],
-    cambiosEquipo2: [
-      { id: 6, entrada: '16 - B. NOMBRE', salida: '07 - B. NOMBRE' },
-    ],
-  });
   const [partidoId, setPartidoId] = useState('');
   const [partidoData, setPartidoData] = useState({});
   const [estadoDelPartido, setEstadoDelPartido] = useState('');
@@ -90,11 +75,11 @@ const PartidoScreen = () => {
     const partido = await getPartidoByIdAdmin(partidoId);
     const listaAccionPartido = await getActionPartidoByIdAdmin(partidoId);
     const accionesLocal = listaAccionPartido.filter(
-      (accion) => accion.equipoLocal === true,
+      (accion) => (accion.equipoLocal === true && !accion.fechaBaja),
     );
     setAccionesLocal(accionesLocal);
     const accionesVisitantes = listaAccionPartido.filter(
-      (accion) => accion.equipoLocal === false,
+      (accion) => (accion.equipoLocal === false && !accion.fechaBaja),
     );
     setAccionesVisitantes(accionesVisitantes);
     if (
@@ -321,24 +306,24 @@ const PartidoScreen = () => {
     getDataDelPatido(idFromPath);
   }, []);
 
-  // useEffect(() => {
-  //   // Obtener la hora actual y la hora objetivo
-  //   const targetDate = new Date(partidoData?.historialEventoList?.[0]?.fechaInicio);
-  //   // Calcular la diferencia inicial
-  //   const calculateDifference = () => {
-  //     const now = new Date();
-  //     const difference = Math.max(0, now - targetDate); // Evita diferencias negativas
-  //     setTimeDifference(difference);
-  //   };
+  useEffect(() => {
+    // Obtener la hora actual y la hora objetivo
+    const targetDate = new Date(partidoData?.historialEventoList?.[0]?.fechaInicio);
+    // Calcular la diferencia inicial
+    const calculateDifference = () => {
+      const now = new Date();
+      const difference = Math.max(0, now - targetDate); // Evita diferencias negativas
+      setTimeDifference(difference);
+    };
 
-  //   // Actualizar cada segundo
-  //   const interval = setInterval(() => {
-  //     calculateDifference();
-  //   }, 1000);
+    // Actualizar cada segundo
+    const interval = setInterval(() => {
+      calculateDifference();
+    }, 1000);
 
-  //   // Limpiar intervalo al desmontar el componente
-  //   return () => clearInterval(interval);
-  // }, [partidoData]);
+    // Limpiar intervalo al desmontar el componente
+    return () => clearInterval(interval);
+  }, [partidoData]);
 
   if (isLoading) {
     return (
@@ -634,16 +619,6 @@ const PartidoScreen = () => {
                   >
                     +
                   </Button>
-                  {!accion.secuencial && (
-                    <Button
-                      isDisabled={estadoDelPartido === ENTRETIEMPO_CONST}
-                      onClick={() =>
-                        setPartido({ ...partido, equipo1: partido.equipo1 + 1 })
-                      }
-                    >
-                      /
-                    </Button>
-                  )}
                   <Button
                     isDisabled={estadoDelPartido === ENTRETIEMPO_CONST}
                     onClick={() => {
@@ -664,16 +639,6 @@ const PartidoScreen = () => {
                   >
                     -
                   </Button>
-                  {!accion.secuencial && (
-                    <Button
-                      isDisabled={estadoDelPartido === ENTRETIEMPO_CONST}
-                      onClick={() =>
-                        setPartido({ ...partido, equipo1: partido.equipo1 + 1 })
-                      }
-                    >
-                      /
-                    </Button>
-                  )}
                   <Button
                     isDisabled={estadoDelPartido === ENTRETIEMPO_CONST}
                     onClick={() => {
@@ -787,7 +752,7 @@ const PartidoScreen = () => {
 
         {/* Tiempo */}
         <div className="mt-8 text-center text-4xl font-bold">
-          {/* {formatTime(timeDifference)} */}
+          {formatTime(timeDifference)}
         </div>
       </Box>
       <FlowModal
