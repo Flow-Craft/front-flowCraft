@@ -90,13 +90,13 @@ const PartidoScreen = () => {
     const accionesLocal = listaAccionPartido.filter(
       (accion) => accion.equipoLocal === true,
     );
-    console.log('accionesLocal', accionesLocal);
+    console.log('accionesLocal', accionesLocal)
     setAccionesLocal(accionesLocal);
     const accionesVisitantes = listaAccionPartido.filter(
       (accion) => accion.equipoLocal === false,
     );
     setAccionesVisitantes(accionesVisitantes);
-    console.log('accionesVisitantes', accionesVisitantes);
+    console.log('accionesVisitantes', accionesVisitantes)
     if (
       partido?.historialEventoList?.[0]?.estadoEvento?.nombreEstado !==
         'Iniciado' &&
@@ -177,7 +177,7 @@ const PartidoScreen = () => {
         partidoData.visitante.jugadoresEnCancha.includes(
           usuario.numCamiseta.toString(),
         ),
-      );
+      )
     }
     opciones = opciones.map((us) => ({
       value: us.id,
@@ -214,11 +214,12 @@ const PartidoScreen = () => {
     );
     const targetDateWithAddedMinutes = new Date(targetDate);
     targetDateWithAddedMinutes.setMinutes(
-      targetDate.getMinutes() + TIEMPO_FUTBOL * (partidoData.periodo - 1),
+      targetDate.getMinutes(),
     );
     // Calcular la diferencia inicial
     const now = new Date();
-    const difference = Math.max(0, now - targetDateWithAddedMinutes);
+    let difference = Math.max(0, now - targetDateWithAddedMinutes);
+    difference += TIEMPO_FUTBOL * 60 * 1000 * (partidoData.periodo - 1);
     const totalSeconds = Math.floor(difference / 1000);
     const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, '0');
     return Number(minutes);
@@ -241,8 +242,8 @@ const PartidoScreen = () => {
         }
       } else {
       }
-      console.log('accionAMandar', accionAMandar);
       await cargarAccionPartidoAdmin(accionAMandar);
+      console.log('accionAMandar', accionAMandar)
       toast.success('accion cargada exitosamente');
       getDataDelPatido(partidoId);
       setModalAltaAccion(false);
@@ -628,7 +629,7 @@ const PartidoScreen = () => {
               </TabList>
 
               <TabPanels>
-                <TabPanel className="min-h-[300px]">
+                <TabPanel className='min-h-[300px]'>
                   {/* Mostrar goles del equipo local */}
                   {accionesVisitantes.filter((accion) =>
                     accion.descripcion.includes('Gol'),
@@ -648,7 +649,7 @@ const PartidoScreen = () => {
                   )}
                 </TabPanel>
 
-                <TabPanel className="min-h-[300px]">
+                <TabPanel className='min-h-[300px]'>
                   {accionesVisitantes.filter((accion) =>
                     accion.descripcion.includes('Falta'),
                   ).length > 0 ? (
@@ -667,7 +668,7 @@ const PartidoScreen = () => {
                   )}
                 </TabPanel>
 
-                <TabPanel className="min-h-[300px]">
+                <TabPanel className='min-h-[300px]'>
                   {accionesVisitantes.filter((accion) =>
                     accion.descripcion.includes('Cambio'),
                   ).length > 0 ? (
