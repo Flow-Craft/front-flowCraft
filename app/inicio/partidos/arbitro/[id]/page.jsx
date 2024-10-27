@@ -73,7 +73,9 @@ const PartidoScreen = () => {
     accion: {},
     esLocal: true,
   });
+  console.log('accionSeleccionada', accionSeleccionada);
   const [usuarioSeleccionado, setUsuarioSeleccionado] = useState({});
+  const [accionADarDeBaja, setAccionADarDeBaja] = useState({});
   const [usuarioParaCambio, setUsuarioParaCambio] = useState({});
   const [confirmacionFinalizacionPartido, setConfirmacionFinalizacionPartido] =
     useState(false);
@@ -90,13 +92,13 @@ const PartidoScreen = () => {
     const accionesLocal = listaAccionPartido.filter(
       (accion) => accion.equipoLocal === true,
     );
-    console.log('accionesLocal', accionesLocal)
+    console.log('accionesLocal', accionesLocal);
     setAccionesLocal(accionesLocal);
     const accionesVisitantes = listaAccionPartido.filter(
       (accion) => accion.equipoLocal === false,
     );
     setAccionesVisitantes(accionesVisitantes);
-    console.log('accionesVisitantes', accionesVisitantes)
+    console.log('accionesVisitantes', accionesVisitantes);
     if (
       partido?.historialEventoList?.[0]?.estadoEvento?.nombreEstado !==
         'Iniciado' &&
@@ -177,7 +179,7 @@ const PartidoScreen = () => {
         partidoData.visitante.jugadoresEnCancha.includes(
           usuario.numCamiseta.toString(),
         ),
-      )
+      );
     }
     opciones = opciones.map((us) => ({
       value: us.id,
@@ -213,9 +215,7 @@ const PartidoScreen = () => {
       partidoData?.historialEventoList?.[0]?.fechaInicio,
     );
     const targetDateWithAddedMinutes = new Date(targetDate);
-    targetDateWithAddedMinutes.setMinutes(
-      targetDate.getMinutes(),
-    );
+    targetDateWithAddedMinutes.setMinutes(targetDate.getMinutes());
     // Calcular la diferencia inicial
     const now = new Date();
     let difference = Math.max(0, now - targetDateWithAddedMinutes);
@@ -243,7 +243,6 @@ const PartidoScreen = () => {
       } else {
       }
       await cargarAccionPartidoAdmin(accionAMandar);
-      console.log('accionAMandar', accionAMandar)
       toast.success('accion cargada exitosamente');
       getDataDelPatido(partidoId);
       setModalAltaAccion(false);
@@ -275,6 +274,11 @@ const PartidoScreen = () => {
       (usuario) => usuario.numCamiseta === numeroJugador,
     );
     return `Num: ${dataJugador?.numCamiseta} / ${dataJugador?.puesto} / ${dataJugador?.usuario?.apellido} ${dataJugador?.usuario?.nombre}`;
+  };
+
+  const getAcciones = () => {
+    console.log(accionSeleccionada);
+    return [];
   };
 
   const formatTime = (ms) => {
@@ -436,6 +440,7 @@ const PartidoScreen = () => {
               <TabList>
                 <Tab>Goles</Tab>
                 <Tab>Faltas</Tab>
+                <Tab>Tarjetas</Tab>
                 <Tab>Cambios</Tab>
               </TabList>
 
@@ -469,6 +474,27 @@ const PartidoScreen = () => {
                         return (
                           <p key={accion.id}>
                             {accion.minuto} -{' '}
+                            {getDataJugador(accion.nroJugador, true)}
+                          </p>
+                        );
+                      })
+                  ) : (
+                    <p>No hay faltas registradas</p>
+                  )}
+                </TabPanel>
+
+                <TabPanel>
+                  {accionesLocal.filter((accion) =>
+                    accion.descripcion.includes('Tarjeta'),
+                  ).length > 0 ? (
+                    accionesLocal
+                      .filter((accion) =>
+                        accion.descripcion.includes('Tarjeta'),
+                      )
+                      .map((accion) => {
+                        return (
+                          <p key={accion.id}>
+                            {accion.minuto} - {accion.descripcion} -
                             {getDataJugador(accion.nroJugador, true)}
                           </p>
                         );
@@ -625,11 +651,12 @@ const PartidoScreen = () => {
               <TabList>
                 <Tab>Goles</Tab>
                 <Tab>Faltas</Tab>
+                <Tab>Tarjetas</Tab>
                 <Tab>Cambios</Tab>
               </TabList>
 
               <TabPanels>
-                <TabPanel className='min-h-[300px]'>
+                <TabPanel className="min-h-[300px]">
                   {/* Mostrar goles del equipo local */}
                   {accionesVisitantes.filter((accion) =>
                     accion.descripcion.includes('Gol'),
@@ -649,7 +676,7 @@ const PartidoScreen = () => {
                   )}
                 </TabPanel>
 
-                <TabPanel className='min-h-[300px]'>
+                <TabPanel className="min-h-[300px]">
                   {accionesVisitantes.filter((accion) =>
                     accion.descripcion.includes('Falta'),
                   ).length > 0 ? (
@@ -667,8 +694,28 @@ const PartidoScreen = () => {
                     <p>No hay faltas registradas</p>
                   )}
                 </TabPanel>
+                <TabPanel className="min-h-[300px]">
+                  {accionesVisitantes.filter((accion) =>
+                    accion.descripcion.includes('Tarjetas'),
+                  ).length > 0 ? (
+                    accionesVisitantes
+                      .filter((accion) =>
+                        accion.descripcion.includes('Tarjetas'),
+                      )
+                      .map((accion) => {
+                        return (
+                          <p key={accion.id}>
+                            {accion.minuto} - {accion.descripcion} -
+                            {getDataJugador(accion.nroJugador, false)}
+                          </p>
+                        );
+                      })
+                  ) : (
+                    <p>No hay faltas registradas</p>
+                  )}
+                </TabPanel>
 
-                <TabPanel className='min-h-[300px]'>
+                <TabPanel className="min-h-[300px]">
                   {accionesVisitantes.filter((accion) =>
                     accion.descripcion.includes('Cambio'),
                   ).length > 0 ? (
