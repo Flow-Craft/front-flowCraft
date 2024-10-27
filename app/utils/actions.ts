@@ -991,6 +991,10 @@ export async function iniciarTiempoAdmin(idPartido: any) {
   );
 }
 
+export async function cargarAccionPartidoAdmin(body: any) {
+  return await FlowCraftAPI.post(`Partidos/AltaAccionPartido`, body);
+}
+
 //REPORTES
 
 export async function getReporteByUsuarioYPeriodo(body: any) {

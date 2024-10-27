@@ -18,6 +18,8 @@ import {
   suspenderPartidoAdmin,
   finalizarTiempoAdmin,
   iniciarTiempoAdmin,
+  cargarAccionPartidoAdmin,
+  getActionPartidoByIdAdmin,
 } from '@/app/utils/actions';
 import { FlowModal } from '@/app/ui/components/FlowModal/FlowModal';
 import { ModalOverlay } from '@chakra-ui/react';
@@ -38,6 +40,8 @@ const periodos = {
 };
 
 const ENTRETIEMPO_CONST = 'Entretiempo';
+const TIEMPO_FUTBOL = 45;
+const TIEMPO_VOLEY = 10;
 
 const PartidoScreen = () => {
   const [partido, setPartido] = useState({
@@ -57,9 +61,7 @@ const PartidoScreen = () => {
   });
   const [partidoId, setPartidoId] = useState('');
   const [partidoData, setPartidoData] = useState({});
-  console.log('partidoData', partidoData);
   const [estadoDelPartido, setEstadoDelPartido] = useState('');
-  console.log('estadoDelPartido', estadoDelPartido);
   const [isLoading, setIsLoading] = useState(true);
   const [accionPartido, setAccionPartido] = useState([]);
   const [modalFinalizarPartido, setModalFinalizarPartido] = useState(false);
@@ -76,11 +78,25 @@ const PartidoScreen = () => {
   const [confirmacionFinalizacionPartido, setConfirmacionFinalizacionPartido] =
     useState(false);
   const [modalSuspenderPartido, setModalSuspenderPartido] = useState(false);
+  const [accionesLocal, setAccionesLocal] = useState([]);
+  const [accionesVisitantes, setAccionesVisitantes] = useState([]);
   const [timeDifference, setTimeDifference] = useState(0);
   const router = useRouter();
 
   const getDataDelPatido = async (partidoId) => {
     const partido = await getPartidoByIdAdmin(partidoId);
+    console.log('partido', partido);
+    const listaAccionPartido = await getActionPartidoByIdAdmin(partidoId);
+    const accionesLocal = listaAccionPartido.filter(
+      (accion) => accion.equipoLocal === true,
+    );
+    console.log('accionesLocal', accionesLocal);
+    setAccionesLocal(accionesLocal);
+    const accionesVisitantes = listaAccionPartido.filter(
+      (accion) => accion.equipoLocal === false,
+    );
+    setAccionesVisitantes(accionesVisitantes);
+    console.log('accionesVisitantes', accionesVisitantes);
     if (
       partido?.historialEventoList?.[0]?.estadoEvento?.nombreEstado !==
         'Iniciado' &&
@@ -164,7 +180,7 @@ const PartidoScreen = () => {
       );
     }
     opciones = opciones.map((us) => ({
-      value: us.usuario.id,
+      value: us.id,
       label: `${us.numCamiseta} - ${us.usuario.apellido} ${us.usuario.apellido} `,
     }));
     return opciones;
@@ -186,10 +202,78 @@ const PartidoScreen = () => {
       );
     }
     opciones = opciones.map((us) => ({
-      value: us.usuario.id,
+      value: us.id,
       label: `${us.numCamiseta} - ${us.usuario.apellido} ${us.usuario.apellido} `,
     }));
     return opciones;
+  };
+
+  const calcularHoraAccion = () => {
+    const targetDate = new Date(
+      partidoData?.historialEventoList?.[0]?.fechaInicio,
+    );
+    const targetDateWithAddedMinutes = new Date(targetDate);
+    targetDateWithAddedMinutes.setMinutes(
+      targetDate.getMinutes() + TIEMPO_FUTBOL * (partidoData.periodo - 1),
+    );
+    // Calcular la diferencia inicial
+    const now = new Date();
+    const difference = Math.max(0, now - targetDateWithAddedMinutes);
+    const totalSeconds = Math.floor(difference / 1000);
+    const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, '0');
+    return Number(minutes);
+  };
+
+  const altaAccionPartido = async () => {
+    try {
+      let accionAMandar;
+      if (partidoData.disciplina.nombre.toLowerCase().includes('futbol')) {
+        accionAMandar = {
+          IdPartido: partidoId,
+          IdTipoAccion: accionSeleccionada.accion.id,
+          IdJugador: usuarioSeleccionado.value,
+          EquipoLocal: accionSeleccionada.esLocal,
+          IdJugadorEnBanca: 0,
+          Minuto: calcularHoraAccion(),
+        };
+        if (accionSeleccionada?.accion?.nombreTipoAccion?.includes('Cambio')) {
+          accionAMandar['IdJugadorEnBanca'] = usuarioParaCambio.value;
+        }
+      } else {
+      }
+      console.log('accionAMandar', accionAMandar);
+      await cargarAccionPartidoAdmin(accionAMandar);
+      toast.success('accion cargada exitosamente');
+      getDataDelPatido(partidoId);
+      setModalAltaAccion(false);
+      setAccionSeleccionada({ accion: {}, esLocal: true });
+      setUsuarioSeleccionado({});
+      setUsuarioParaCambio({});
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  const getDataJugador = (numeroJugador, isLocal, numeroCambio) => {
+    if (numeroCambio) {
+      const dataJugador = partidoData?.[
+        isLocal ? 'local' : 'visitante'
+      ]?.equipo?.equipoUsuarios?.find(
+        (usuario) => usuario.numCamiseta === numeroJugador,
+      );
+      const dataJugadorCambio = partidoData?.[
+        isLocal ? 'local' : 'visitante'
+      ]?.equipo?.equipoUsuarios?.find(
+        (usuario) => usuario.numCamiseta === numeroCambio,
+      );
+      return `${dataJugadorCambio?.usuario?.apellido} ${dataJugadorCambio?.usuario?.nombre} <--> ${dataJugador?.usuario?.apellido} ${dataJugador?.usuario?.nombre}`;
+    }
+    const dataJugador = partidoData?.[
+      isLocal ? 'local' : 'visitante'
+    ]?.equipo?.equipoUsuarios?.find(
+      (usuario) => usuario.numCamiseta === numeroJugador,
+    );
+    return `Num: ${dataJugador?.numCamiseta} / ${dataJugador?.puesto} / ${dataJugador?.usuario?.apellido} ${dataJugador?.usuario?.nombre}`;
   };
 
   const formatTime = (ms) => {
@@ -356,35 +440,61 @@ const PartidoScreen = () => {
 
               <TabPanels>
                 <TabPanel>
-                  {/* Mostrar goles del equipo local */}
-                  {partido.golesEquipo1.length > 0 ? (
-                    partido.golesEquipo1.map((gol) => (
-                      <p key={gol.id}>{gol.jugador}</p>
-                    ))
+                  {accionesLocal.filter((accion) =>
+                    accion.descripcion.includes('Gol'),
+                  ).length > 0 ? (
+                    accionesLocal
+                      .filter((accion) => accion.descripcion.includes('Gol'))
+                      .map((accion) => {
+                        return (
+                          <p key={accion.id}>
+                            Min: {accion.minuto} -{' '}
+                            {getDataJugador(accion.nroJugador, true)}
+                          </p>
+                        );
+                      })
                   ) : (
                     <p>No hay goles registrados</p>
                   )}
                 </TabPanel>
 
                 <TabPanel>
-                  {/* Mostrar faltas del equipo local */}
-                  {partido.faltasEquipo1.length > 0 ? (
-                    partido.faltasEquipo1.map((falta) => (
-                      <p key={falta.id}>{falta.jugador}</p>
-                    ))
+                  {accionesLocal.filter((accion) =>
+                    accion.descripcion.includes('Falta'),
+                  ).length > 0 ? (
+                    accionesLocal
+                      .filter((accion) => accion.descripcion.includes('Falta'))
+                      .map((accion) => {
+                        return (
+                          <p key={accion.id}>
+                            {accion.minuto} -{' '}
+                            {getDataJugador(accion.nroJugador, true)}
+                          </p>
+                        );
+                      })
                   ) : (
                     <p>No hay faltas registradas</p>
                   )}
                 </TabPanel>
 
                 <TabPanel>
-                  {/* Mostrar cambios del equipo local */}
-                  {partido.cambiosEquipo1.length > 0 ? (
-                    partido.cambiosEquipo1.map((cambio) => (
-                      <p key={cambio.id}>
-                        {cambio.entrada} &lt;&gt; {cambio.salida}
-                      </p>
-                    ))
+                  {accionesLocal.filter((accion) =>
+                    accion.descripcion.includes('Cambio'),
+                  ).length > 0 ? (
+                    accionesLocal
+                      .filter((accion) => accion.descripcion.includes('Cambio'))
+                      .map((accion) => {
+                        return (
+                          <p key={accion.id}>
+                            {accion.minuto} -{' '}
+                            {getDataJugador(
+                              accion.nroJugador,
+                              true,
+                              accion.nroJugadorCambio,
+                            )}
+                          </p>
+                        );
+                      })
                   ) : (
                     <p>No hay cambios registrados</p>
                   )}
@@ -406,7 +516,6 @@ const PartidoScreen = () => {
                     key={accion.id}
                   >
                     <Button
-                      isDisabled={estadoDelPartido === ENTRETIEMPO_CONST}
                       onClick={() => {
                         setModalAltaAccion(true);
                         setAccionSeleccionada({ accion, esLocal: true });
@@ -415,7 +524,6 @@ const PartidoScreen = () => {
                       +
                     </Button>
                     <Button
-                      isDisabled={estadoDelPartido === ENTRETIEMPO_CONST}
                       onClick={() =>
                         setPartido({ ...partido, equipo1: partido.equipo1 + 1 })
                       }
@@ -426,7 +534,6 @@ const PartidoScreen = () => {
                       {accion.nombreTipoAccion}
                     </span>
                     <Button
-                      isDisabled={estadoDelPartido === ENTRETIEMPO_CONST}
                       onClick={() =>
                         setPartido({ ...partido, equipo1: partido.equipo1 + 1 })
                       }
@@ -434,7 +541,6 @@ const PartidoScreen = () => {
                       -
                     </Button>
                     <Button
-                      isDisabled={estadoDelPartido === ENTRETIEMPO_CONST}
                       onClick={() => {
                         setModalAltaAccion(true);
                         setAccionSeleccionada({ accion, esLocal: false });
@@ -522,36 +628,63 @@ const PartidoScreen = () => {
               </TabList>
 
               <TabPanels>
-                <TabPanel>
-                  {/* Mostrar goles del equipo visitante */}
-                  {partido.golesEquipo2.length > 0 ? (
-                    partido.golesEquipo2.map((gol) => (
-                      <p key={gol.id}>{gol.jugador}</p>
-                    ))
+                <TabPanel className="min-h-[300px]">
+                  {/* Mostrar goles del equipo local */}
+                  {accionesVisitantes.filter((accion) =>
+                    accion.descripcion.includes('Gol'),
+                  ).length > 0 ? (
+                    accionesVisitantes
+                      .filter((accion) => accion.descripcion.includes('Gol'))
+                      .map((accion) => {
+                        return (
+                          <p key={accion.id}>
+                            Min: {accion.minuto} -{' '}
+                            {getDataJugador(accion.nroJugador, false)}
+                          </p>
+                        );
+                      })
                   ) : (
                     <p>No hay goles registrados</p>
                   )}
                 </TabPanel>
 
-                <TabPanel>
-                  {/* Mostrar faltas del equipo visitante */}
-                  {partido.faltasEquipo2.length > 0 ? (
-                    partido.faltasEquipo2.map((falta) => (
-                      <p key={falta.id}>{falta.jugador}</p>
-                    ))
+                <TabPanel className="min-h-[300px]">
+                  {accionesVisitantes.filter((accion) =>
+                    accion.descripcion.includes('Falta'),
+                  ).length > 0 ? (
+                    accionesVisitantes
+                      .filter((accion) => accion.descripcion.includes('Falta'))
+                      .map((accion) => {
+                        return (
+                          <p key={accion.id}>
+                            {accion.minuto} -{' '}
+                            {getDataJugador(accion.nroJugador, false)}
+                          </p>
+                        );
+                      })
                   ) : (
                     <p>No hay faltas registradas</p>
                   )}
                 </TabPanel>
 
-                <TabPanel>
-                  {/* Mostrar cambios del equipo visitante */}
-                  {partido.cambiosEquipo2.length > 0 ? (
-                    partido.cambiosEquipo2.map((cambio) => (
-                      <p key={cambio.id}>
-                        {cambio.entrada} &lt;&gt; {cambio.salida}
-                      </p>
-                    ))
+                <TabPanel className="min-h-[300px]">
+                  {accionesVisitantes.filter((accion) =>
+                    accion.descripcion.includes('Cambio'),
+                  ).length > 0 ? (
+                    accionesVisitantes
+                      .filter((accion) => accion.descripcion.includes('Cambio'))
+                      .map((accion) => {
+                        return (
+                          <p key={accion.id}>
+                            {accion.minuto} -{' '}
+                            {getDataJugador(
+                              accion.nroJugador,
+                              true,
+                              accion.nroJugadorCambio,
+                            )}
+                          </p>
+                        );
+                      })
                   ) : (
                     <p>No hay cambios registrados</p>
                   )}
@@ -692,6 +825,7 @@ const PartidoScreen = () => {
           setUsuarioSeleccionado({});
           setUsuarioParaCambio({});
         }}
+        onAcceptModal={altaAccionPartido}
       />
       <Toaster />
     </section>
