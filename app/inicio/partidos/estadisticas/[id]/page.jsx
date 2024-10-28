@@ -1,4 +1,7 @@
-import React from 'react';
+'use client';
+import { getActionPartidoPanelAdmin, getPartidoByIdAdmin } from '@/app/utils/actions';
+import { Button } from '@chakra-ui/react';
+import React, { useEffect, useState } from 'react';
 const jugadores = [
   { id: 1, value: '1 - Juan Pérez' },
   { id: 2, value: '2 - Pepe Argento' },
@@ -23,6 +26,32 @@ const jugadores = [
 ];
 
 const page = () => {
+  const [jugadorSeleccionado, setJugadorSeleccionado] = useState('');
+  const [partido, setPartido] = useState({})
+  const [listaDeAcciones, setListaDeAcciones] = useState([])
+  const [jugadores, setJugadores] = useState([])
+
+  const getDataDelPatido = async (partidoId) => {
+    const partido = await getPartidoByIdAdmin(partidoId);
+    console.log('partido', partido)
+    const equipoLocal = partido?.local?.equipo?.equipoUsuarios
+    const equipoVisitante = partido?.visitante?.equipo?.equipoUsuarios
+    const listaDeUsuarios = [...equipoLocal, ...equipoVisitante]
+    setJugadores(listaDeUsuarios)
+    setPartido(partido)
+  };
+
+  const getAccionesParaEseUsuario = async(dniUsuario) =>{
+
+  }
+
+  useEffect(() => {
+    const path = window.location.pathname;
+    const idFromPath = path.split('/').pop();
+    getDataDelPatido(idFromPath);
+  }, []);
+  
+
   return (
     <section className="w-full">
       <section className="flex flex-1 flex-row justify-between">
@@ -34,22 +63,43 @@ const page = () => {
       </section>
       <section class="mt-8 flex w-full">
         <div className="overflow h-[80vh] w-full max-w-[30%] flex-col gap-5 overflow-y-auto">
-          {jugadores.map((jugador) => {
+          {jugadores && jugadores.map((jugador) => {
             return (
               <>
                 <button
-                  className="mt-5 w-[80%] rounded-lg bg-blue-300 p-2 text-lg font-semibold text-white"
+                  className={`mt-5 w-[80%] rounded-lg bg-blue-300 ${jugador.usuario.dni === jugadorSeleccionado && 'bg-blue-600'} p-2 text-lg font-semibold text-white`}
                   key={jugador.id}
+                  onClick={() => {
+                    setJugadorSeleccionado(jugador.usuario.dni);
+                    getAccionesParaEseUsuario(jugador.usuario.dni)
+                  }}
                 >
-                  {jugador.value}
+                  {`${jugador.numCamiseta} - ${jugador.usuario.apellido} ${jugador.usuario.nombre}`}
                 </button>
               </>
             );
           })}
         </div>
-        <div class="h-[80vh] flex-1 bg-gray-200 p-4">
-          Contenido de la columna derecha
+        <div class="h-[80vh] flex-1 p-4">
+          <div className="flex w-full flex-col items-center  gap-5">
+            {listaDeAcciones && listaDeAcciones.map((accion)=>{
+              return(
+                <div key={accion.id} className="flex items-center justify-center space-x-4">
+                  <span className="min-w-[200px] whitespace-normal break-words text-center  text-xl font-semibold">
+                    {accion.nombreTipoAccion}
+                  </span>
+                  <span className="text-center  text-2xl font-bold">3</span>
+                  <Button onClick={() => {}}>+</Button>
+                  <Button onClick={() => {}}>-</Button>
+                </div>
+              )
+            })}
+            
+          </div>
         </div>
+      </section>
+      <section className='w-full flex flex-row-reverse gap-4'>
+      <Button colorScheme='blue' onClick={() => {}}>Finalizar</Button>
       </section>
     </section>
   );

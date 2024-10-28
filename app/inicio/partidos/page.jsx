@@ -34,7 +34,6 @@ function Page() {
     label: 'Todas las instalaciones',
   });
   const [eventosSeleccionado, setEventosSeleccionado] = useState({});
-  console.log('eventosSeleccionado', eventosSeleccionado);
   const [partidos, setPartidos] = useState([]);
   const [partidoAver, setPartidoAver] = useState([]);
   const [detallesDelPartido, setDetallesDelPartido] = useState(false);
