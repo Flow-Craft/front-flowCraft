@@ -1,6 +1,10 @@
 import React, { useEffect } from 'react';
 
-export const FormDetallePartido = ({ partido, handleSuspenderPartido }) => {
+export const FormDetallePartido = ({
+  partido,
+  handleSuspenderPartido,
+  gestionaPartidos,
+}) => {
   const estado = partido?.historialEventoList?.[0]?.estadoEvento?.nombreEstado;
 
   return (
@@ -49,7 +53,9 @@ export const FormDetallePartido = ({ partido, handleSuspenderPartido }) => {
           <span>{new Date(partido.fechaInicio).toLocaleDateString()}</span>
         </div>
         <div>
-          {estado !== 'Suspendido' && estado !== 'Finalizado' ? (
+          {estado !== 'Suspendido' &&
+          estado !== 'Finalizado' &&
+          gestionaPartidos ? (
             <button
               className="mt-8 rounded-lg bg-blue-500 p-2 text-center text-xl text-white lg:ml-auto"
               type="button"

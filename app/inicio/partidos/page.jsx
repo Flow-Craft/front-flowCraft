@@ -18,6 +18,12 @@ import { FlowModal } from '@/app/ui/components/FlowModal/FlowModal';
 import toast, { Toaster } from 'react-hot-toast';
 import { ModalOverlay } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
+import {
+  LOCAL_STORAGE_PERFIL_KEY,
+  LOCAL_STORAGE_PERMISOS_KEY,
+} from '@/app/utils/const';
+
+const PERFIL_BOTON_ASIGNADO = ['Admin', 'Arbitro'];
 
 function Page() {
   const [fechaPartido, setFechaPartido] = useState(null);
@@ -39,6 +45,8 @@ function Page() {
     useState([]);
   const [confirmacionInicioPartido, setConfirmacionInicioPartido] =
     useState(false);
+  const [perfilUsuario, setPerfilUsuario] = useState('');
+  const [permisosUsuarios, setPermisosUsuarios] = useState([]);
   const router = useRouter();
 
   const handleGetMatchDetails = (partido) => {
@@ -134,56 +142,140 @@ function Page() {
     }
   };
 
+  const estaHabilitadoElEvento = (evento) => {
+    const { funcionalidades: funcionalidadesSocio } =
+      permisosUsuarios.find((el) => el.funcionalidades === 'Ver partidos') ||
+      {};
+    const { funcionalidades: funcionalidadesAdmin } =
+      permisosUsuarios.find(
+        (el) => el.funcionalidades === 'Gestionar partido',
+      ) || {};
+    const esPerfilValido =
+      perfilUsuario === 'Socio' || perfilUsuario === 'Simpatizante';
+    const { funcionalidades: funcionalidadesPlanillero } =
+      permisosUsuarios.find(
+        (el) => el.funcionalidades === 'Gestionar estadisticas partido',
+      ) || {};
+    const estadoEvento =
+      evento?.historialEventoList?.[0]?.estadoEvento?.nombreEstado;
+    const fechaInicio = new Date(evento?.fechaInicio);
+    const fechaFinEvento = new Date(evento?.fechaFinEvento);
+    const fechaActual = new Date();
+
+    if (
+      (funcionalidadesPlanillero || funcionalidadesSocio || esPerfilValido) &&
+      (estadoEvento === 'Iniciado' || estadoEvento === 'Entretiempo')
+    ) {
+      return false;
+    }
+
+    if (!funcionalidadesAdmin) {
+      return true;
+    }
+
+    // Comprobar si el evento está suspendido o si la fecha actual está fuera del rango del evento
+    const eventoSuspendido = estadoEvento === 'Suspendido';
+    const fueraDeRango = !(
+      fechaActual >= fechaInicio && fechaActual <= fechaFinEvento
+    );
+
+    return eventoSuspendido || fueraDeRango;
+  };
+
+  const handlePartidos = () => {
+    const tienePermisoVer = permisosUsuarios.some(
+      (el) => el.funcionalidades === 'Ver partidos',
+    );
+    const tienePermisoGestion = permisosUsuarios.some(
+      (el) => el.funcionalidades === 'Gestionar partido',
+    );
+    const tienePermisoGestionEstadisticas = permisosUsuarios.some(
+      (el) => el.funcionalidades === 'Gestionar estadisticas partido',
+    );
+    const esPerfilSocioOSimpatizante =
+      perfilUsuario === 'Socio' || perfilUsuario === 'Simpatizante';
+    const estadoEvento =
+      eventosSeleccionado?.historialEventoList?.[0]?.estadoEvento?.nombreEstado;
+
+    if (tienePermisoGestionEstadisticas) {
+      return router.push(`partidos/estadisticas/${eventosSeleccionado.id}`);
+    }
+
+    if (tienePermisoVer && esPerfilSocioOSimpatizante && !tienePermisoGestion) {
+      return router.push(`partidos/tiempo-real/${eventosSeleccionado.id}`);
+    }
+
+    switch (estadoEvento) {
+      case 'Iniciado':
+        return router.push(`partidos/arbitro/${eventosSeleccionado.id}`);
+      case 'Creado':
+        return prepararPartido();
+      default:
+        setDetallesDelPartido(false);
+    }
+  };
+
+  const handlePartidosNombre = () => {
+    const tienePermisoVer = permisosUsuarios.some(
+      (el) => el.funcionalidades === 'Ver partidos',
+    );
+    const tienePermisoGestion = permisosUsuarios.some(
+      (el) => el.funcionalidades === 'Gestionar partido',
+    );
+    const tienePermisoGestionEstadisticas = permisosUsuarios.some(
+      (el) => el.funcionalidades === 'Gestionar estadisticas partido',
+    );
+    const esPerfilSocioOSimpatizante =
+      perfilUsuario === 'Socio' || perfilUsuario === 'Simpatizante';
+    const estadoEvento =
+      eventosSeleccionado?.historialEventoList?.[0]?.estadoEvento?.nombreEstado;
+
+    if (tienePermisoGestionEstadisticas) {
+      return 'Cargar estadisticas del partido';
+    }
+
+    // Condición para ver el partido en tiempo real
+    if (
+      (tienePermisoVer || esPerfilSocioOSimpatizante) &&
+      !tienePermisoGestion
+    ) {
+      return 'Ver en tiempo real';
+    }
+
+    // Condiciones para el estado del evento
+    switch (estadoEvento) {
+      case 'Iniciado':
+        return 'Continuar Partido';
+      case 'Creado':
+        return 'Preparar Partido';
+      default:
+        return '';
+    }
+  };
+
+  const getPermisosUsuarios = () => {
+    const perfilUsuario = window.localStorage.getItem(LOCAL_STORAGE_PERFIL_KEY);
+    const permisos = window.localStorage.getItem(LOCAL_STORAGE_PERMISOS_KEY);
+    const permisosJSON = JSON.parse(permisos);
+    setPermisosUsuarios(permisosJSON);
+    setPerfilUsuario(perfilUsuario);
+  };
+
+  const gestionaPartidos = () => {
+    return !!permisosUsuarios.find(
+      (el) => el.funcionalidades === 'Gestionar partido',
+    );
+  };
+
   useEffect(() => {
     getInstalaciones();
     getTodosLosPartidos();
+    getPermisosUsuarios();
   }, []);
 
   useEffect(() => {
     handleSearchMatches();
   }, [asignado, fechaPartido, instalacionSeleccionada]);
-
-  const estaHabilitadoElEvento = (evento) => {
-    return (
-      evento?.historialEventoList?.[0]?.estadoEvento?.nombreEstado ===
-        'Suspendido' ||
-      !(
-        new Date() >= new Date(evento?.fechaInicio) &&
-        new Date() <= new Date(evento?.fechaFinEvento)
-      )
-    );
-  };
-
-  const handlePartidos = () => {
-    if (
-      eventosSeleccionado?.historialEventoList?.[0]?.estadoEvento
-        ?.nombreEstado === 'Iniciado'
-    ) {
-      router.push(`partidos/arbitro/${eventosSeleccionado.id}`);
-    }
-    if (
-      eventosSeleccionado?.historialEventoList?.[0]?.estadoEvento
-        ?.nombreEstado === 'Creado'
-    ) {
-      return prepararPartido();
-    }
-    return setDetallesDelPartido(false);
-  };
-
-  const handlePartidosNombre = () => {
-    if (
-      eventosSeleccionado?.historialEventoList?.[0]?.estadoEvento
-        ?.nombreEstado === 'Iniciado'
-    ) {
-      return 'Continuar Partido';
-    }
-    if (
-      eventosSeleccionado?.historialEventoList?.[0]?.estadoEvento
-        ?.nombreEstado === 'Creado'
-    ) {
-      return 'Preparar Partido';
-    }
-  };
 
   return (
     <section>
@@ -193,19 +285,26 @@ function Page() {
       </div>
       <div className="flex flex-row flex-wrap gap-5">
         <div className="flex flex-row items-center gap-3">
-          <label className="mb-3 mt-5 block text-lg font-bold text-gray-900">
-            Asingados:
-          </label>
-          <InputWithLabel
-            name="Socio"
-            type="checkbox"
-            stylesInput="peer block rounded-md h-[37px] border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
-            defaultChecked={asignado}
-            defaultValue={asignado}
-            onChange={(e) => {
-              setAsignado(e.target.checked);
-            }}
-          />
+          {perfilUsuario &&
+            PERFIL_BOTON_ASIGNADO.findIndex(
+              (perfil) => perfil === perfilUsuario,
+            ) !== -1 && (
+              <>
+                <label className="mb-3 mt-5 block text-lg font-bold text-gray-900">
+                  Asingados:
+                </label>
+                <InputWithLabel
+                  name="Socio"
+                  type="checkbox"
+                  stylesInput="peer block rounded-md h-[37px] border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
+                  defaultChecked={asignado}
+                  defaultValue={asignado}
+                  onChange={(e) => {
+                    setAsignado(e.target.checked);
+                  }}
+                />
+              </>
+            )}
         </div>
         <div className="flex flex-row items-center gap-3">
           <label className="mb-3 mt-5 block text-lg font-bold text-gray-900">
@@ -254,6 +353,7 @@ function Page() {
             <FormDetallePartido
               partido={eventosSeleccionado}
               handleSuspenderPartido={handleSuspenderPartido}
+              gestionaPartidos={gestionaPartidos()}
             />
           </>
         }

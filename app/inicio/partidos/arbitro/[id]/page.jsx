@@ -75,11 +75,11 @@ const PartidoScreen = () => {
     const partido = await getPartidoByIdAdmin(partidoId);
     const listaAccionPartido = await getActionPartidoByIdAdmin(partidoId);
     const accionesLocal = listaAccionPartido.filter(
-      (accion) => (accion.equipoLocal === true && !accion.fechaBaja),
+      (accion) => accion.equipoLocal === true && !accion.fechaBaja,
     );
     setAccionesLocal(accionesLocal);
     const accionesVisitantes = listaAccionPartido.filter(
-      (accion) => (accion.equipoLocal === false && !accion.fechaBaja),
+      (accion) => accion.equipoLocal === false && !accion.fechaBaja,
     );
     setAccionesVisitantes(accionesVisitantes);
     if (
@@ -240,9 +240,9 @@ const PartidoScreen = () => {
   const bajaAccionPartido = async () => {
     try {
       await eliminarAccionPartidoAdmin({
-        IdPartido:partidoId,
-        Id:accionADarDeBaja.value
-      })
+        IdPartido: partidoId,
+        Id: accionADarDeBaja.value,
+      });
       toast.success('accion eliminada exitosamente');
       getDataDelPatido(partidoId);
       setModalBajaAccion(false);
@@ -278,19 +278,24 @@ const PartidoScreen = () => {
   const getAcciones = () => {
     const esLocal = accionSeleccionada.esLocal;
     const acciones = esLocal ? accionesLocal : accionesVisitantes;
-    const jugadoresEquipo = esLocal ? partidoData?.local?.equipo?.equipoUsuarios : partidoData?.visitante?.equipo?.equipoUsuarios;
-  
+    const jugadoresEquipo = esLocal
+      ? partidoData?.local?.equipo?.equipoUsuarios
+      : partidoData?.visitante?.equipo?.equipoUsuarios;
+
     return acciones
-      .filter((acc) => acc.tipoAccionPartido.id === accionSeleccionada.accion.id)
+      .filter(
+        (acc) => acc.tipoAccionPartido.id === accionSeleccionada.accion.id,
+      )
       .map((acc) => {
-        const jugador = jugadoresEquipo.find((user) => user.numCamiseta === acc.nroJugador);
+        const jugador = jugadoresEquipo.find(
+          (user) => user.numCamiseta === acc.nroJugador,
+        );
         return {
           value: acc.id,
-          label: `${jugador.numCamiseta} - ${jugador.usuario.apellido} ${jugador.usuario.nombre}`
+          label: `${jugador.numCamiseta} - ${jugador.usuario.apellido} ${jugador.usuario.nombre}`,
         };
       });
   };
-  
 
   const formatTime = (ms) => {
     const totalSeconds = Math.floor(ms / 1000);
@@ -308,7 +313,9 @@ const PartidoScreen = () => {
 
   useEffect(() => {
     // Obtener la hora actual y la hora objetivo
-    const targetDate = new Date(partidoData?.historialEventoList?.[0]?.fechaInicio);
+    const targetDate = new Date(
+      partidoData?.historialEventoList?.[0]?.fechaInicio,
+    );
     // Calcular la diferencia inicial
     const calculateDifference = () => {
       const now = new Date();
@@ -404,7 +411,7 @@ const PartidoScreen = () => {
                   const accionSeleccionada = accionPartido.find((acc) =>
                     acc.nombreTipoAccion.includes('Gol'),
                   );
-                  setModalBajaAccion(true)
+                  setModalBajaAccion(true);
                   setAccionSeleccionada({
                     accion: accionSeleccionada,
                     esLocal: true,
@@ -446,7 +453,7 @@ const PartidoScreen = () => {
                   const accionSeleccionada = accionPartido.find((acc) =>
                     acc.nombreTipoAccion.includes('Gol'),
                   );
-                  setModalBajaAccion(true)
+                  setModalBajaAccion(true);
                   setAccionSeleccionada({
                     accion: accionSeleccionada,
                     esLocal: false,
