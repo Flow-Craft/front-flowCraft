@@ -35,7 +35,8 @@
     "app/inicio/partidos/page.jsx",
     "app/inicio/eventos/equipos/page.jsx",
     "app/inicio/estados/page.jsx",
-    "app/inicio/reportes/page.jsx"
+    "app/inicio/reportes/page.jsx",
+    "app/inicio/lecciones/page.jsx"
   ],
   "exclude": ["node_modules"]
 }

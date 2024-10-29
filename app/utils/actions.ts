@@ -999,6 +999,24 @@ export async function eliminarAccionPartidoAdmin(body: any) {
   return await FlowCraftAPI.post(`Partidos/BajaAccionPartido`, body);
 }
 
+export async function getAccionesPorUsuarioYPartido({
+  IdPartido,
+  NroJugador,
+}: any) {
+  const queryString = new URLSearchParams({ IdPartido, NroJugador }).toString();
+  return await FlowCraftAPI.get(
+    `Partidos/GetEstadisticasByPartidoUsu?${queryString}`,
+  );
+}
+
+export async function altaEstaditicaPartidoAccionUsuario(body: any) {
+  return await FlowCraftAPI.post(`Partidos/AltaEstadistica`, body);
+}
+
+export async function bajaEstaditicaPartidoAccionUsuario(body: any) {
+  return await FlowCraftAPI.post(`Partidos/ActualizarEstadistica`, body);
+}
+
 //REPORTES
 
 export async function getReporteByUsuarioYPeriodo(body: any) {
@@ -1043,4 +1061,25 @@ export async function getReporteByPeriodoInstalacion(body: any) {
       'Content-Type': 'application/pdf',
     },
   );
+}
+
+// LECCIONES
+
+export async function getLeccionesAdmin() {
+  return await FlowCraftAPI.get(`DisciplinasYLecciones/GetLecciones`);
+}
+
+export async function crearLeccionAdmin(body: any) {
+  return await FlowCraftAPI.post(`DisciplinasYLecciones/CrearLeccion`, body);
+}
+
+export async function editarLeccionAdmin(body: any) {
+  return await FlowCraftAPI.post(
+    `DisciplinasYLecciones/ActualizarLeccion`,
+    body,
+  );
+}
+
+export async function eliminarLeccionAdmin(body: any) {
+  return await FlowCraftAPI.post(`DisciplinasYLecciones/EliminarLeccion`, body);
 }
