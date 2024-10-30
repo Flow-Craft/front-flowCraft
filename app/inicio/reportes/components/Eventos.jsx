@@ -232,6 +232,8 @@ export const Eventos = () => {
         });
         break;
     }
+
+    console.log('pdf', pdf);
     window.open(pdf, '_blank');
   };
 

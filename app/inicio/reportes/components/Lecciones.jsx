@@ -161,6 +161,25 @@ export const Lecciones = () => {
     setDisciplinas(disciplinasToShow);
   };
   const handlePedirReporte = () => {
+    try {
+      switch (opcionSeleccionada.value) {
+        case 1:
+          return (
+            fechaInicio === '' || fechaFin === '' || !usuarioSeleccionado.value
+          );
+        case 2:
+          return (
+            !disciplinaSeleccionada.value ||
+            !categoriaSeleccionada.value ||
+            (!fechaUnica && (fechaInicio === '' || fechaFin === '')) ||
+            (fechaUnica && fechaInicio === '')
+          );
+        default:
+          return false;
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
     console.log('fechaInicio', fechaInicio);
     console.log('fechaInicio', fechaFin);
   };

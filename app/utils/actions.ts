@@ -73,7 +73,7 @@ export async function checkJWTSession() {
     const token = window.localStorage.getItem(AUTORIZATION_KEY);
     if (token) {
       await FlowCraftAPI.get('Users/ComprobarJWT');
-      // window.location.href = '/inicio/noticias';
+      window.location.href = '/inicio/noticias';
     }
 
     return;
@@ -1056,6 +1056,72 @@ export async function getReporteByPeriodoInstalacion(body: any) {
   const queryString = new URLSearchParams(body).toString();
   return await FlowCraftAPI.get(
     `Reportes/ReporteEventoByInstalacionPeriodo?${queryString}`,
+    true,
+    {
+      'Content-Type': 'application/pdf',
+    },
+  );
+}
+
+export async function ReporteReservasByUsuarioPeriodo(body: any) {
+  const queryString = new URLSearchParams(body).toString();
+  return await FlowCraftAPI.get(
+    `Reportes/ReporteReservasByUsuarioPeriodo?${queryString}`,
+    true,
+    {
+      'Content-Type': 'application/pdf',
+    },
+  );
+}
+
+export async function ReporteReservasByInstalacionPeriodo(body: any) {
+  const queryString = new URLSearchParams(body).toString();
+  return await FlowCraftAPI.get(
+    `Reportes/ReporteReservasByInstalacionPeriodo?${queryString}`,
+    true,
+    {
+      'Content-Type': 'application/pdf',
+    },
+  );
+}
+
+export async function ReporteReservasByPeriodo(body: any) {
+  const queryString = new URLSearchParams(body).toString();
+  return await FlowCraftAPI.get(
+    `Reportes/ReporteReservasByPeriodo?${queryString}`,
+    true,
+    {
+      'Content-Type': 'application/pdf',
+    },
+  );
+}
+
+export async function reporteEstadisticasByDiscUsuPeriodo(body: any) {
+  const queryString = new URLSearchParams(body).toString();
+  return await FlowCraftAPI.get(
+    `Reportes/ReporteEstadisticasByDiscUsuPeriodo?${queryString}`,
+    true,
+    {
+      'Content-Type': 'application/pdf',
+    },
+  );
+}
+
+export async function reporteEstadisticasByDiscUsuLeccionPeriodo(body: any) {
+  const queryString = new URLSearchParams(body).toString();
+  return await FlowCraftAPI.get(
+    `Reportes/ReporteEstadisticasByDiscUsuLeccionPeriodo?${queryString}`,
+    true,
+    {
+      'Content-Type': 'application/pdf',
+    },
+  );
+}
+
+export async function reporteEstadisticasByDiscEquipoPeriodo(body: any) {
+  const queryString = new URLSearchParams(body).toString();
+  return await FlowCraftAPI.get(
+    `Reportes/ReporteEstadisticasByDiscEquipoPeriodo?${queryString}`,
     true,
     {
       'Content-Type': 'application/pdf',

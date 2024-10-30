@@ -3,8 +3,12 @@ import { SelectWithLabel } from '@/app/ui/components/SelectWithLabel/SelectWithL
 import {
   getInstalacionesActionAdmin,
   getUsersAdmin,
+  ReporteReservasByInstalacionPeriodo,
+  ReporteReservasByPeriodo,
+  ReporteReservasByUsuarioPeriodo,
 } from '@/app/utils/actions';
 import React, { useEffect, useMemo, useState } from 'react';
+import toast from 'react-hot-toast';
 
 const OPTIONS_PER_SAVE = [
   {
@@ -130,7 +134,7 @@ export const Reservas = () => {
     const usuariosToShow = usuarios.usuarios.map((user) => {
       return {
         label: `${user.dni} - ${user.apellido} ${user.nombre}`,
-        value: user.dni,
+        value: user.id,
       };
     });
     const instalacionesToShow = instalaciones.map((ins) => {
@@ -142,11 +146,36 @@ export const Reservas = () => {
     setUsuarios(usuariosToShow);
     setInstalaciones(instalacionesToShow);
   };
-  const handlePedirReporte = () => {
-    console.log('usuarioSeleccionado', usuarioSeleccionado);
-    console.log('instalacionSeleccionada', instalacionSeleccionada);
-    console.log('fechaInicio', fechaInicio);
-    console.log('fechaInicio', fechaFin);
+  const handlePedirReporte = async () => {
+    try {
+      let pdf;
+      switch (opcionSeleccionada.value) {
+        case 1:
+          pdf = await ReporteReservasByPeriodo({
+            periodoInicio: `${fechaInicio}T00:00:00`,
+            periodoFin: `${fechaFin}T23:59:59`,
+          });
+          break;
+        case 2:
+          pdf = await ReporteReservasByInstalacionPeriodo({
+            IdInstalacion: instalacionSeleccionada.value,
+            periodoInicio: `${fechaInicio}T00:00:00`,
+            periodoFin: `${fechaFin}T23:59:59`,
+          });
+          break;
+        case 3:
+          usuarioSeleccionado;
+          pdf = await ReporteReservasByUsuarioPeriodo({
+            IdUsuario: usuarioSeleccionado.value.toString(),
+            periodoInicio: `${fechaInicio}T00:00:00`,
+            periodoFin: `${fechaFin}T23:59:59`,
+          });
+          break;
+      }
+      window.open(pdf, '_blank');
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
 
   const isDisable = () => {

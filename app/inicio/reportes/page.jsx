@@ -9,6 +9,7 @@ import {
 import { Reservas } from './components/Reservas';
 import { Eventos } from './components/Eventos';
 import { Lecciones } from './components/Lecciones';
+import { Estadisticas } from './components/Estadisticas';
 import withAuthorization from '@/app/utils/autorization';
 import { StarIcon } from '@heroicons/react/20/solid';
 
@@ -44,7 +45,7 @@ function Page() {
       case 'Eventos':
         return <Eventos />;
       case 'Estadisticas':
-        return <div>Proximamente</div>;
+        return <Estadisticas />;
       default:
         <div />;
     }
