@@ -1066,7 +1066,7 @@ export async function getReporteByPeriodoInstalacion(body: any) {
 // LECCIONES
 
 export async function getLeccionesAdmin() {
-  return await FlowCraftAPI.get(`DisciplinasYLecciones/GetLecciones`);
+  return await FlowCraftAPI.get(`DisciplinasYLecciones/GetLeccionesCompletas`);
 }
 
 export async function crearLeccionAdmin(body: any) {
@@ -1082,4 +1082,28 @@ export async function editarLeccionAdmin(body: any) {
 
 export async function eliminarLeccionAdmin(body: any) {
   return await FlowCraftAPI.post(`DisciplinasYLecciones/EliminarLeccion`, body);
+}
+
+export async function getLeccionesActivasAdmin() {
+  return await FlowCraftAPI.get(`DisciplinasYLecciones/GetLeccionesActivas`);
+}
+
+export async function inscribirseALeccion(body: any) {
+  return await FlowCraftAPI.post(
+    `DisciplinasYLecciones/InscribirseALeccion`,
+    body,
+  );
+}
+
+export async function desinscribirseALeccion(body: any) {
+  return await FlowCraftAPI.post(
+    `DisciplinasYLecciones/DesinscribirseALeccion`,
+    body,
+  );
+}
+
+export async function getInscricionesDelUsuario() {
+  return await FlowCraftAPI.get(
+    `DisciplinasYLecciones/GetInscripcionesByUsuario`,
+  );
 }

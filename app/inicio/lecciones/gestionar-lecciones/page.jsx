@@ -175,7 +175,7 @@ function Page() {
   const ActionTab = (categoria, categorias, disciplinas, profesores) => {
     return (
       <div className="flex flex-row gap-4">
-        {!categoria.fechaBaja ? (
+        {categoria.activa ? (
           <Tooltip label="Editar">
             <PencilIcon
               onClick={() => {
@@ -211,7 +211,7 @@ function Page() {
             <PencilIcon className={`w-[50px] text-transparent `} />
           </>
         )}
-        {!categoria.fechaBaja && (
+        {categoria.activa && (
           <Tooltip label="Eliminar">
             <TrashIcon
               onClick={() => {

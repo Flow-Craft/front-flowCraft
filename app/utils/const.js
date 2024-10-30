@@ -25,7 +25,7 @@ export const SEX_SELECT_OPTIONS = [
 ];
 
 export const SEX_CATEGORIA_SELECT_OPTIONS = [
-  { label: 'Hombre', value: 'Hombre' },
-  { label: 'Mujer', value: 'Mujer' },
-  { label: 'No Binario', value: 'No Binario' },
+  { label: 'Hombre', value: 'H' },
+  { label: 'Mujer', value: 'M' },
+  { label: 'No Binario', value: 'N' },
 ];

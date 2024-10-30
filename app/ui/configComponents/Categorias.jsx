@@ -18,6 +18,7 @@ const HEADER_TABLE = [
   { name: 'Nombre' },
   { name: 'Descripcion' },
   { name: 'Edad Minima' },
+  { name: 'Edad Maxima' },
   { name: 'Genero' },
   { name: 'Acciones' },
 ];
