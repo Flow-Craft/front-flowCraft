@@ -71,7 +71,7 @@ const links = [
   {
     name: 'Lecciones',
     href: '/inicio/lecciones',
-    hrefProfesor:'/inicio/lecciones/profesor',
+    hrefProfesor: '/inicio/lecciones/profesor',
     icon: AcademicCapIcon,
     nombrePermiso: 'Lecciones',
   },
@@ -159,22 +159,27 @@ export default function NavLinks({ onClose = () => {} }) {
       {isLoading && <AquiVieneFlow />}
       {MenuNuevo.map((link) => {
         const LinkIcon = link.icon;
-        if(window?.localStorage?.perfil === "Profesor" && link.name === "Lecciones"){
-          return(<Link
-            key={link.name}
-            href={link.hrefProfesor!}
-            onClick={onClose}
-            className={`
+        if (
+          window?.localStorage?.perfil === 'Profesor' &&
+          link.name === 'Lecciones'
+        ) {
+          return (
+            <Link
+              key={link.name}
+              href={link.hrefProfesor!}
+              onClick={onClose}
+              className={`
             flex h-[48px] grow items-center gap-2 rounded-md
             p-3 text-sm font-medium hover:bg-sky-100
             hover:text-blue-600 md:flex-none 
             md:justify-start md:bg-gray-50 md:p-2 md:px-3
             ${pathname === link.hrefProfesor ? 'bg-sky-100 text-blue-600' : ''}
             `}
-          >
-            <LinkIcon className="w-6" />
-            <p>{link.name}</p>
-          </Link>)
+            >
+              <LinkIcon className="w-6" />
+              <p>{link.name}</p>
+            </Link>
+          );
         }
         return (
           <Link

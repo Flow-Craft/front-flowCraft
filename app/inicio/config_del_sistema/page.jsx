@@ -15,6 +15,7 @@ import { DisciplinasTab } from '@/app/ui/configComponents/Disciplines';
 import { ProfilesTab } from '@/app/ui/configComponents/Profiles';
 import { SolicitudesTab } from '@/app/ui/configComponents/Solicitudes';
 import { CategoriasTab } from '@/app/ui/configComponents/Categorias';
+import { ParametrosTab } from '@/app/ui/configComponents/Parametros';
 import withAuthorization from '@/app/utils/autorization';
 
 function Page() {
@@ -60,6 +61,8 @@ function Page() {
         return <SolicitudesTab />;
       case 'Categorias':
         return <CategoriasTab />;
+      case 'Parámetros':
+        return <ParametrosTab />;
       default:
         <div />;
     }

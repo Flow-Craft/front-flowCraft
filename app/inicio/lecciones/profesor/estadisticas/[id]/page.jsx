@@ -17,23 +17,23 @@ import { FlowModal } from '@/app/ui/components/FlowModal/FlowModal';
 
 const page = () => {
   const [jugadorSeleccionado, setJugadorSeleccionado] = useState('');
-  const [alumnosPresentes, setAlumnosPresentes] = useState([])
+  const [alumnosPresentes, setAlumnosPresentes] = useState([]);
   const [partido, setPartido] = useState({});
   const [listaDeAcciones, setListaDeAcciones] = useState([]);
   const [jugadores, setJugadores] = useState([]);
   const [accionesPorJugador, setAccionesPorJugador] = useState([]);
-  const [modalFinalizarLeccion, setModalFinalizarLeccion] = useState(false)
-  const [esEdicion, setEsEdicion] = useState(false)
+  const [modalFinalizarLeccion, setModalFinalizarLeccion] = useState(false);
+  const [esEdicion, setEsEdicion] = useState(false);
   const router = useRouter();
   const getDataDelPatido = async (partidoId) => {
-    const partido = await getLeccionById(partidoId)
-    const alumnos = await getInscripcionesALecciones(partidoId)
+    const partido = await getLeccionById(partidoId);
+    const alumnos = await getInscripcionesALecciones(partidoId);
     const result = await getActionPartidoPanelAdmin({
       IdDisciplina: partido?.disciplina?.id,
       Estadistica: true,
       Partido: false,
     });
-    
+
     setListaDeAcciones(result);
     setJugadores(alumnos);
     setPartido(partido);
@@ -82,17 +82,19 @@ const page = () => {
     return 0;
   };
 
-  const finalizarLeccion = async() =>{
+  const finalizarLeccion = async () => {
     try {
-        if(!esEdicion){
-            await finalizarLeccionAdmin(partido.id)
-        }
-        toast.success(`${esEdicion ? "Leccion editada con exito" : "Leccion finalizada con exito"}`)
-        router.back();
+      if (!esEdicion) {
+        await finalizarLeccionAdmin(partido.id);
+      }
+      toast.success(
+        `${esEdicion ? 'Leccion editada con exito' : 'Leccion finalizada con exito'}`,
+      );
+      router.back();
     } catch (error) {
-        toast.error(error.message)
+      toast.error(error.message);
     }
-  }
+  };
 
   useEffect(() => {
     const path = window.location.pathname;
@@ -101,7 +103,7 @@ const page = () => {
 
     // Obtener el valor de un parámetro específico
     const paramValue = params.get('esEdicion');
-    setEsEdicion(!!paramValue)
+    setEsEdicion(!!paramValue);
     getDataDelPatido(idFromPath);
   }, []);
 
@@ -187,18 +189,14 @@ const page = () => {
       </section>
       <FlowModal
         title={`Finalizar leccion`}
-        modalBody={
-          <div>
-            Seguro que desea finalizar la leccion en curso
-          </div>
-        }
+        modalBody={<div>Seguro que desea finalizar la leccion en curso</div>}
         primaryTextButton="Aceptar"
         isOpen={modalFinalizarLeccion}
         scrollBehavior="outside"
         onAcceptModal={finalizarLeccion}
         type="submit"
         onCancelModal={() => {
-            setModalFinalizarLeccion(false);
+          setModalFinalizarLeccion(false);
         }}
       />
     </section>
