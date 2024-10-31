@@ -1220,5 +1220,3 @@ export async function getEstadisticasByIdLeccionYIdAsistencia(body: any) {
     `DisciplinasYLecciones/GetEstadisticasByLeccionUsuario?${queryString}`,
   );
 }
-
-

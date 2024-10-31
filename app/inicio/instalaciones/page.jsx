@@ -20,6 +20,7 @@ import {
 import { EditCreateInstall } from './components/editCreateInstall';
 import { FlowModal } from '@/app/ui/components/FlowModal/FlowModal';
 import withAuthorization from '@/app/utils/autorization';
+import usePermisos from '@/app/utils/permisos';
 
 const HEADER_TABLE = [
   { name: 'Nombre' },
@@ -42,6 +43,8 @@ function Page() {
   const [instalacionEliminar, setInstalacionEliminar] = useState(false);
   const [estadoInstalacion, setEstadoInstalacion] = useState([]);
   const [edit, setEdit] = useState(false);
+  const { getPermisosByNombre } = usePermisos();
+  const permisos = getPermisosByNombre('Instalaciones');
 
   const getInstalacionesAction = async () => {
     try {
@@ -62,6 +65,7 @@ function Page() {
             ),
             acciones: ActionTab(
               result.find((disc) => disc.instalacion.id === dis.instalacion.id),
+              permisos,
             ),
           };
         });
@@ -149,6 +153,7 @@ function Page() {
   };
 
   const ActionTab = (instalacion) => {
+    console.log('permisos', permisos);
     return (
       <div className="flex flex-row gap-4">
         {instalacion.activo && (
@@ -163,7 +168,10 @@ function Page() {
             />
           </Tooltip>
         )}
-        {instalacion.activo ? (
+        {instalacion.activo &&
+        permisos.some(
+          (permiso) => permiso.funcionalidades === 'ABM instalación',
+        ) ? (
           <>
             <Tooltip label="Editar">
               <PencilIcon
@@ -181,7 +189,10 @@ function Page() {
             <PencilIcon className={`w-[50px] text-transparent `} />
           </>
         )}
-        {instalacion.activo ? (
+        {instalacion.activo &&
+        permisos.some(
+          (permiso) => permiso.funcionalidades === 'ABM instalación',
+        ) ? (
           <>
             <Tooltip label="Eliminar">
               <TrashIcon
@@ -204,7 +215,7 @@ function Page() {
   useEffect(() => {
     getInstalacionesAction();
     getInstalacionesEstado();
-  }, []);
+  }, [permisos]);
 
   return (
     <section>
@@ -214,18 +225,22 @@ function Page() {
       <section>
         <div className="mt-7">
           <div className="flex w-full items-end justify-end py-5">
-            <button
-              className="rounded-lg bg-blue-600 p-2 text-center text-xl text-white"
-              type="button"
-              onClick={() => {
-                setErrors([]);
-                setEdit(false);
-                setOpenCreateEditInstalacion(true);
-                setInstalacionSeleccionada(null);
-              }}
-            >
-              Crear Nueva instalacion
-            </button>
+            {permisos.some(
+              (permiso) => permiso.funcionalidades === 'ABM instalación',
+            ) && (
+              <button
+                className="rounded-lg bg-blue-600 p-2 text-center text-xl text-white"
+                type="button"
+                onClick={() => {
+                  setErrors([]);
+                  setEdit(false);
+                  setOpenCreateEditInstalacion(true);
+                  setInstalacionSeleccionada(null);
+                }}
+              >
+                Crear Nueva instalacion
+              </button>
+            )}
           </div>
           <section>
             <FlowTable Header={HEADER_TABLE} dataToShow={instalacionesToShow} />

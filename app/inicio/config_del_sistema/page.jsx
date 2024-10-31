@@ -16,10 +16,14 @@ import { ProfilesTab } from '@/app/ui/configComponents/Profiles';
 import { SolicitudesTab } from '@/app/ui/configComponents/Solicitudes';
 import { CategoriasTab } from '@/app/ui/configComponents/Categorias';
 import { ParametrosTab } from '@/app/ui/configComponents/Parametros';
+import usePermisos from '@/app/utils/permisos';
 import withAuthorization from '@/app/utils/autorization';
 
 function Page() {
   const [menuSelected, setMenuSelected] = useState('');
+  const { getPermisosByNombre } = usePermisos();
+  const permisos = getPermisosByNombre('Configuracion del sistema');
+  console.log('permisos', permisos);
   const buttonsUser = useMemo(() => {
     return [
       {
@@ -35,15 +39,15 @@ function Page() {
         icon: <FolderIcon className="h-[100px] w-[100px]" />,
       },
       {
-        name: 'Parámetros',
+        name: 'Configuraciones generales',
         icon: <CpuChipIcon className="h-[100px] w-[100px]" />,
       },
       {
-        name: 'Disciplinas',
+        name: 'Disciplina',
         icon: <FireIcon className="h-[100px] w-[100px]" />,
       },
       {
-        name: 'Categorias',
+        name: 'Categoria',
         icon: <FunnelIcon className="h-[100px] w-[100px]" />,
       },
     ];
@@ -53,15 +57,15 @@ function Page() {
     switch (menuSelected) {
       case 'Usuario':
         return <UserTab />;
-      case 'Disciplinas':
+      case 'Disciplina':
         return <DisciplinasTab />;
       case 'Perfiles':
         return <ProfilesTab />;
       case 'Solicitudes':
         return <SolicitudesTab />;
-      case 'Categorias':
+      case 'Categoria':
         return <CategoriasTab />;
-      case 'Parámetros':
+      case 'Configuraciones generales':
         return <ParametrosTab />;
       default:
         <div />;
@@ -75,22 +79,24 @@ function Page() {
       <section>
         <div className="flex flex-row flex-wrap gap-7">
           {buttonsUser.map((bt) => {
-            return (
-              <div
-                className={`flex 
-                  h-[150px] 
-                  w-[140px] cursor-pointer flex-col items-center rounded-lg bg-blue-300 p-4 text-center text-white
-                  ${menuSelected === bt.name && 'bg-blue-600 shadow-lg shadow-cyan-500/50'}
-                `}
-                onClick={() => {
-                  setMenuSelected(bt.name);
-                }}
-                key={bt.name}
-              >
-                {bt.icon}
-                {bt.name}
-              </div>
-            );
+            if (permisos.some((permiso) => permiso.modulo === bt.name)) {
+              return (
+                <div
+                  className={`flex 
+                    h-[150px] 
+                    w-[140px] cursor-pointer flex-col items-center rounded-lg bg-blue-300 p-4 text-center text-white
+                    ${menuSelected === bt.name && 'bg-blue-600 shadow-lg shadow-cyan-500/50'}
+                  `}
+                  onClick={() => {
+                    setMenuSelected(bt.name);
+                  }}
+                  key={bt.name}
+                >
+                  {bt.icon}
+                  {bt.name}
+                </div>
+              );
+            }
           })}
         </div>
         <section>{optionSelected}</section>

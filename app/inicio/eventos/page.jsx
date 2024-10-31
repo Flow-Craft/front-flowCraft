@@ -32,6 +32,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import { FlowModal } from '@/app/ui/components/FlowModal/FlowModal';
 import { CrearEditarModalEventos } from './CrearEditarModalEventos/CrearEditarModalEventos';
 import { useRouter } from 'next/navigation';
+import usePermisos from '@/app/utils/permisos';
 
 const HEADER_TABLE = [
   { name: 'Nombre' },
@@ -67,6 +68,8 @@ function Page() {
   const [instalacionesSeleccionadas, setInstalacionesSeleccionadas] = useState(
     [],
   );
+  const { getPermisosByNombre } = usePermisos();
+  const permisos = getPermisosByNombre('Eventos');
   const nombreRef = useRef(null);
   const tipoRef = useRef(null);
   const fechaRef = useRef(null);
@@ -143,6 +146,7 @@ function Page() {
   const ActionTab = (evento) => {
     const fechaInicio = new Date(evento?.evento.fechaInicio);
     const fechaFin = new Date(evento?.evento.fechaFinEvento);
+    console.log('permisoasdasdass', permisos);
     return (
       <div className="flex flex-row gap-4">
         {evento.activo && (
@@ -151,12 +155,13 @@ function Page() {
               className={`w-[50px] cursor-pointer text-slate-500 `}
               onClick={() => {
                 router.push(`eventos/${evento.evento.id}`);
-                console.log();
               }}
             />
           </Tooltip>
         )}
-        {evento.activo && new Date() < fechaInicio ? (
+        {evento.activo &&
+        permisos.some((perm) => perm.funcionalidades === 'Gestionar evento') &&
+        new Date() < fechaInicio ? (
           <>
             <Tooltip label="Editar">
               <PencilIcon
@@ -173,7 +178,8 @@ function Page() {
             <PencilIcon className={`w-[50px] text-transparent `} />
           </>
         )}
-        {evento.activo ? (
+        {evento.activo &&
+        permisos.some((perm) => perm.funcionalidades === 'Gestionar evento') ? (
           <>
             <Tooltip label="Eliminar">
               <TrashIcon
@@ -190,7 +196,10 @@ function Page() {
             <PencilIcon className={`w-[50px] text-transparent `} />
           </>
         )}
-        {evento.activo && fechaFin > new Date() && new Date() > fechaInicio ? (
+        {evento.activo &&
+        permisos.some((perm) => perm.funcionalidades === 'Asistencia evento') &&
+        fechaFin > new Date() &&
+        new Date() > fechaInicio ? (
           <>
             <Tooltip label="Tomar asistencia">
               <ClipboardIcon
@@ -349,7 +358,7 @@ function Page() {
   useEffect(() => {
     getAllFilters();
     getEventos();
-  }, []);
+  }, [permisos]);
 
   useEffect(() => {
     if (isScannerActive) {
@@ -594,26 +603,32 @@ function Page() {
               Buscar
             </button>
           </div>
-          <button
-            className="rounded-lg bg-blue-600 p-2 text-center text-xl text-white"
-            type="button"
-            onClick={() => {
-              router.push('eventos/equipos');
-            }}
-          >
-            Equipos
-          </button>
-          <button
-            className="rounded-lg bg-blue-500 p-2 text-center text-xl text-white lg:ml-auto"
-            type="button"
-            onClick={() => {
-              setEditCreateEvento(true);
-              setErrors([]);
-              setEventoSeleccionado({});
-            }}
-          >
-            Crear Evento
-          </button>
+          {permisos.some(
+            (perm) => perm.funcionalidades === 'Gestionar evento',
+          ) && (
+            <>
+              <button
+                className="rounded-lg bg-blue-600 p-2 text-center text-xl text-white"
+                type="button"
+                onClick={() => {
+                  router.push('eventos/equipos');
+                }}
+              >
+                Equipos
+              </button>
+              <button
+                className="rounded-lg bg-blue-500 p-2 text-center text-xl text-white lg:ml-auto"
+                type="button"
+                onClick={() => {
+                  setEditCreateEvento(true);
+                  setErrors([]);
+                  setEventoSeleccionado({});
+                }}
+              >
+                Crear Evento
+              </button>
+            </>
+          )}
         </form>
         <section>
           <FlowTable Header={HEADER_TABLE} dataToShow={eventosToShow} />

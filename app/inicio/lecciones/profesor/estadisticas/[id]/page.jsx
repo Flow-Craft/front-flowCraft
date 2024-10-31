@@ -23,7 +23,7 @@ const page = () => {
   const [listaDeAcciones, setListaDeAcciones] = useState([]);
   const [jugadores, setJugadores] = useState([]);
   const [accionesPorJugador, setAccionesPorJugador] = useState([]);
-  console.log('accionesPorJugador', accionesPorJugador)
+  console.log('accionesPorJugador', accionesPorJugador);
   const [modalFinalizarLeccion, setModalFinalizarLeccion] = useState(false);
   const [esEdicion, setEsEdicion] = useState(false);
   const router = useRouter();
@@ -40,14 +40,12 @@ const page = () => {
     setPartido(partido);
   };
 
-  console.log('jugadorSeleccionado', jugadorSeleccionado)
-
   const getAccionesParaEseUsuario = async (nroJugador) => {
     const acciones = await getEstadisticasByIdLeccionYIdAsistencia({
       idLeccion: partido.id,
       idUsuario: nroJugador,
     });
-    console.log('acciones', acciones)
+    console.log('acciones', acciones);
     setAccionesPorJugador(acciones);
   };
 
@@ -57,7 +55,7 @@ const page = () => {
       MarcaEstadistica: '+',
       Secuencial: true,
       IdAsistencia: jugadorSeleccionado.id,
-    })
+    });
     await altaEstaditicaPartidoAccionUsuario({
       IdTipoAccion: accionId,
       MarcaEstadistica: '+',
@@ -80,7 +78,6 @@ const page = () => {
   };
 
   const verTotalPorAccion = (accion) => {
-    
     if (accionesPorJugador) {
       const accionFiltrada = accionesPorJugador.find(
         (acc) => acc?.tipoAccionPartido?.id === accion.id,

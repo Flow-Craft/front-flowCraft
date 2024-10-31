@@ -25,6 +25,7 @@ import {
   getUsuarioEstadoAdmin,
 } from '@/app/utils/actions';
 import { EditarCrearEquipo } from '../equipo/EditarCrearEquipo';
+import usePermisos from '@/app/utils/permisos';
 
 const HEADER_TABLE = [
   { name: 'Nombre' },

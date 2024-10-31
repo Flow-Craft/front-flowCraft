@@ -12,6 +12,7 @@ import {
   inscribirseALeccion,
 } from '@/app/utils/actions';
 import { FlowModal } from '@/app/ui/components/FlowModal/FlowModal';
+import usePermisos from '@/app/utils/permisos';
 function Page() {
   const [leccionesActivas, setLeccionesActivas] = useState([]);
   const [leccionDisponible, setLeccionDisponible] = useState({});
@@ -19,6 +20,9 @@ function Page() {
   const [esInscripcion, setEsInscripcion] = useState(false);
   const [openModalDetallesLeccion, setOpenModalDetallesLeccion] =
     useState(false);
+  const { getPermisosByNombre } = usePermisos();
+  const permisos = getPermisosByNombre('Lecciones');
+  console.log('permisos', permisos);
   const router = useRouter();
   const getLeccionesActivas = async () => {
     try {
@@ -105,14 +109,18 @@ function Page() {
         <div className="mt-6 self-start px-9 pb-9 text-3xl font-bold">
           Lecciones
         </div>
-        <button
-          className="h-[50px] rounded-lg bg-blue-600 p-2 text-center text-xl text-white"
-          onClick={() => {
-            router.push('/inicio/lecciones/gestionar-lecciones');
-          }}
-        >
-          Gestionar Lecciones
-        </button>
+        {permisos.some(
+          (perm) => perm.funcionalidades === 'Gestionar lección',
+        ) && (
+          <button
+            className="h-[50px] rounded-lg bg-blue-600 p-2 text-center text-xl text-white"
+            onClick={() => {
+              router.push('/inicio/lecciones/gestionar-lecciones');
+            }}
+          >
+            Gestionar Lecciones
+          </button>
+        )}
       </div>
       <section className="grid h-full w-full grid-rows-3 gap-4">
         <div>

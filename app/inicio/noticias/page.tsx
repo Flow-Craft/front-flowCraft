@@ -23,6 +23,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import FormModal from './formModal/formModal';
 import { ZodIssue } from 'zod';
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
+import usePermisos from '@/app/utils/permisos';
 
 export default function Page() {
   const [news, setNews] = useState([]);
@@ -32,6 +33,8 @@ export default function Page() {
   const [errors, setErrors] = useState<ZodIssue[]>([]);
   const [newToEdit, setNewToEdit] = useState<any>(null);
   const [newToDelete, setNewToDelete] = useState<any>(null);
+  const { getPermisosByNombre } = usePermisos();
+  const permisos = getPermisosByNombre('Noticias');
 
   const tituloRef = useRef<any>(null);
   const fechaInicioRef = useRef<any>(null);
@@ -55,35 +58,42 @@ export default function Page() {
   }, []);
   const cardHeader = useCallback(
     (nw: any, edit = (id: any) => {}, allowDel = (id: any) => {}) => {
+      console.log('permisos', permisos);
       return (
         <section className="relative">
           <section className="absolute right-0 top-0 z-20">
             <ShareInSocialMedia newID={nw.id} />
           </section>
-          {edit && (
-            <section className="relative bg-slate-400">
-              <div className="absolute bottom-[-40px] right-11 flex items-center justify-center rounded-full bg-gray-600 p-2">
-                <PencilIcon
-                  className="h-[24px] w-[24px] cursor-pointer text-white"
-                  onClick={() => {
-                    edit(nw.id);
-                  }}
-                />
-              </div>
-            </section>
-          )}
-          {allowDel && (
-            <section className="relative bg-slate-400">
-              <div className="absolute bottom-[-40px] left-0 flex items-center justify-center rounded-full bg-gray-600 p-2">
-                <TrashIcon
-                  className="h-[24px] w-[24px] cursor-pointer text-white"
-                  onClick={() => {
-                    allowDel(nw.id);
-                  }}
-                />
-              </div>
-            </section>
-          )}
+          {edit &&
+            permisos.some(
+              (perm: any) => perm.funcionalidades === 'ABM noticia',
+            ) && (
+              <section className="relative bg-slate-400">
+                <div className="absolute bottom-[-40px] right-11 flex items-center justify-center rounded-full bg-gray-600 p-2">
+                  <PencilIcon
+                    className="h-[24px] w-[24px] cursor-pointer text-white"
+                    onClick={() => {
+                      edit(nw.id);
+                    }}
+                  />
+                </div>
+              </section>
+            )}
+          {allowDel &&
+            permisos.some(
+              (perm: any) => perm.funcionalidades === 'ABM noticia',
+            ) && (
+              <section className="relative bg-slate-400">
+                <div className="absolute bottom-[-40px] left-0 flex items-center justify-center rounded-full bg-gray-600 p-2">
+                  <TrashIcon
+                    className="h-[24px] w-[24px] cursor-pointer text-white"
+                    onClick={() => {
+                      allowDel(nw.id);
+                    }}
+                  />
+                </div>
+              </section>
+            )}
           <section
             onClick={() => {
               handleNew(nw.id);
@@ -130,7 +140,7 @@ export default function Page() {
         <FlowCard CardHeaderContent={cardHeader(nw, onEditNew, onDeleteNew)} />
       );
     },
-    [news],
+    [news, permisos],
   );
 
   const EditNew = async (e: any) => {
@@ -211,14 +221,18 @@ export default function Page() {
     <main className="flex min-h-screen flex-col p-2">
       <div className="flex w-full flex-row justify-between">
         <div className="mt-6 self-start px-9 text-3xl font-bold">Noticias</div>
-        <button
-          className="rounded-lg bg-blue-600 p-2 text-center text-xl text-white"
-          onClick={() => {
-            setFirst(true);
-          }}
-        >
-          Crear Noticia
-        </button>
+        {permisos.some(
+          (perm: any) => perm.funcionalidades === 'ABM noticia',
+        ) && (
+          <button
+            className="rounded-lg bg-blue-600 p-2 text-center text-xl text-white"
+            onClick={() => {
+              setFirst(true);
+            }}
+          >
+            Crear Noticia
+          </button>
+        )}
       </div>
       <form
         className="mt-5 flex w-full flex-row flex-wrap gap-3"

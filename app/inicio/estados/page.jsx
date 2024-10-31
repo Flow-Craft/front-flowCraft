@@ -16,33 +16,36 @@ import { LeccionTab } from '@/app/ui/estadosComponents/leccion/LeccionTab';
 import { InstalacionTab } from '@/app/ui/estadosComponents/instalacion/InstalacionTab';
 import { TorneosTab } from '@/app/ui/estadosComponents/torneos/TorneosTab';
 import withAuthorization from '@/app/utils/autorization';
+import usePermisos from '@/app/utils/permisos';
 
 function Page() {
   const [menuSelected, setMenuSelected] = useState('');
+  const { getPermisosByNombre } = usePermisos();
+  const permisos = getPermisosByNombre('Estados');
   const buttonsUser = useMemo(() => {
     return [
       {
-        name: 'Equipo',
+        name: 'ABM estado equipo',
         icon: <GiftTopIcon className="h-[100px] w-[100px]" />,
       },
       {
-        name: 'Evento',
+        name: 'ABM estado evento',
         icon: <InboxIcon className="h-[100px] w-[100px]" />,
       },
       {
-        name: 'Usuario',
+        name: 'ABM estado usuario',
         icon: <UserCircleIcon className="h-[100px] w-[100px]" />,
       },
       {
-        name: 'Leccion',
+        name: 'ABM estado lección',
         icon: <LightBulbIcon className="h-[100px] w-[100px]" />,
       },
       {
-        name: 'Instalacion',
+        name: 'ABM estado instalación',
         icon: <MapPinIcon className="h-[100px] w-[100px]" />,
       },
       {
-        name: 'Torneo',
+        name: 'ABM estado torneo',
         icon: <RadioIcon className="h-[100px] w-[100px]" />,
       },
     ];
@@ -50,17 +53,17 @@ function Page() {
 
   const optionSelected = useMemo(() => {
     switch (menuSelected) {
-      case 'Equipo':
+      case 'ABM estado equipo':
         return <EquiposTab />;
-      case 'Evento':
+      case 'ABM estado evento':
         return <EventosTab />;
-      case 'Usuario':
+      case 'ABM estado usuario':
         return <UsuariosTab />;
-      case 'Leccion':
+      case 'ABM estado lección':
         return <LeccionTab />;
-      case 'Instalacion':
+      case 'ABM estado instalación':
         return <InstalacionTab />;
-      case 'Torneo':
+      case 'ABM estado torneo':
         return <TorneosTab />;
       default:
         <div />;
@@ -74,22 +77,24 @@ function Page() {
       <section>
         <div className="flex flex-row flex-wrap gap-7">
           {buttonsUser.map((bt) => {
-            return (
-              <div
-                className={`flex 
-                  h-[150px] 
-                  w-[140px] cursor-pointer flex-col items-center rounded-lg bg-blue-300 p-4 text-center text-white
-                  ${menuSelected === bt.name && 'bg-blue-600 shadow-lg shadow-cyan-500/50'}
-                `}
-                onClick={() => {
-                  setMenuSelected(bt.name);
-                }}
-                key={bt.name}
-              >
-                {bt.icon}
-                {bt.name}
-              </div>
-            );
+            if (permisos.some((perm) => perm.funcionalidades === bt.name)) {
+              return (
+                <div
+                  className={`flex 
+                    h-[150px] 
+                    w-[140px] cursor-pointer flex-col items-center rounded-lg bg-blue-300 p-4 text-center text-white
+                    ${menuSelected === bt.name && 'bg-blue-600 shadow-lg shadow-cyan-500/50'}
+                  `}
+                  onClick={() => {
+                    setMenuSelected(bt.name);
+                  }}
+                  key={bt.name}
+                >
+                  {bt.icon}
+                  {bt.name}
+                </div>
+              );
+            }
           })}
         </div>
         <section>{optionSelected}</section>

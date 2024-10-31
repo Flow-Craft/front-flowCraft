@@ -253,7 +253,7 @@ export default function LoginForm() {
         onAcceptModal={LoginAgain}
         onCancelModal={handleCancel}
         primaryTextButton="Aceptar terminos y condiciones"
-        scrollBehavior={"outside"}
+        scrollBehavior={'outside'}
       />
       <FlowModal
         title="Debe actualizar su contraseña"
