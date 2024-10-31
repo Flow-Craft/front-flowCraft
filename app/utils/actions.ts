@@ -1173,3 +1173,41 @@ export async function getInscricionesDelUsuario() {
     `DisciplinasYLecciones/GetInscripcionesByUsuario`,
   );
 }
+
+
+export async function getleccionesAsignadas() {
+  return await FlowCraftAPI.get(
+    `DisciplinasYLecciones/Getleccionesasignadas`,
+  );
+}
+
+
+export async function getInscripcionesALecciones(id:any) {
+  return await FlowCraftAPI.get(
+    `DisciplinasYLecciones/GetInscripcionesALecciones?Id=${id}`,
+  );
+}
+
+
+export async function iniciarLeccionAdmin(body:any) {
+  return await FlowCraftAPI.post(
+    `DisciplinasYLecciones/IniciarLeccion`,body
+  );
+}
+export async function finalizarLeccionAdmin(id:any) {
+  return await FlowCraftAPI.post(
+    `DisciplinasYLecciones/FinalizarLeccion?Id=${id}`
+  );
+}
+
+
+
+
+export async function getLeccionById(id:any) {
+  return await FlowCraftAPI.get(
+    `DisciplinasYLecciones/GetLeccionById?Id=${id}`,
+  );
+}
+
+
+
