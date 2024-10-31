@@ -1,28 +1,39 @@
 'use client';
-import { getTyCToBack } from '@/app/utils/actions';
+import { actualizarTyC, getTyCToBack } from '@/app/utils/actions';
 import React, { useState } from 'react';
 import { FlowModal } from '../components/FlowModal/FlowModal';
+import toast, { Toaster } from 'react-hot-toast';
 
 export const ParametrosTab = () => {
   const [openModal, setOpenModal] = useState(false);
   const [openTerminosYcondiciones, setOpenTerminosYcondiciones] =
     useState(false);
-  const [terminosYCondicionesAnteriores, setTerminosYCondicionesAnteriores] =
-    useState('');
   const [nuevosTerminosYCondiciones, setNuevosTerminosYCondiciones] =
     useState('');
   const [terminosYcondicionesEjemplo, setTerminosYcondicionesEjemplo] =
     useState(null);
+
+  const ActualizarnuevosTerminosYCondiciones = async () => {
+    try {
+      await actualizarTyC({ TYC: nuevosTerminosYCondiciones });
+      toast.success('TyC actualizados correctamente');
+      setNuevosTerminosYCondiciones('');
+      setOpenModal(false);
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
   const handleChangeTerminosYCondiciones = async () => {
     const result = await getTyCToBack();
-    setTerminosYCondicionesAnteriores(result?.['tyc']);
+    setNuevosTerminosYCondiciones(result?.['tyc'].replace(/\\n/g, '\n'));
   };
   const getTerminosYcondiciones = async () => {
     const result = await getTyCToBack();
     setOpenTerminosYcondiciones(true);
     setTerminosYcondicionesEjemplo(
       <div>
-        {nuevosTerminosYCondiciones?.['tyc'].split('\n').map((pf, index) => (
+        {result?.['tyc']?.split('\n').map((pf, index) => (
           <p key={index} className="mb-6">
             {pf}
           </p>
@@ -47,7 +58,7 @@ export const ParametrosTab = () => {
           className="mt-7 rounded-lg bg-blue-600 p-2 text-center text-xl text-white"
           type="button"
           onClick={() => {
-            getTerminosYcondiciones();
+            getTerminosYcondiciones(nuevosTerminosYCondiciones);
           }}
         >
           Ver terminos y condiciones
@@ -68,7 +79,6 @@ export const ParametrosTab = () => {
                 name="Descripcion"
                 rows="20"
                 cols="50"
-                defaultValue={terminosYCondicionesAnteriores}
                 value={nuevosTerminosYCondiciones}
                 onChange={(e) => {
                   setNuevosTerminosYCondiciones(e.target.value);
@@ -79,7 +89,7 @@ export const ParametrosTab = () => {
           </>
         }
         onAcceptModal={() => {
-          setOpenModal(false);
+          ActualizarnuevosTerminosYCondiciones();
         }}
         onCancelModal={() => {
           setOpenModal(false);
@@ -91,6 +101,7 @@ export const ParametrosTab = () => {
         title="Debe aceptar los nuevos terminos y condiciones"
         isOpen={openTerminosYcondiciones}
         modalBody={terminosYcondicionesEjemplo}
+        scrollBehavior="outside"
         onAcceptModal={() => {
           setOpenTerminosYcondiciones(false);
         }}
@@ -99,6 +110,7 @@ export const ParametrosTab = () => {
         }}
         primaryTextButton="Aceptar terminos y condiciones"
       />
+      <Toaster />
     </>
   );
 };

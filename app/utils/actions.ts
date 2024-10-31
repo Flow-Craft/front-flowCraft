@@ -237,6 +237,15 @@ export async function getQuienesSomosAction() {
   }
 }
 
+export async function actualizarTyC(body: any) {
+  try {
+    return await FlowCraftAPI.post('Configuracion/CrearTYC', body);
+  } catch (error: any) {
+    toast.dismiss();
+    toast.error(error.message);
+  }
+}
+
 export async function getNewsAction() {
   try {
     return await FlowCraftAPI.get(
