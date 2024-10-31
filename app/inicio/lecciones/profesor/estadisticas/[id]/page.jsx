@@ -5,6 +5,8 @@ import {
   finalizarLeccionAdmin,
   getAccionesPorUsuarioYPartido,
   getActionPartidoPanelAdmin,
+  getAsistenciasByIdLeccion,
+  getEstadisticasByIdLeccionYIdAsistencia,
   getInscripcionesALecciones,
   getLeccionById,
   getPartidoByIdAdmin,
@@ -17,45 +19,53 @@ import { FlowModal } from '@/app/ui/components/FlowModal/FlowModal';
 
 const page = () => {
   const [jugadorSeleccionado, setJugadorSeleccionado] = useState('');
-  const [alumnosPresentes, setAlumnosPresentes] = useState([]);
   const [partido, setPartido] = useState({});
   const [listaDeAcciones, setListaDeAcciones] = useState([]);
   const [jugadores, setJugadores] = useState([]);
   const [accionesPorJugador, setAccionesPorJugador] = useState([]);
+  console.log('accionesPorJugador', accionesPorJugador)
   const [modalFinalizarLeccion, setModalFinalizarLeccion] = useState(false);
   const [esEdicion, setEsEdicion] = useState(false);
   const router = useRouter();
   const getDataDelPatido = async (partidoId) => {
     const partido = await getLeccionById(partidoId);
-    const alumnos = await getInscripcionesALecciones(partidoId);
+    const alumnos = await getAsistenciasByIdLeccion(partidoId);
     const result = await getActionPartidoPanelAdmin({
       IdDisciplina: partido?.disciplina?.id,
       Estadistica: true,
       Partido: false,
     });
-
     setListaDeAcciones(result);
     setJugadores(alumnos);
     setPartido(partido);
   };
 
+  console.log('jugadorSeleccionado', jugadorSeleccionado)
+
   const getAccionesParaEseUsuario = async (nroJugador) => {
-    const acciones = await getAccionesPorUsuarioYPartido({
-      IdPartido: partido.id,
-      NroJugador: nroJugador,
+    const acciones = await getEstadisticasByIdLeccionYIdAsistencia({
+      idLeccion: partido.id,
+      idUsuario: nroJugador,
     });
+    console.log('acciones', acciones)
     setAccionesPorJugador(acciones);
   };
 
   const altaAccionEstadistica = async (accionId) => {
+    console.log({
+      IdTipoAccion: accionId,
+      MarcaEstadistica: '+',
+      Secuencial: true,
+      IdAsistencia: jugadorSeleccionado.id,
+    })
     await altaEstaditicaPartidoAccionUsuario({
       IdTipoAccion: accionId,
       MarcaEstadistica: '+',
       Secuencial: true,
-      IdAsistenciaLeccion: null,
+      IdAsistencia: jugadorSeleccionado.id,
     });
     toast.success('accion cargada con exito');
-    getAccionesParaEseUsuario(jugadorSeleccionado?.id);
+    getAccionesParaEseUsuario(jugadorSeleccionado?.usuario?.id);
   };
 
   const bajaAccionEstadistica = async (accionId) => {
@@ -63,19 +73,17 @@ const page = () => {
       IdTipoAccion: accionId,
       MarcaEstadistica: '-',
       Secuencial: true,
-      IdAsistencia: null,
-      NroJugador: jugadorSeleccionado.id,
-      IdEquipo: jugadorSeleccionado.idEquipo,
-      IdPartido: partido.id,
+      IdAsistencia: jugadorSeleccionado.id,
       Resta: true,
     });
-    getAccionesParaEseUsuario(jugadorSeleccionado?.id);
+    getAccionesParaEseUsuario(jugadorSeleccionado?.usuario?.id);
   };
 
   const verTotalPorAccion = (accion) => {
+    
     if (accionesPorJugador) {
       const accionFiltrada = accionesPorJugador.find(
-        (acc) => acc.tipoAccionPartido.id === accion.id,
+        (acc) => acc?.tipoAccionPartido?.id === accion.id,
       );
       return accionFiltrada?.puntajeTipoAccion || 0;
     }
@@ -111,7 +119,7 @@ const page = () => {
     <section className="w-full">
       <Toaster />
       <section className="flex flex-1 flex-row justify-between">
-        <span className="text-3xl font-bold">Estadisticas de la leccion</span>
+        <span className="text-3xl font-bold">Estadisticas de leccion</span>
         <div className="flex flex-row gap-10 text-2xl font-semibold">
           <span>Disciplinas: {partido?.disciplina?.nombre}</span>
           <span>Categoria: {partido?.categoria?.nombre}</span>

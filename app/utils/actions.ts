@@ -1207,3 +1207,18 @@ export async function getLeccionById(id: any) {
     `DisciplinasYLecciones/GetLeccionById?Id=${id}`,
   );
 }
+
+export async function getAsistenciasByIdLeccion(id: any) {
+  return await FlowCraftAPI.get(
+    `DisciplinasYLecciones/GetAsistencias?idLeccion=${id}`,
+  );
+}
+
+export async function getEstadisticasByIdLeccionYIdAsistencia(body: any) {
+  const queryString = new URLSearchParams(body).toString();
+  return await FlowCraftAPI.get(
+    `DisciplinasYLecciones/GetEstadisticasByLeccionUsuario?${queryString}`,
+  );
+}
+
+
