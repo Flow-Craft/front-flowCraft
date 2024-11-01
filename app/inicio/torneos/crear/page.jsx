@@ -1,16 +1,17 @@
 'use client';
 import {
+  AltaDeTorneo,
   getCategoriasActivasAdmin,
   getDisciplinasctionAction,
-  getInstalacionesActivasAdmin,
   getInstalacionesAdmin,
-  getTipoEventosAdmin,
 } from '@/app/utils/actions';
 import withAuthorization from '../../../../app/utils/autorization';
 import { useEffect, useState } from 'react';
 import { InputWithLabel } from '@/app/ui/components/InputWithLabel/InputWithLabel';
 import { SelectWithLabel } from '@/app/ui/components/SelectWithLabel/SelectWithLabel';
 import { Fases } from '../components/Fases';
+import { useRouter } from 'next/navigation';
+import toast, { Toaster } from 'react-hot-toast';
 
 const CANTIDAD_EQUIPOS = [
   { value: 2, label: 4 },
@@ -24,6 +25,43 @@ function Page() {
   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState({});
   const [disciplinaSeleccinada, setDisciplinaSeleccinada] = useState({});
   const [cantidadDeEquipos, setCantidadDeEquipos] = useState({});
+  const [instalacionSeleccionada, setInstalacionSeleccionada] = useState({});
+  const [fase, setFase] = useState({});
+  const router = useRouter();
+
+  const crearTorneo = async (e) => {
+    try {
+      const IdEquipos = Object.values(fase?.[0]?.partidos || {})
+        .flatMap((partido) => [
+          partido?.equipoLocal?.value
+            ? String(partido.equipoLocal.value)
+            : null,
+          partido?.equipoVisitante?.value
+            ? String(partido.equipoVisitante.value)
+            : null,
+        ])
+        .filter(Boolean);
+
+      e.preventDefault();
+      const torneoACrear = {
+        Nombre: e?.target?.Nombre?.value,
+        Descripcion: e?.target?.Descripcion?.value,
+        IdDisciplina: disciplinaSeleccinada?.value?.toString(),
+        IdCategoria: categoriaSeleccionada?.value?.toString(),
+        IdInstalacion: instalacionSeleccionada?.value?.toString(),
+        CantEquipos: cantidadDeEquipos?.label,
+        Condiciones: e?.target?.condiciones?.value,
+        FechaInicio: e?.target?.FechaInicio?.value,
+        BannerNo64: e.target.BannerNo64.files[0],
+        IdEquipos: IdEquipos,
+      };
+      await AltaDeTorneo(torneoACrear);
+      toast.success('torneo creado correctamente');
+      router.back();
+    } catch (error) {
+      toast.error('Error al crear el torneo');
+    }
+  };
 
   const getAllFilters = async () => {
     const inst = await getInstalacionesAdmin();
@@ -67,16 +105,33 @@ function Page() {
   return (
     <section>
       <div className="mt-3 self-start text-3xl font-bold">Crear Torneo</div>
-      <form className="grid grid-cols-1 gap-6 md:grid-cols-2">
+      <Toaster />
+      <form
+        className="grid grid-cols-1 gap-6 md:grid-cols-2"
+        onSubmit={crearTorneo}
+      >
         <div className="flex flex-col space-y-4">
-          <InputWithLabel label="Nombre" name="Titulo" type="text" required />
+          <InputWithLabel label="Nombre" name="Nombre" type="text" required />
           <SelectWithLabel
             name="IdInstalacion"
             options={instalacion}
             label="Instalacion"
+            value={instalacionSeleccionada}
+            onChange={setInstalacionSeleccionada}
             required
           />
-          <InputWithLabel label="Banner" name="Banner" type="file" required />
+          <InputWithLabel
+            label="Condiciones"
+            name="condiciones"
+            type="text"
+            required
+          />
+          <InputWithLabel
+            label="Banner"
+            name="BannerNo64"
+            type="file"
+            required
+          />
           <SelectWithLabel
             name="IdCategoria"
             options={categoria}
@@ -85,14 +140,14 @@ function Page() {
             required
           />
           <SelectWithLabel
-            name="IdCategoria"
+            name="IdDisciplina"
             options={disciplinas}
             label="Disciplinas"
             onChange={setDisciplinaSeleccinada}
             required
           />
           <SelectWithLabel
-            name="cantidadDeEquipos"
+            name="CantEquipos"
             options={CANTIDAD_EQUIPOS}
             label="Cantidad de equipos del torneo"
             isDisabled={
@@ -123,8 +178,30 @@ function Page() {
         </div>
         <div className="flex flex-col space-y-4">
           {cantidadDeEquipos && (
-            <Fases cantidadDeFases={cantidadDeEquipos?.value} />
+            <Fases
+              cantidadDeFases={cantidadDeEquipos?.value}
+              categoria={categoriaSeleccionada}
+              disciplina={disciplinaSeleccinada}
+              onChangeFase={setFase}
+            />
           )}
+          <div className="flex w-full flex-row justify-end gap-4">
+            <button
+              className="rounded-lg bg-blue-600 p-2 text-center text-xl text-white"
+              type="submit"
+            >
+              Crear Torneo
+            </button>
+            <button
+              className="rounded-lg bg-gray-600 p-2 text-center text-xl text-white"
+              type="button"
+              onClick={() => {
+                router.back();
+              }}
+            >
+              Volver
+            </button>
+          </div>
         </div>
       </form>
     </section>

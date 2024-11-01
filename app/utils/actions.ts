@@ -1220,3 +1220,42 @@ export async function getEstadisticasByIdLeccionYIdAsistencia(body: any) {
     `DisciplinasYLecciones/GetEstadisticasByLeccionUsuario?${queryString}`,
   );
 }
+
+//TORNEOS
+
+export async function AltaDeTorneo(evento: any) {
+  const fileType = evento.BannerNo64.type;
+  const eventToSend = JSON.parse(JSON.stringify(evento));
+  //convertir File to base 64
+  let file64 = await handleFileConversion(
+    new File([evento.BannerNo64], evento.BannerNo64.name, {
+      type: evento.BannerNo64.type,
+    }),
+  );
+  eventToSend.Banner = file64;
+  eventToSend.type = fileType;
+  delete eventToSend.BannerNo64;
+  console.log('eventToSend', eventToSend);
+  return await FlowCraftAPI.post(`Torneos/AltaTorneo`, eventToSend);
+}
+
+export async function getTorneoById(id: any) {
+  return await FlowCraftAPI.get(`Torneos/GetTorneos?Id=${id}`);
+}
+
+export async function EditarTorneo(evento: any) {
+  const eventToSend = JSON.parse(JSON.stringify(evento));
+  if (evento.BannerNo64) {
+    const fileType = evento.BannerNo64.type;
+    //convertir File to base 64
+    let file64 = await handleFileConversion(
+      new File([evento.BannerNo64], evento.BannerNo64.name, {
+        type: evento.BannerNo64.type,
+      }),
+    );
+    eventToSend.Banner = file64;
+    eventToSend.type = fileType;
+  }
+  delete eventToSend.BannerNo64;
+  return await FlowCraftAPI.post(`Torneos/EditarTorneo`, eventToSend);
+}
