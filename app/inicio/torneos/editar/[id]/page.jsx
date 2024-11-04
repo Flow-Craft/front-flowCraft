@@ -64,7 +64,7 @@ function Page() {
       };
       await EditarTorneo(torneoACrear);
       toast.success('torneo editado correctamente');
-      // router.back();
+      router.back();
     } catch (error) {
       console.error(error);
       toast.error('Error al editar el torneo');

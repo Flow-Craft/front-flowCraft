@@ -47,6 +47,7 @@ export default function Page() {
       toast.success('torneo eliminado correctamente');
       setModalEliminarEvento(false);
       setTorneoSeleccionado({});
+      getTorneos();
     } catch (error) {
       toast.error(error.title);
     }
@@ -75,21 +76,18 @@ export default function Page() {
       <div className="mt-6 grid h-[80vh] w-full grid-rows-3 gap-4">
         <div>
           <span className="ml-6 text-2xl font-bold">Abiertos</span>
-          <section className="ml-6 flex w-full flex-row overflow-x-scroll pt-6">
+          <section className="ml-6 flex max-w-[80vw] flex-row gap-2 overflow-x-auto pt-6">
             {torneosAbiertos.length > 0 ? (
-              torneosAbiertos.map((torneo) => {
-                return (
-                  <CardTorneo
-                    key={torneo.id}
-                    torneo={torneo}
-                    onEdit={onEditTorneo}
-                    onDelete={onDeleteTorneo}
-                  />
-                );
-              })
+              torneosAbiertos.map((torneo) => (
+                <CardTorneo
+                  key={torneo.id}
+                  torneo={torneo}
+                  onEdit={onEditTorneo}
+                  onDelete={onDeleteTorneo}
+                />
+              ))
             ) : (
               <span className="ml-6 text-xl font-semibold">
-                {' '}
                 Nada que mostrar
               </span>
             )}
@@ -97,7 +95,7 @@ export default function Page() {
         </div>
         <div>
           <span className="ml-6 text-2xl font-bold">En Curso</span>
-          <section className="ml-6 flex w-full flex-row overflow-x-scroll pt-6">
+          <section className="ml-6 flex max-w-[80vw] flex-row gap-2 overflow-x-auto pt-6">
             {torneosEnCurso.length > 0 ? (
               torneosEnCurso.map((torneo) => {
                 return (
@@ -119,7 +117,7 @@ export default function Page() {
         </div>
         <div>
           <span className="ml-6 text-2xl font-bold"> Finalizados</span>
-          <section className="ml-6 flex w-full flex-row overflow-x-scroll pt-6">
+          <section className="ml-6 flex max-w-[80vw] flex-row gap-4 overflow-x-auto pt-6">
             {torneosFinalizados.length > 0 ? (
               torneosFinalizados.map((torneo) => {
                 return (

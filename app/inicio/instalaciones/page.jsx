@@ -153,10 +153,13 @@ function Page() {
   };
 
   const ActionTab = (instalacion) => {
-    console.log('permisos', permisos);
+    const estadoInstalacion =
+      instalacion?.instalacion?.instalacionHistoriales.reverse();
+    const ultimoEstado = estadoInstalacion[0];
+
     return (
       <div className="flex flex-row gap-4">
-        {instalacion.activo && (
+        {ultimoEstado?.instalacionEstado?.nombreEstado !== 'Inactivo' && (
           <Tooltip label="Ver detalles">
             <MagnifyingGlassIcon
               className={`w-[50px] cursor-pointer text-slate-500 `}
@@ -168,7 +171,7 @@ function Page() {
             />
           </Tooltip>
         )}
-        {instalacion.activo &&
+        {ultimoEstado?.instalacionEstado?.nombreEstado !== 'Inactivo' &&
         permisos.some(
           (permiso) => permiso.funcionalidades === 'ABM instalación',
         ) ? (
@@ -189,7 +192,7 @@ function Page() {
             <PencilIcon className={`w-[50px] text-transparent `} />
           </>
         )}
-        {instalacion.activo &&
+        {ultimoEstado?.instalacionEstado?.nombreEstado !== 'Inactivo' &&
         permisos.some(
           (permiso) => permiso.funcionalidades === 'ABM instalación',
         ) ? (
