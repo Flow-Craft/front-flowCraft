@@ -67,7 +67,7 @@ function Page() {
       // router.back();
     } catch (error) {
       console.error(error);
-      toast.error('Error al crear el torneo');
+      toast.error('Error al editar el torneo');
     }
   };
 
@@ -126,6 +126,9 @@ function Page() {
 
     setCantidadDeEquipos(
       CANTIDAD_EQUIPOS.find((option) => option.label === torneo?.cantEquipos),
+    );
+    setInstalacionSeleccionada(
+      instalacion.find((option) => option.value === torneo?.instalacion?.id),
     );
   }, [torneo]);
 

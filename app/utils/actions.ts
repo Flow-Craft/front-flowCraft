@@ -1239,8 +1239,16 @@ export async function AltaDeTorneo(evento: any) {
   return await FlowCraftAPI.post(`Torneos/AltaTorneo`, eventToSend);
 }
 
+export async function getTorneosAdmin() {
+  return await FlowCraftAPI.get(`Torneos/GetTorneos`);
+}
+
 export async function getTorneoById(id: any) {
   return await FlowCraftAPI.get(`Torneos/GetTorneos?Id=${id}`);
+}
+
+export async function eliminarTorneoAdmin(id: any) {
+  return await FlowCraftAPI.post(`Torneos/EliminarTorneo?idTorneo=${id}`);
 }
 
 export async function EditarTorneo(evento: any) {
