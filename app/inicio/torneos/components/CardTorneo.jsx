@@ -3,9 +3,8 @@ import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
 import React from 'react';
 
 export const CardTorneo = ({ torneo, onEdit, onDelete, disabled }) => {
-  console.log('torneo', torneo);
   return (
-    <div className="mx-auto max-w-4xl rounded-lg bg-blue-300 p-2">
+    <div className="mx-auto aspect-auto h-40 w-80 rounded-lg bg-blue-300 p-2">
       <div className="flex items-center">
         {!disabled && (
           <div className="w-1/10 p-2">

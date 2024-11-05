@@ -1251,6 +1251,25 @@ export async function eliminarTorneoAdmin(id: any) {
   return await FlowCraftAPI.post(`Torneos/EliminarTorneo?idTorneo=${id}`);
 }
 
+export async function getEquiposByDisciplinaCategoriaYUsuario(
+  idCategoria: any,
+  idDisciplina: any,
+) {
+  return await FlowCraftAPI.get(
+    `Partidos/GetEquiposByCategoriaAndDisciplinaActivos?IdCategoria=${idCategoria}&IdDisciplina=${idDisciplina}`,
+  );
+}
+
+export async function inscribirmeATorneoAdmin(idTorneo: any, idEquipo: any) {
+  return await FlowCraftAPI.post(
+    `Torneos/InscribirseATorneo?idTorneo=${idTorneo}&idEquipo=${idEquipo}`,
+  );
+}
+
+export async function getTorneoByUsuario() {
+  return await FlowCraftAPI.get(`Torneos/GetTorneosByUsuario`);
+}
+
 export async function EditarTorneo(evento: any) {
   const eventToSend = JSON.parse(JSON.stringify(evento));
   if (evento.BannerNo64) {
