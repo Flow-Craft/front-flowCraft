@@ -848,7 +848,7 @@ const PartidoScreen = () => {
         sx={{ minWidth: '800px' }}
         modalBody={
           <section className="flex-full z-50 mt-4 flex w-full gap-10">
-            <div className="mb-16 flex-1  ">
+            <div className="mb-16 flex-1">
               <SelectWithLabel
                 name="IdsDisciplinas"
                 options={getJugadores()}
