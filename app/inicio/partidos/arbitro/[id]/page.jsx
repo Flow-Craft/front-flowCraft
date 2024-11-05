@@ -844,7 +844,7 @@ const PartidoScreen = () => {
         }}
       />
       <FlowModal
-        title={`${accionSeleccionada.accion.nombreTipoAccion}`}
+        title={`${accionSeleccionada?.accion?.nombreTipoAccion}`}
         sx={{ minWidth: '800px' }}
         modalBody={
           <section className="flex-full z-50 mt-4 flex w-full gap-10">
