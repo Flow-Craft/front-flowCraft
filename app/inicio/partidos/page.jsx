@@ -26,7 +26,7 @@ import {
 const PERFIL_BOTON_ASIGNADO = ['Admin', 'Arbitro'];
 
 function Page() {
-  const [fechaPartido, setFechaPartido] = useState(null);
+  const [fechaPartidoIngresada, setFechaPartidoIngresada] = useState(null);
   const [asignado, setAsignado] = useState(false);
   const [instalacion, setInstalacion] = useState([]);
   const [instalacionSeleccionada, setInstalacionSeleccionada] = useState({
@@ -56,13 +56,43 @@ function Page() {
   const getInstalaciones = async () => {
     const result = await getInstalacionesActionAdmin();
     const instalaciones = [
-      { value: undefined, label: 'Todas las instalaciones' },
+      { value: 0, label: 'Todas las instalaciones' },
       ...result.map((ins) => ({ value: ins.id, label: ins.nombre })),
     ];
     setInstalacion(instalaciones);
   };
 
-  const handleSearchMatches = () => {};
+  const handleSearchMatches = () => {
+    const partidosAVer = partidos.map((partido) => ({
+      id: partido.id,
+      equipoLocal: partido?.local?.equipo?.nombre,
+      equipoVisitante: partido?.visitante?.equipo?.nombre,
+      nombrePartido: partido?.titulo,
+      fechaPartido: partido?.fechaInicio,
+      estadoPartido:
+        partido?.historialEventoList?.[0]?.estadoEvento?.nombreEstado,
+      totalEquipoLocal: partido?.resultadoLocal || 0,
+      totalEquipoVisitante: partido?.resultadoVisitante || 0,
+      instalacionPartido: partido.instalacion,
+    }));
+    console.log('partidosAVer', partidosAVer);
+    const nuevosPartidosAVer = partidosAVer.filter((objeto) => {
+      // Filtro de fecha
+      const coincideFecha =
+        !fechaPartidoIngresada ||
+        objeto.fechaPartido.slice(0, 10) === fechaPartidoIngresada;
+
+      // Filtro de instalación
+      const coincideInstalacion =
+        !instalacionSeleccionada ||
+        instalacionSeleccionada.value === 0 ||
+        objeto.instalacionPartido.id === instalacionSeleccionada.value;
+
+      // Incluir el objeto si ambas condiciones son verdaderas
+      return coincideFecha && coincideInstalacion;
+    });
+    setPartidoAver(nuevosPartidosAVer);
+  };
 
   const getTodosLosPartidos = async () => {
     const eventos = await getEventosAdmin();
@@ -82,6 +112,7 @@ function Page() {
         partido?.historialEventoList?.[0]?.estadoEvento?.nombreEstado,
       totalEquipoLocal: partido?.resultadoLocal || 0,
       totalEquipoVisitante: partido?.resultadoVisitante || 0,
+      instalacionPartido: partido.instalacion,
     }));
     setPartidoAver(partidosAVer);
   };
@@ -274,7 +305,7 @@ function Page() {
 
   useEffect(() => {
     handleSearchMatches();
-  }, [asignado, fechaPartido, instalacionSeleccionada]);
+  }, [asignado, fechaPartidoIngresada, instalacionSeleccionada]);
 
   return (
     <section>
@@ -312,8 +343,8 @@ function Page() {
           <InputWithLabel
             name={'fecha'}
             type="date"
-            defaultValue={fechaPartido}
-            onChange={(e) => setFechaPartido(e.target.value)}
+            defaultValue={fechaPartidoIngresada}
+            onChange={(e) => setFechaPartidoIngresada(e.target.value)}
           />
         </div>
         <div className="flex min-w-[170px] flex-row items-center gap-3">

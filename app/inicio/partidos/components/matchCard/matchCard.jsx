@@ -10,6 +10,7 @@ const MatchCard = ({ partido, handleGetMatchDetails }) => {
     estadoPartido,
     totalEquipoLocal,
     totalEquipoVisitante,
+    instalacionPartido,
   } = partido;
   const formattedDate = new Date(fechaPartido).toLocaleDateString();
 
@@ -25,6 +26,10 @@ const MatchCard = ({ partido, handleGetMatchDetails }) => {
             <ShieldCheckIcon className="ml-6 h-10 w-10 text-blue-600" />
             <div className="text-lg">{equipoVisitante}</div>
           </div>
+        </div>
+        <div className="text-sm">
+          <span className="font-semibold">Instalacion:</span>{' '}
+          {instalacionPartido.nombre}
         </div>
         <div className="text-sm">{formattedDate}</div>
       </div>

@@ -162,7 +162,7 @@ export const Lecciones = () => {
     setCategoria(categoriasToShow);
     setDisciplinas(disciplinasToShow);
   };
-  const handlePedirReporte = async() => {
+  const handlePedirReporte = async () => {
     let pdf;
     try {
       switch (opcionSeleccionada.value) {
@@ -174,13 +174,13 @@ export const Lecciones = () => {
           });
           break;
         case 2:
-          reporteLeccionDisciplinaCategoriaPeriodo
+          reporteLeccionDisciplinaCategoriaPeriodo;
           pdf = await reporteLeccionDisciplinaCategoriaPeriodo({
             idUsuario: usuarioSeleccionado.value.toString(),
             periodoInicio: `${fechaInicio}`,
             periodoFin: `${fechaFin}`,
-            idDisciplina:disciplinaSeleccionada.value,
-            idCategoria:categoriaSeleccionada.value
+            idDisciplina: disciplinaSeleccionada.value,
+            idCategoria: categoriaSeleccionada.value,
           });
           break;
         default:
