@@ -1149,6 +1149,28 @@ export async function reporteEstadisticasByDiscEquipoPeriodo(body: any) {
   );
 }
 
+export async function reporteLeccionUsuarioPeriodo(body: any) {
+  const queryString = new URLSearchParams(body).toString();
+  return await FlowCraftAPI.get(
+    `Reportes/ReporteLeccionUsuarioPeriodo?${queryString}`,
+    true,
+    {
+      'Content-Type': 'application/pdf',
+    },
+  );
+}
+
+export async function reporteLeccionDisciplinaCategoriaPeriodo(body: any) {
+  const queryString = new URLSearchParams(body).toString();
+  return await FlowCraftAPI.get(
+    `Reportes/ReporteLeccionDisciplinaCategoriaPeriodo?${queryString}`,
+    true,
+    {
+      'Content-Type': 'application/pdf',
+    },
+  );
+}
+
 // LECCIONES
 
 export async function getLeccionesAdmin() {

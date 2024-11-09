@@ -7,6 +7,8 @@ import {
   getTipoEventosAdmin,
   getCategoriaAdmin,
   getDisciplinasAdmin,
+  reporteLeccionUsuarioPeriodo,
+  reporteLeccionDisciplinaCategoriaPeriodo,
 } from '@/app/utils/actions';
 import React, { useEffect, useMemo, useState } from 'react';
 
@@ -153,35 +155,41 @@ export const Lecciones = () => {
     const usuariosToShow = usuarios.usuarios.map((user) => {
       return {
         label: `${user.dni} - ${user.apellido} ${user.nombre}`,
-        value: user.dni,
+        value: user.id,
       };
     });
     setUsuarios(usuariosToShow);
     setCategoria(categoriasToShow);
     setDisciplinas(disciplinasToShow);
   };
-  const handlePedirReporte = () => {
+  const handlePedirReporte = async() => {
+    let pdf;
     try {
       switch (opcionSeleccionada.value) {
         case 1:
-          return (
-            fechaInicio === '' || fechaFin === '' || !usuarioSeleccionado.value
-          );
+          pdf = await reporteLeccionUsuarioPeriodo({
+            idUsuario: usuarioSeleccionado.value.toString(),
+            periodoInicio: `${fechaInicio}`,
+            periodoFin: `${fechaFin}`,
+          });
+          break;
         case 2:
-          return (
-            !disciplinaSeleccionada.value ||
-            !categoriaSeleccionada.value ||
-            (!fechaUnica && (fechaInicio === '' || fechaFin === '')) ||
-            (fechaUnica && fechaInicio === '')
-          );
+          reporteLeccionDisciplinaCategoriaPeriodo
+          pdf = await reporteLeccionDisciplinaCategoriaPeriodo({
+            idUsuario: usuarioSeleccionado.value.toString(),
+            periodoInicio: `${fechaInicio}`,
+            periodoFin: `${fechaFin}`,
+            idDisciplina:disciplinaSeleccionada.value,
+            idCategoria:categoriaSeleccionada.value
+          });
+          break;
         default:
           return false;
       }
+      window.open(pdf, '_blank');
     } catch (error) {
       console.error(error.message);
     }
-    console.log('fechaInicio', fechaInicio);
-    console.log('fechaInicio', fechaFin);
   };
 
   const isDisable = () => {
