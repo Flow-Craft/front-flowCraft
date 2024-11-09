@@ -1,12 +1,14 @@
 'use client';
 import { FlowTable } from '@/app/ui/components/FlowTable/FlowTable';
 import { InputWithLabel } from '@/app/ui/components/InputWithLabel/InputWithLabel';
-import { getEquiposActivos } from '@/app/utils/actions';
+import { elimarEquipoAdmin, getEquiposActivos } from '@/app/utils/actions';
 import withAuthorization from '@/app/utils/autorization';
 import { Tooltip } from '@chakra-ui/react';
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import toast, { Toaster } from 'react-hot-toast';
+import { FlowModal } from '@/app/ui/components/FlowModal/FlowModal';
 
 const HEADER_TABLE = [
   { name: 'Nombre' },
@@ -20,6 +22,8 @@ function Page() {
   const [nombreSeleccionado, setNombreSeleccionado] = useState('');
   const [equipo, setEquipo] = useState([]);
   const [equiposAMostrar, setEquiposAMostrar] = useState([]);
+  const [modalEliminarEquipo, setModalEliminarEquipo] = useState(false);
+  const [equipoSeleccionado, setEquipoSeleccionado] = useState({});
   const router = useRouter();
   const handleBuscarNombre = (e) => {
     if (!e.target.value) {
@@ -34,19 +38,36 @@ function Page() {
     setEquiposAMostrar(mappearData(nuevosEquipos));
   };
 
+  const eliminarUnEquipo = async () => {
+    try {
+      await elimarEquipoAdmin(equipoSeleccionado.id);
+      setModalEliminarEquipo(false);
+      setEquipoSeleccionado({});
+      toast.success('equipo eliminado correctamente');
+      getEquipos();
+    } catch (error) {
+      toast.error(error.title);
+    }
+  };
+
   const ActionTab = (equipo) => {
     return (
       <div className="flex flex-row gap-4">
         <Tooltip label="Editar">
           <PencilIcon
             className={`w-[50px] cursor-pointer text-slate-500`}
-            onClick={() => {}}
+            onClick={() => {
+              router.push(`/inicio/eventos/equipos/editar/${equipo.id}`);
+            }}
           />
         </Tooltip>
         <Tooltip label="Eliminar">
           <TrashIcon
             className={`w-[50px] cursor-pointer text-slate-500`}
-            onClick={() => {}}
+            onClick={() => {
+              setModalEliminarEquipo(true);
+              setEquipoSeleccionado(equipo);
+            }}
           />
         </Tooltip>
       </div>
@@ -87,6 +108,7 @@ function Page() {
 
   return (
     <section>
+      <Toaster />
       <div className="mt-6 self-start px-9 pb-9 text-3xl font-bold">
         Equipos
       </div>
@@ -117,6 +139,19 @@ function Page() {
           <FlowTable Header={HEADER_TABLE} dataToShow={equiposAMostrar} />
         </section>
       </section>
+      <FlowModal
+        title={`Esta seguro que desea eliminar el equipo ${equipoSeleccionado.nombre}`}
+        modalBody={<div></div>}
+        primaryTextButton={'Eliminar'}
+        isOpen={modalEliminarEquipo}
+        onAcceptModal={() => {
+          eliminarUnEquipo();
+        }}
+        onCancelModal={() => {
+          setModalEliminarEquipo(false);
+          setEquipoSeleccionado({});
+        }}
+      />
     </section>
   );
 }

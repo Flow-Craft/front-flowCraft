@@ -14,7 +14,7 @@ import { SelectWithLabel } from '@/app/ui/components/SelectWithLabel/SelectWithL
 
 export default function Page() {
   const [torneosAbiertos, setTorneosAbiertos] = useState([]);
-  const [torneosUsuario, setTorneosUsuario] = useState([])
+  const [torneosUsuario, setTorneosUsuario] = useState([]);
   const [openDetallesDelTorneo, setOpenDetallesDelTorneo] = useState(false);
   const [modalSeleccionarEquipo, setModalSeleccionarEquipo] = useState(false);
   const [darseDeBajaTorneo, setDarseDeBajaTorneo] = useState(false);
@@ -25,9 +25,15 @@ export default function Page() {
     try {
       const result = await getTorneosAdmin();
       const resultUsuario = await getTorneoByUsuario();
-      setTorneosUsuario(resultUsuario)
+      setTorneosUsuario(resultUsuario);
       setTorneosAbiertos(
-        result.filter((torneo) => torneo.torneoEstado === 'Abierto' && !resultUsuario.some(elementoCorto => elementoCorto.id === torneo.id)),
+        result.filter(
+          (torneo) =>
+            torneo.torneoEstado === 'Abierto' &&
+            !resultUsuario.some(
+              (elementoCorto) => elementoCorto.id === torneo.id,
+            ),
+        ),
       );
     } catch (error) {
       toast.error(error.message);
@@ -44,10 +50,10 @@ export default function Page() {
     setEquiposUsuario(result);
   };
 
-  const handleDesincribirseATorneo = (torneo)=>{
-    setDarseDeBajaTorneo(true)
-    setTorneoSeleccionado(torneo)
-  }
+  const handleDesincribirseATorneo = (torneo) => {
+    setDarseDeBajaTorneo(true);
+    setTorneoSeleccionado(torneo);
+  };
 
   const handleInscribirseAunTorneo = async () => {
     try {
@@ -57,17 +63,20 @@ export default function Page() {
     }
   };
 
-  const desincribirAUnTorneo = async() =>{
+  const desincribirAUnTorneo = async () => {
     try {
-      await desinscribirmeATorneoAdmin(torneoSeleccionado.idEquipoInscriptoUsuario, torneoSeleccionado.id)
-      toast.success("Te desinscribiste con exito")
+      await desinscribirmeATorneoAdmin(
+        torneoSeleccionado.idEquipoInscriptoUsuario,
+        torneoSeleccionado.id,
+      );
+      toast.success('Te desinscribiste con exito');
       setDarseDeBajaTorneo(false);
       setTorneoSeleccionado({});
       getTorneos();
     } catch (error) {
       toast.error(error.title);
     }
-  }
+  };
 
   const handleInscribirmeAUnTorneo = async () => {
     try {
@@ -263,7 +272,7 @@ export default function Page() {
         primaryTextButton={'Desincribirse'}
         isOpen={darseDeBajaTorneo}
         onAcceptModal={() => {
-          desincribirAUnTorneo()
+          desincribirAUnTorneo();
         }}
         onCancelModal={() => {
           setDarseDeBajaTorneo(false);

@@ -933,6 +933,17 @@ export async function getEquiposActivos() {
 export async function crearNuevoEquipo(equipo: any) {
   return await FlowCraftAPI.post(`Partidos/CrearEquipo`, equipo);
 }
+export async function elimarEquipoAdmin(id: any) {
+  return await FlowCraftAPI.post(`Partidos/EliminarEquipo`, { Id: id });
+}
+
+export async function getEquiposById(id: any) {
+  return await FlowCraftAPI.get(`Partidos/GetEquipoById?Id=${id}`);
+}
+
+export async function editarEquipoExistente(equipo: any) {
+  return await FlowCraftAPI.post(`Partidos/ActualizarEquipo`, equipo);
+}
 
 export async function getEquipoByDisciplinaYCategoria(
   idDisciplina: any,
