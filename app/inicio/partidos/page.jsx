@@ -9,6 +9,7 @@ import {
   getEventosAdmin,
   getInstalacionesActionAdmin,
   getPartidoByIdAdmin,
+  getPartidosAsignadosAdmin,
   IniciarPartidoAdmin,
   suspenderPartidoAdmin,
 } from '@/app/utils/actions';
@@ -92,6 +93,41 @@ function Page() {
       return coincideFecha && coincideInstalacion;
     });
     setPartidoAver(nuevosPartidosAVer);
+  };
+
+  const handleAsingado = async (checked) => {
+    setInstalacionSeleccionada({ value: 0, label: 'Todas las instalaciones' });
+    setFechaPartidoIngresada('');
+    setAsignado(checked);
+    try {
+      if (checked) {
+        const eventos = await getPartidosAsignadosAdmin();
+        const partidos = eventos
+          .filter((ev) => ev?.tipoEvento?.nombreTipoEvento === 'Partido')
+          .map((partido) => partido.id);
+        const promises = partidos.map((part) => getPartidoByIdAdmin(part));
+        const result = await Promise.all(promises);
+        setPartidos(result);
+        const partidosAVer = result.map((partido) => ({
+          id: partido.id,
+          equipoLocal: partido?.local?.equipo?.nombre,
+          equipoVisitante: partido?.visitante?.equipo?.nombre,
+          nombrePartido: partido?.titulo,
+          fechaPartido: partido?.fechaInicio,
+          estadoPartido:
+            partido?.historialEventoList?.[0]?.estadoEvento?.nombreEstado,
+          totalEquipoLocal: partido?.resultadoLocal || 0,
+          totalEquipoVisitante: partido?.resultadoVisitante || 0,
+          instalacionPartido: partido.instalacion,
+        }));
+        setPartidoAver(partidosAVer);
+      } else {
+        getTodosLosPartidos();
+      }
+    } catch (error) {
+      console.error('error', error);
+      toast.error(error.title);
+    }
   };
 
   const getTodosLosPartidos = async () => {
@@ -305,7 +341,7 @@ function Page() {
 
   useEffect(() => {
     handleSearchMatches();
-  }, [asignado, fechaPartidoIngresada, instalacionSeleccionada]);
+  }, [fechaPartidoIngresada, instalacionSeleccionada]);
 
   return (
     <section>
@@ -330,7 +366,7 @@ function Page() {
                   defaultChecked={asignado}
                   defaultValue={asignado}
                   onChange={(e) => {
-                    setAsignado(e.target.checked);
+                    handleAsingado(e.target.checked);
                   }}
                 />
               </>

@@ -964,6 +964,10 @@ export async function getPartidoByIdAdmin(id: any) {
   return await FlowCraftAPI.get(`Partidos/GetPartidoById?id=${id}`);
 }
 
+export async function getPartidosAsignadosAdmin() {
+  return await FlowCraftAPI.get(`Partidos/GetPartidosAsignados`);
+}
+
 export async function getEventosActivos() {
   return await FlowCraftAPI.get(`Eventos/GetEventosActivos`);
 }
