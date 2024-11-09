@@ -1260,9 +1260,15 @@ export async function getEquiposByDisciplinaCategoriaYUsuario(
   );
 }
 
-export async function inscribirmeATorneoAdmin(idTorneo: any, idEquipo: any) {
+export async function inscribirmeATorneoAdmin(idEquipo: any, idTorneo: any) {
   return await FlowCraftAPI.post(
     `Torneos/InscribirseATorneo?idTorneo=${idTorneo}&idEquipo=${idEquipo}`,
+  );
+}
+
+export async function desinscribirmeATorneoAdmin(idEquipo: any, idTorneo: any) {
+  return await FlowCraftAPI.post(
+    `Torneos/DesinscribirseATorneo?idTorneo=${idTorneo}&idEquipo=${idEquipo}`,
   );
 }
 

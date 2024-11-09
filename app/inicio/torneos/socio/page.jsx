@@ -1,5 +1,6 @@
 'use client';
 import {
+  desinscribirmeATorneoAdmin,
   getEquiposByDisciplinaCategoriaYUsuario,
   getTorneoByUsuario,
   getTorneosAdmin,
@@ -13,6 +14,7 @@ import { SelectWithLabel } from '@/app/ui/components/SelectWithLabel/SelectWithL
 
 export default function Page() {
   const [torneosAbiertos, setTorneosAbiertos] = useState([]);
+  const [torneosUsuario, setTorneosUsuario] = useState([])
   const [openDetallesDelTorneo, setOpenDetallesDelTorneo] = useState(false);
   const [modalSeleccionarEquipo, setModalSeleccionarEquipo] = useState(false);
   const [darseDeBajaTorneo, setDarseDeBajaTorneo] = useState(false);
@@ -23,8 +25,9 @@ export default function Page() {
     try {
       const result = await getTorneosAdmin();
       const resultUsuario = await getTorneoByUsuario();
+      setTorneosUsuario(resultUsuario)
       setTorneosAbiertos(
-        result.filter((torneo) => torneo.torneoEstado === 'Abierto'),
+        result.filter((torneo) => torneo.torneoEstado === 'Abierto' && !resultUsuario.some(elementoCorto => elementoCorto.id === torneo.id)),
       );
     } catch (error) {
       toast.error(error.message);
@@ -41,6 +44,11 @@ export default function Page() {
     setEquiposUsuario(result);
   };
 
+  const handleDesincribirseATorneo = (torneo)=>{
+    setDarseDeBajaTorneo(true)
+    setTorneoSeleccionado(torneo)
+  }
+
   const handleInscribirseAunTorneo = async () => {
     try {
       setModalSeleccionarEquipo(true);
@@ -48,6 +56,18 @@ export default function Page() {
       toast.error(error.title);
     }
   };
+
+  const desincribirAUnTorneo = async() =>{
+    try {
+      await desinscribirmeATorneoAdmin(torneoSeleccionado.idEquipoInscriptoUsuario, torneoSeleccionado.id)
+      toast.success("Te desinscribiste con exito")
+      setDarseDeBajaTorneo(false);
+      setTorneoSeleccionado({});
+      getTorneos();
+    } catch (error) {
+      toast.error(error.title);
+    }
+  }
 
   const handleInscribirmeAUnTorneo = async () => {
     try {
@@ -84,6 +104,27 @@ export default function Page() {
       <div className="mt-6 grid h-[80vh] w-full grid-rows-2 gap-4">
         <div>
           <span className="ml-6 text-2xl font-bold">Mis Torneos</span>
+          <section className="ml-6 flex max-w-[80vw] flex-row gap-2 overflow-x-auto pt-6">
+            {torneosUsuario.length > 0 ? (
+              torneosUsuario.map((torneo) => (
+                <>
+                  <button
+                    className="cursor-pointer"
+                    onClick={() => {
+                      handleDesincribirseATorneo(torneo);
+                    }}
+                    disabled={torneo.lleno}
+                  >
+                    <CardTorneo key={torneo.id} torneo={torneo} disabled />
+                  </button>
+                </>
+              ))
+            ) : (
+              <span className="ml-6 text-xl font-semibold">
+                Nada que mostrar
+              </span>
+            )}
+          </section>
         </div>
         <div>
           <span className="ml-6 text-2xl font-bold">Torneos Abiertos</span>
@@ -172,15 +213,58 @@ export default function Page() {
       />
       <FlowModal
         title={'Desincribirse a un torneo'}
+        sx={{ minWidth: '900px' }}
         modalBody={
-          <span className="text-2xl">
-            Nombre:{' '}
-            <span className="font-semibold">{torneoSeleccionado?.nombre}</span>
-          </span>
+          <div className="mt-6 grid w-full grid-cols-2 gap-4">
+            <div className="flex w-full flex-col gap-4">
+              <span className="text-2xl">
+                Nombre:{' '}
+                <span className="font-semibold">
+                  {torneoSeleccionado?.nombre}
+                </span>
+              </span>
+              <span className="text-2xl">
+                Disciplina:
+                <span className="font-semibold">
+                  {torneoSeleccionado?.disciplina?.nombre}
+                </span>
+              </span>
+              <span className="text-2xl">
+                Cantidad de Equipos:{' '}
+                <span className="font-semibold">
+                  {torneoSeleccionado?.cantEquipos}
+                </span>
+              </span>
+              <span className="text-2xl">
+                Fecha de inicio:{' '}
+                <span className="font-semibold">
+                  {new Date(torneoSeleccionado?.fechaInicio).toLocaleDateString(
+                    'es-ES',
+                  )}
+                </span>
+              </span>
+              <span className="text-2xl">
+                Descripcion:
+                <span className="font-semibold">
+                  {' '}
+                  {torneoSeleccionado?.descripcion}
+                </span>
+              </span>
+            </div>
+            <div>
+              <img
+                src={`data:${torneoSeleccionado?.imageType};base64,${torneoSeleccionado?.banner}`}
+                alt="Torneo Banner"
+                className="h-auto w-full max-w-lg"
+              />
+            </div>
+          </div>
         }
-        primaryTextButton={'Aceptar'}
+        primaryTextButton={'Desincribirse'}
         isOpen={darseDeBajaTorneo}
-        onAcceptModal={() => {}}
+        onAcceptModal={() => {
+          desincribirAUnTorneo()
+        }}
         onCancelModal={() => {
           setDarseDeBajaTorneo(false);
           setTorneoSeleccionado({});
