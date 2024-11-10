@@ -560,7 +560,7 @@ function Page() {
                 Categoria:
               </label>
               <div className="min-w-[220px]">
-                <SelectWithLabel
+                <thLabel
                   name="categoria"
                   options={categoria}
                   ref={categoriaRef}
