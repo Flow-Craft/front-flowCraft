@@ -302,7 +302,7 @@ function Page() {
 
   const editarEvento = async (e) => {
     try {
-      if (eventoSeleccionado.tipoEvento.nombreTipoEvento === "Partido") {
+      if (eventoSeleccionado.tipoEvento.nombreTipoEvento === 'Partido') {
         const eventoACrear = {
           Id: eventoSeleccionado.id,
           Titulo: e.target.Titulo.value,
@@ -322,7 +322,7 @@ function Page() {
         };
         await editarEventoAdmin(eventoACrear);
         toast.success('Evento editado con exito');
-      }else{
+      } else {
         const eventoACrear = {
           Id: eventoSeleccionado.id,
           Titulo: e.target.Titulo.value,
@@ -336,7 +336,7 @@ function Page() {
           IdCategoria: e.target.IdCategoria.value,
           IdDisciplina: disciplinasSeleccionadas.value,
           Banner: e.target.Banner.files[0] || eventoSeleccionado.Banner,
-        };  
+        };
         const result = await editarEventoAdmin(eventoACrear);
         if (result?.error) {
           setErrors(result?.errors);
@@ -348,7 +348,7 @@ function Page() {
       setEditCreateEvento(false);
       getEventos();
     } catch (error) {
-      console.error(error)
+      console.error(error);
       toast.error(error.message);
     }
   };

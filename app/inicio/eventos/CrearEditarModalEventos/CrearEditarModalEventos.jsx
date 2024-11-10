@@ -94,13 +94,13 @@ export const CrearEditarModalEventos = ({
       (eq) => eq.id !== e.value,
     );
     setEquipoVisitanteOpciones(mappearEquipos(nuevoEquipoVisitante));
-    setDefaultValueLocal(e)
+    setDefaultValueLocal(e);
   };
 
   const handleChangeEquipoVisitante = (e) => {
     const nuevoEquipoLocal = equipoLocal.filter((eq) => eq.id !== e.value);
     setEquipoLocalOpciones(mappearEquipos(nuevoEquipoLocal));
-    setDefaultValueVisitante(e)
+    setDefaultValueVisitante(e);
   };
 
   useEffect(() => {
@@ -116,12 +116,22 @@ export const CrearEditarModalEventos = ({
 
   const getDataDelPartido = async (id) => {
     const result = await getPartidoByIdAdmin(id);
-    const planilleroYArbitro = await getPlanilleroYArbritroByPartidoId(id)
-    console.log('planilleroYArbitro', planilleroYArbitro)
-    const arbitro = planilleroYArbitro.find((user)=>user.perfil === "Arbitro");
-    setArbitroSeleccionado({value:arbitro.id, label: `${arbitro.dni} - ${arbitro.nombre} ${arbitro.apellido}`})
-    const planillero = planilleroYArbitro.find((user)=>user.perfil === "Planillero");
-    setPlanilleroSeleccionado({value:planillero.id, label: `${planillero.dni} - ${planillero.nombre} ${planillero.apellido}`})
+    const planilleroYArbitro = await getPlanilleroYArbritroByPartidoId(id);
+    console.log('planilleroYArbitro', planilleroYArbitro);
+    const arbitro = planilleroYArbitro.find(
+      (user) => user.perfil === 'Arbitro',
+    );
+    setArbitroSeleccionado({
+      value: arbitro.id,
+      label: `${arbitro.dni} - ${arbitro.nombre} ${arbitro.apellido}`,
+    });
+    const planillero = planilleroYArbitro.find(
+      (user) => user.perfil === 'Planillero',
+    );
+    setPlanilleroSeleccionado({
+      value: planillero.id,
+      label: `${planillero.dni} - ${planillero.nombre} ${planillero.apellido}`,
+    });
     const equipos = await getEquipoByDisciplinaYCategoria(
       result?.disciplina?.id,
       result?.categoria?.id,
@@ -330,8 +340,8 @@ export const CrearEditarModalEventos = ({
                 options={arbitros}
                 value={arbitroSeleccionado}
                 label="Arbitro"
-                onChange={(e)=>{
-                  setArbitroSeleccionado(e)
+                onChange={(e) => {
+                  setArbitroSeleccionado(e);
                 }}
                 required
                 wrong={!!errors.find((e) => e.path[0] === 'Arbitro')}
@@ -340,8 +350,8 @@ export const CrearEditarModalEventos = ({
                 name="planillero"
                 options={planilleros}
                 value={planilleroSeleccionado}
-                onChange={(e)=>{
-                  setPlanilleroSeleccionado(e)
+                onChange={(e) => {
+                  setPlanilleroSeleccionado(e);
                 }}
                 label="Planillero"
                 required

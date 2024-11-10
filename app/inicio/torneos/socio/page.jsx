@@ -108,8 +108,8 @@ export default function Page() {
         <button
           className="rounded-lg bg-blue-600 p-2 text-center text-xl text-white"
           type="button"
-          onClick={()=>{
-            router.push("/inicio/torneos/socio/equipos")
+          onClick={() => {
+            router.push('/inicio/torneos/socio/equipos');
           }}
         >
           Equipos

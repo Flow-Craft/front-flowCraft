@@ -930,6 +930,10 @@ export async function getEquiposActivos() {
   return await FlowCraftAPI.get(`Partidos/GetEquiposActivos`);
 }
 
+export async function getEquiposActivosByUsuario() {
+  return await FlowCraftAPI.get(`Partidos/GetEquiposByUsuario`);
+}
+
 export async function crearNuevoEquipo(equipo: any) {
   return await FlowCraftAPI.post(`Partidos/CrearEquipo`, equipo);
 }
@@ -1022,7 +1026,6 @@ export async function cargarAccionPartidoAdmin(body: any) {
 export async function eliminarAccionPartidoAdmin(body: any) {
   return await FlowCraftAPI.post(`Partidos/BajaAccionPartido`, body);
 }
-
 
 export async function getPlanilleroYArbritroByPartidoId(idPartido: any) {
   return await FlowCraftAPI.get(

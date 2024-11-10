@@ -1,7 +1,11 @@
 'use client';
 import { FlowTable } from '@/app/ui/components/FlowTable/FlowTable';
 import { InputWithLabel } from '@/app/ui/components/InputWithLabel/InputWithLabel';
-import { elimarEquipoAdmin, getEquiposActivos } from '@/app/utils/actions';
+import {
+  elimarEquipoAdmin,
+  getEquiposActivos,
+  getEquiposActivosByUsuario,
+} from '@/app/utils/actions';
 import withAuthorization from '@/app/utils/autorization';
 import { Tooltip } from '@chakra-ui/react';
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
@@ -84,9 +88,10 @@ function Page() {
         categoria: `${equipo.categoria.genero} - ${equipo.categoria.nombre}`,
         jugadores: (
           <ul>
-            {equipo.jugadores.map((jugador, i) => (
+            {equipo.equipoUsuarios.map((jugador, i) => (
               <li className="mb-1" key={`${jugador.id} - ${i}`}>
-                {jugador.numCamiseta} - {jugador.nombre} - {jugador.puesto}
+                {jugador.numCamiseta} - {jugador.usuario.nombre} -{' '}
+                {jugador.puesto}
               </li>
             ))}
           </ul>
@@ -96,9 +101,9 @@ function Page() {
     );
   };
   const getEquipos = async () => {
-    const result = await getEquiposActivos();
-    setEquipo(result);
-    const equipoAMostrar = mappearData(result);
+    const result = await getEquiposActivosByUsuario();
+    setEquipo(result.filter((res) => !res.fechaBaja));
+    const equipoAMostrar = mappearData(result.filter((res) => !res.fechaBaja));
     setEquiposAMostrar(equipoAMostrar);
   };
 
