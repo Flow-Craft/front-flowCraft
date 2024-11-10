@@ -10,7 +10,6 @@ import { Button } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
-import { useSyncExternalStore } from 'react';
 
 const page = () => {
   const [jugadorSeleccionado, setJugadorSeleccionado] = useState('');
@@ -19,7 +18,6 @@ const page = () => {
   const [jugadoresLocales, setJugadoresLocales] = useState([]);
   const [jugadoresVisitantes, setJugadoresVisitantes] = useState([]);
   const [accionesPorJugador, setAccionesPorJugador] = useState([]);
-  console.log('accionesPorJugador', accionesPorJugador);
   const router = useRouter();
   const getDataDelPatido = async (partidoId) => {
     const partido = await getPartidoByIdAdmin(partidoId);
@@ -132,10 +130,10 @@ const page = () => {
                   </>
                 );
               })}
-              <div>
+            <div className="mt-2">
               <span className="text-2xl font-bold">Equipo Visitante</span>
-              </div>
-            
+            </div>
+
             {jugadoresVisitantes &&
               jugadoresVisitantes.map((jugador) => {
                 return (
