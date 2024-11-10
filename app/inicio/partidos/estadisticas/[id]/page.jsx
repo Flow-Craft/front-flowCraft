@@ -10,12 +10,14 @@ import { Button } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
+import { useSyncExternalStore } from 'react';
 
 const page = () => {
   const [jugadorSeleccionado, setJugadorSeleccionado] = useState('');
   const [partido, setPartido] = useState({});
   const [listaDeAcciones, setListaDeAcciones] = useState([]);
-  const [jugadores, setJugadores] = useState([]);
+  const [jugadoresLocales, setJugadoresLocales] = useState([]);
+  const [jugadoresVisitantes, setJugadoresVisitantes] = useState([]);
   const [accionesPorJugador, setAccionesPorJugador] = useState([]);
   console.log('accionesPorJugador', accionesPorJugador);
   const router = useRouter();
@@ -35,14 +37,14 @@ const page = () => {
         idEquipo: partido?.visitante?.equipo?.id,
         ...usuario,
       }));
-    const listaDeUsuarios = [...equipoLocal, ...equipoVisitante];
+    setJugadoresLocales(equipoLocal);
+    setJugadoresVisitantes(equipoVisitante);
     const result = await getActionPartidoPanelAdmin({
       IdDisciplina: partido?.disciplina?.id,
       Estadistica: true,
       Partido: false,
     });
     setListaDeAcciones(result);
-    setJugadores(listaDeUsuarios);
     setPartido(partido);
   };
 
@@ -110,24 +112,48 @@ const page = () => {
       </section>
       <section className="mt-8 flex w-full">
         <div className="overflow h-[80vh] w-full max-w-[30%] flex-col gap-5 overflow-y-auto">
-          {jugadores &&
-            jugadores.map((jugador) => {
-              return (
-                <>
-                  <button
-                    className={`mt-5 w-[80%] rounded-lg bg-blue-300 ${jugador.usuario.dni === jugadorSeleccionado?.usuario?.dni && 'bg-blue-600'} p-2 text-lg font-semibold text-white`}
-                    key={jugador.id}
-                    onClick={() => {
-                      setAccionesPorJugador([]);
-                      setJugadorSeleccionado(jugador);
-                      getAccionesParaEseUsuario(jugador.id);
-                    }}
-                  >
-                    {`${jugador.numCamiseta} - ${jugador.usuario.apellido} ${jugador.usuario.nombre}`}
-                  </button>
-                </>
-              );
-            })}
+          <div>
+            <span className="text-2xl font-bold">Equipo Local</span>
+            {jugadoresLocales &&
+              jugadoresLocales.map((jugador) => {
+                return (
+                  <>
+                    <button
+                      className={`mt-5 w-[80%] rounded-lg bg-blue-300 ${jugador.usuario.dni === jugadorSeleccionado?.usuario?.dni && 'bg-blue-600'} p-2 text-lg font-semibold text-white`}
+                      key={jugador.id}
+                      onClick={() => {
+                        setAccionesPorJugador([]);
+                        setJugadorSeleccionado(jugador);
+                        getAccionesParaEseUsuario(jugador.id);
+                      }}
+                    >
+                      {`${jugador.numCamiseta} - ${jugador.usuario.apellido} ${jugador.usuario.nombre}`}
+                    </button>
+                  </>
+                );
+              })}
+              <div>
+                <span className="text-2xl font-bold">Equipo Visitante</span>
+              </div>
+            {jugadoresVisitantes &&
+              jugadoresVisitantes.map((jugador) => {
+                return (
+                  <>
+                    <button
+                      className={`mt-5 w-[80%] rounded-lg bg-blue-300 ${jugador.usuario.dni === jugadorSeleccionado?.usuario?.dni && 'bg-blue-600'} p-2 text-lg font-semibold text-white`}
+                      key={jugador.id}
+                      onClick={() => {
+                        setAccionesPorJugador([]);
+                        setJugadorSeleccionado(jugador);
+                        getAccionesParaEseUsuario(jugador.id);
+                      }}
+                    >
+                      {`${jugador.numCamiseta} - ${jugador.usuario.apellido} ${jugador.usuario.nombre}`}
+                    </button>
+                  </>
+                );
+              })}
+          </div>
         </div>
         <div className="h-[80vh] flex-1 p-4">
           <div className="flex w-full flex-col items-center  gap-5">

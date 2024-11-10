@@ -8,25 +8,26 @@ import { Toaster } from 'react-hot-toast';
 
 function Page() {
   const [usuarios, setUsuarios] = useState([]);
-  const [usuarioSeleccionado, setUsuarioSeleccionado] = useState({})
-  const getUsuariosParaBuscarEstadisticas = async() =>{
-    const {usuarios} = await getUsersAdmin();
-    const usuariosValue = usuarios.map((usr)=>({value:usr.id, label:`${usr.dni} - ${usr.apellido} ${usr.nombre}`}))
-    setUsuarios([{value:0,label:"Yo mismo"}, ...usuariosValue])
-  }
+  const [usuarioSeleccionado, setUsuarioSeleccionado] = useState({});
+  const getUsuariosParaBuscarEstadisticas = async () => {
+    const { usuarios } = await getUsersAdmin();
+    const usuariosValue = usuarios.map((usr) => ({
+      value: usr.id,
+      label: `${usr.dni} - ${usr.apellido} ${usr.nombre}`,
+    }));
+    setUsuarios([{ value: 0, label: 'Yo mismo' }, ...usuariosValue]);
+  };
 
-  const handleChangeUsuario = (e) =>{
-    if(e.value){
-
-    }else{
-
+  const handleChangeUsuario = (e) => {
+    if (e.value) {
+    } else {
     }
-  }
-  
+  };
+
   useEffect(() => {
     getUsuariosParaBuscarEstadisticas();
-  }, [])
-  
+  }, []);
+
   return (
     <section>
       <Toaster />
@@ -34,14 +35,14 @@ function Page() {
         Estadisticas
       </div>
       <div className="ml-8 flex flex-row items-center gap-3">
-        <div className='min-w-[500px]'>
+        <div className="min-w-[500px]">
           <SelectWithLabel
             label="Seleccionar el jugador a visualizar"
             options={usuarios}
             value={usuarioSeleccionado}
-            onChange={(e)=>{
-              setUsuarioSeleccionado(e)
-              handleChangeUsuario(e)
+            onChange={(e) => {
+              setUsuarioSeleccionado(e);
+              handleChangeUsuario(e);
             }}
           />
         </div>
