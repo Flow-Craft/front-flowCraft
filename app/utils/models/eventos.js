@@ -35,7 +35,6 @@ export const eventoSchema = z
 export const categoriaSchema = z
   .object({
     Nombre: z.string().min(1, 'El nombre no puede estar vacío'),
-    Descripcion: z.string().min(1, 'La descripción no puede estar vacía'),
     EdadMinima: z.number().min(1, 'La edad mínima debe ser mayor o igual a 1'),
     EdadMaxima: z.number().min(1, 'La edad máxima debe ser mayor o igual a 1'),
     Genero: z.string().optional(),
