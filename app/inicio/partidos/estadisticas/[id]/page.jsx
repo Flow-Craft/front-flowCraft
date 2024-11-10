@@ -133,8 +133,9 @@ const page = () => {
                 );
               })}
               <div>
-                <span className="text-2xl font-bold">Equipo Visitante</span>
+              <span className="text-2xl font-bold">Equipo Visitante</span>
               </div>
+            
             {jugadoresVisitantes &&
               jugadoresVisitantes.map((jugador) => {
                 return (
