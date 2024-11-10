@@ -146,7 +146,6 @@ function Page() {
   const ActionTab = (evento) => {
     const fechaInicio = new Date(evento?.evento.fechaInicio);
     const fechaFin = new Date(evento?.evento.fechaFinEvento);
-    console.log('permisoasdasdass', permisos);
     return (
       <div className="flex flex-row gap-4">
         {evento.activo && (
@@ -222,7 +221,6 @@ function Page() {
 
   const getEventos = async () => {
     const result = await getEventosAdmin();
-    console.log('result', result);
     setEventos(result);
     const resultFilter =
       result &&
@@ -269,7 +267,6 @@ function Page() {
           Arbitro: e.target.arbitro.value,
           Planillero: e.target.planillero.value,
         };
-        console.log('eventoACrear', eventoACrear);
         const result = await crearEventosPartidoAdmin(eventoACrear);
         if (result?.error) {
           setErrors(result?.errors);
@@ -305,32 +302,53 @@ function Page() {
 
   const editarEvento = async (e) => {
     try {
-      const eventoACrear = {
-        Id: eventoSeleccionado.id,
-        Titulo: e.target.Titulo.value,
-        FechaInicio: e.target.FechaInicio.value,
-        FechaFinEvento: e.target.FechaFinEvento.value,
-        CupoMaximo: e.target.CupoMaximo.value,
-        LinkStream: e.target.LinkStream.value,
-        Descripcion: e.target.Descripcion.value,
-        IdTipoEvento: e.target.IdTipoEvento.value,
-        IdInstalacion: e.target.IdInstalacion.value,
-        IdCategoria: e.target.IdCategoria.value,
-        IdDisciplina: disciplinasSeleccionadas.value,
-        Banner: e.target.Banner.files[0] || eventoSeleccionado.Banner,
-      };
-      console.log('eventoACrear', eventoACrear);
-
-      const result = await editarEventoAdmin(eventoACrear);
-      if (result?.error) {
-        setErrors(result?.errors);
-        return;
+      if (eventoSeleccionado.tipoEvento.nombreTipoEvento === "Partido") {
+        const eventoACrear = {
+          Id: eventoSeleccionado.id,
+          Titulo: e.target.Titulo.value,
+          FechaInicio: e.target.FechaInicio.value,
+          FechaFinEvento: e.target.FechaFinEvento.value,
+          CupoMaximo: e.target.CupoMaximo.value,
+          LinkStream: e.target.LinkStream.value,
+          Descripcion: e.target.Descripcion.value,
+          IdInstalacion: e.target.IdInstalacion.value,
+          IdCategoria: e.target.IdCategoria.value,
+          IdDisciplina: e.target.IdsDisciplinaPartido.value,
+          Banner: e.target.Banner.files[0],
+          EquipoLocal: e.target.equipoLocal.value,
+          EquipoVisitante: e.target.equipoVisitante.value,
+          Arbitro: e.target.arbitro.value,
+          Planillero: e.target.planillero.value,
+        };
+        await editarEventoAdmin(eventoACrear);
+        toast.success('Evento editado con exito');
+      }else{
+        const eventoACrear = {
+          Id: eventoSeleccionado.id,
+          Titulo: e.target.Titulo.value,
+          FechaInicio: e.target.FechaInicio.value,
+          FechaFinEvento: e.target.FechaFinEvento.value,
+          CupoMaximo: e.target.CupoMaximo.value,
+          LinkStream: e.target.LinkStream.value,
+          Descripcion: e.target.Descripcion.value,
+          IdTipoEvento: e.target.IdTipoEvento.value,
+          IdInstalacion: e.target.IdInstalacion.value,
+          IdCategoria: e.target.IdCategoria.value,
+          IdDisciplina: disciplinasSeleccionadas.value,
+          Banner: e.target.Banner.files[0] || eventoSeleccionado.Banner,
+        };  
+        const result = await editarEventoAdmin(eventoACrear);
+        if (result?.error) {
+          setErrors(result?.errors);
+          return;
+        }
+        toast.success('Evento editado con exito');
       }
-      toast.success('Evento editado con exito');
       setEventoSeleccionado({});
       setEditCreateEvento(false);
       getEventos();
     } catch (error) {
+      console.error(error)
       toast.error(error.message);
     }
   };

@@ -3,9 +3,11 @@ import { InputWithLabel } from '@/app/ui/components/InputWithLabel/InputWithLabe
 import { SelectWithLabel } from '@/app/ui/components/SelectWithLabel/SelectWithLabel';
 import toast from 'react-hot-toast';
 import {
+  gertPlanilleroYArbritroByPartidoId,
   getEquipoByDisciplinaYCategoria,
   getPartidoByIdAdmin,
   getPerfilByNombreAdmin,
+  getPlanilleroYArbritroByPartidoId,
 } from '@/app/utils/actions';
 
 export const CrearEditarModalEventos = ({
@@ -30,6 +32,8 @@ export const CrearEditarModalEventos = ({
   const [disableEventoPartido, setDisableEventoPartido] = useState(false);
   const [defaultValueLocal, setDefaultValueLocal] = useState({});
   const [defaultValueVisitante, setDefaultValueVisitante] = useState({});
+  const [arbitroSeleccionado, setArbitroSeleccionado] = useState({});
+  const [planilleroSeleccionado, setPlanilleroSeleccionado] = useState({});
   const [arbitroDefault, setArbitroDefault] = useState({});
   const handleSelectTipo = (e) => {
     if (e.label === 'Partido' && !categoriaSeleccionada?.value) {
@@ -90,11 +94,13 @@ export const CrearEditarModalEventos = ({
       (eq) => eq.id !== e.value,
     );
     setEquipoVisitanteOpciones(mappearEquipos(nuevoEquipoVisitante));
+    setDefaultValueLocal(e)
   };
 
   const handleChangeEquipoVisitante = (e) => {
     const nuevoEquipoLocal = equipoLocal.filter((eq) => eq.id !== e.value);
     setEquipoLocalOpciones(mappearEquipos(nuevoEquipoLocal));
+    setDefaultValueVisitante(e)
   };
 
   useEffect(() => {
@@ -110,8 +116,14 @@ export const CrearEditarModalEventos = ({
 
   const getDataDelPartido = async (id) => {
     const result = await getPartidoByIdAdmin(id);
+    const planilleroYArbitro = await getPlanilleroYArbritroByPartidoId(id)
+    console.log('planilleroYArbitro', planilleroYArbitro)
+    const arbitro = planilleroYArbitro.find((user)=>user.perfil === "Arbitro");
+    setArbitroSeleccionado({value:arbitro.id, label: `${arbitro.dni} - ${arbitro.nombre} ${arbitro.apellido}`})
+    const planillero = planilleroYArbitro.find((user)=>user.perfil === "Planillero");
+    setPlanilleroSeleccionado({value:planillero.id, label: `${planillero.dni} - ${planillero.nombre} ${planillero.apellido}`})
     const equipos = await getEquipoByDisciplinaYCategoria(
-      result?.disciplinas?.[0]?.id,
+      result?.disciplina?.id,
       result?.categoria?.id,
     );
     setEquipoLocal(equipos);
@@ -277,9 +289,9 @@ export const CrearEditarModalEventos = ({
               <SelectWithLabel
                 name="IdsDisciplinaPartido"
                 options={disciplinas}
-                defaultValue={evento?.disciplinas?.map((dis) => {
-                  return disciplinas.find((option) => option.value === dis.id);
-                })}
+                defaultValue={disciplinas.find(
+                  (option) => option.value === evento?.disciplina?.id,
+                )}
                 label="Disciplina del partido"
                 required
                 onChange={(e) => {
@@ -290,7 +302,7 @@ export const CrearEditarModalEventos = ({
               <SelectWithLabel
                 name="equipoLocal"
                 options={equipoLocalOpciones}
-                defaultValue={equipoLocalOpciones.find(
+                value={equipoLocalOpciones.find(
                   (option) => option.value === defaultValueLocal.value,
                 )}
                 onChange={(e) => {
@@ -303,9 +315,9 @@ export const CrearEditarModalEventos = ({
               <SelectWithLabel
                 name="equipoVisitante"
                 options={equipoVisitanteOpciones}
-                // defaultValue={equipoLocalOpciones.find(
-                //   (option) => option.value === defaultValueLocal.value,
-                // )}
+                value={equipoVisitanteOpciones.find(
+                  (option) => option.value === defaultValueVisitante.value,
+                )}
                 onChange={(e) => {
                   handleChangeEquipoVisitante(e);
                 }}
@@ -316,19 +328,21 @@ export const CrearEditarModalEventos = ({
               <SelectWithLabel
                 name="arbitro"
                 options={arbitros}
-                //   defaultValue={SEX_SELECT_OPTIONS.find(
-                //     (option) => option.value === user.sexo,
-                //   )}
+                value={arbitroSeleccionado}
                 label="Arbitro"
+                onChange={(e)=>{
+                  setArbitroSeleccionado(e)
+                }}
                 required
                 wrong={!!errors.find((e) => e.path[0] === 'Arbitro')}
               />
               <SelectWithLabel
                 name="planillero"
                 options={planilleros}
-                //   defaultValue={SEX_SELECT_OPTIONS.find(
-                //     (option) => option.value === user.sexo,
-                //   )}
+                value={planilleroSeleccionado}
+                onChange={(e)=>{
+                  setPlanilleroSeleccionado(e)
+                }}
                 label="Planillero"
                 required
                 wrong={!!errors.find((e) => e.path[0] === 'Planillero')}

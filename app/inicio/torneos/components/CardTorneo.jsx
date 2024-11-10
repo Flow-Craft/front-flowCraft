@@ -4,7 +4,7 @@ import React from 'react';
 
 export const CardTorneo = ({ torneo, onEdit, onDelete, disabled }) => {
   return (
-    <div className="h-50 mx-auto aspect-auto w-80 rounded-lg bg-blue-300 p-2">
+    <div className="h-50 min-h-50 mx-auto aspect-auto w-80 rounded-lg bg-blue-300 p-2">
       <div className="flex items-center">
         {!disabled && (
           <div className="w-1/10 p-2">

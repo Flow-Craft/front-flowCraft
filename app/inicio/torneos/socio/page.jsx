@@ -11,6 +11,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import { CardTorneo } from '../components/CardTorneo';
 import { FlowModal } from '@/app/ui/components/FlowModal/FlowModal';
 import { SelectWithLabel } from '@/app/ui/components/SelectWithLabel/SelectWithLabel';
+import { useRouter } from 'next/navigation';
 
 export default function Page() {
   const [torneosAbiertos, setTorneosAbiertos] = useState([]);
@@ -21,6 +22,7 @@ export default function Page() {
   const [equiposUsuario, setEquiposUsuario] = useState([]);
   const [torneoSeleccionado, setTorneoSeleccionado] = useState({});
   const [equipoSeleccionado, setEquipoSeleccionado] = useState({});
+  const router = useRouter();
   const getTorneos = async () => {
     try {
       const result = await getTorneosAdmin();
@@ -106,6 +108,9 @@ export default function Page() {
         <button
           className="rounded-lg bg-blue-600 p-2 text-center text-xl text-white"
           type="button"
+          onClick={()=>{
+            router.push("/inicio/torneos/socio/equipos")
+          }}
         >
           Equipos
         </button>

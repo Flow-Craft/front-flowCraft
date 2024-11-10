@@ -1023,6 +1023,13 @@ export async function eliminarAccionPartidoAdmin(body: any) {
   return await FlowCraftAPI.post(`Partidos/BajaAccionPartido`, body);
 }
 
+
+export async function getPlanilleroYArbritroByPartidoId(idPartido: any) {
+  return await FlowCraftAPI.get(
+    `Partidos/GetArbitroPlanilleroPartido?idPartido=${idPartido}`,
+  );
+}
+
 export async function getAccionesPorUsuarioYPartido({
   IdPartido,
   NroJugador,
