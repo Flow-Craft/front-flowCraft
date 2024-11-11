@@ -1339,3 +1339,14 @@ export async function EditarTorneo(evento: any) {
   delete eventToSend.BannerNo64;
   return await FlowCraftAPI.post(`Torneos/EditarTorneo`, eventToSend);
 }
+
+// ESTADISTICAS
+export async function GetEstadisticasByUsuarioDNI(dniUsuario: any) {
+  return await FlowCraftAPI.get(
+    `Partidos/GetEstadisticasByUsuario?dniUsuario=${dniUsuario}`,
+  );
+}
+
+export async function GetEstadisticasByUsuarioLogin() {
+  return await FlowCraftAPI.get(`Partidos/GetEstadisticasByUsuarioLogin`);
+}

@@ -144,10 +144,12 @@ function Page() {
               onClick={() => {
                 const fecha = new Date();
                 const fechaActual = fecha.toISOString().split('T')[0];
-                const fechaInicio = objetoConIdMasGrande.fechaInicio.split('T')[0];
+                const fechaInicio =
+                  objetoConIdMasGrande.fechaInicio.split('T')[0];
                 if (
                   objetoConIdMasGrande.leccionEstado.nombreEstado ===
-                  'ClaseIniciada' && fechaActual === fechaInicio
+                    'ClaseIniciada' &&
+                  fechaActual === fechaInicio
                 ) {
                   router.push(
                     `/inicio/lecciones/profesor/estadisticas/${leccion.id}`,
