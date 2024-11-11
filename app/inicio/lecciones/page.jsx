@@ -22,7 +22,6 @@ function Page() {
     useState(false);
   const { getPermisosByNombre } = usePermisos();
   const permisos = getPermisosByNombre('Lecciones');
-  console.log('permisos', permisos);
   const router = useRouter();
   const getLeccionesActivas = async () => {
     try {
