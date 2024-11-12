@@ -25,7 +25,7 @@ export const FormDetallePartido = ({
         </div>
       </div>
       <div className="min-w-[300px] flex-1  p-6 ">
-        <h2 className="text-xl font-bold">Equipo Local</h2>
+        <h2 className="text-xl font-bold">Equipo Visitante</h2>
         <ul>
           {partido?.visitante?.equipo?.equipoUsuarios.map((user) => {
             return (
