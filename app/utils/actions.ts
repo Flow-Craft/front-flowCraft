@@ -1291,7 +1291,7 @@ export async function getTorneosAdmin() {
 }
 
 export async function getTorneoById(id: any) {
-  return await FlowCraftAPI.get(`Torneos/GetTorneos?Id=${id}`);
+  return await FlowCraftAPI.get(`Torneos/GetTorneoById?idTorneo=${id}`);
 }
 
 export async function eliminarTorneoAdmin(id: any) {

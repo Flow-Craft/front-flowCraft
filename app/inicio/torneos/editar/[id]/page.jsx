@@ -105,8 +105,7 @@ function Page() {
     setCategoria(catOptions);
     setDisciplinas(disOptions);
     const result = await getTorneoById(idTorneo);
-    const torneo = result[0];
-    setTorneo(torneo);
+    setTorneo(result);
   };
 
   useEffect(() => {
@@ -145,7 +144,7 @@ function Page() {
             label="Nombre"
             name="Nombre"
             type="text"
-            defaultValue={torneo.nombre}
+            defaultValue={torneo?.nombre}
             required
           />
           <SelectWithLabel
@@ -160,7 +159,7 @@ function Page() {
             label="Condiciones"
             name="condiciones"
             type="text"
-            defaultValue={torneo.condiciones}
+            defaultValue={torneo?.condiciones}
             required
           />
           <InputWithLabel

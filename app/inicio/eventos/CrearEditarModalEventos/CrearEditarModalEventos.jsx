@@ -9,6 +9,7 @@ import {
   getPerfilByNombreAdmin,
   getPlanilleroYArbritroByPartidoId,
 } from '@/app/utils/actions';
+import { CircularProgress } from '@chakra-ui/react';
 
 export const CrearEditarModalEventos = ({
   errors = [],
@@ -34,6 +35,7 @@ export const CrearEditarModalEventos = ({
   const [defaultValueVisitante, setDefaultValueVisitante] = useState({});
   const [arbitroSeleccionado, setArbitroSeleccionado] = useState({});
   const [planilleroSeleccionado, setPlanilleroSeleccionado] = useState({});
+  const [isLoading, setisLoading] = useState(false)
   const [arbitroDefault, setArbitroDefault] = useState({});
   const handleSelectTipo = (e) => {
     if (e.label === 'Partido' && !categoriaSeleccionada?.value) {
@@ -115,23 +117,28 @@ export const CrearEditarModalEventos = ({
   }, []);
 
   const getDataDelPartido = async (id) => {
+    setisLoading(true)
     const result = await getPartidoByIdAdmin(id);
     const planilleroYArbitro = await getPlanilleroYArbritroByPartidoId(id);
-    console.log('planilleroYArbitro', planilleroYArbitro);
     const arbitro = planilleroYArbitro.find(
       (user) => user.perfil === 'Arbitro',
     );
-    setArbitroSeleccionado({
-      value: arbitro.id,
-      label: `${arbitro.dni} - ${arbitro.nombre} ${arbitro.apellido}`,
-    });
+    if(arbitro){
+      setArbitroSeleccionado({
+        value: arbitro.id,
+        label: `${arbitro.dni} - ${arbitro.nombre} ${arbitro.apellido}`,
+      });
+    }
+    
     const planillero = planilleroYArbitro.find(
       (user) => user.perfil === 'Planillero',
     );
-    setPlanilleroSeleccionado({
-      value: planillero.id,
-      label: `${planillero.dni} - ${planillero.nombre} ${planillero.apellido}`,
-    });
+    if(planillero){
+      setPlanilleroSeleccionado({
+        value: planillero.id,
+        label: `${planillero.dni} - ${planillero.nombre} ${planillero.apellido}`,
+      });
+    }
     const equipos = await getEquipoByDisciplinaYCategoria(
       result?.disciplina?.id,
       result?.categoria?.id,
@@ -148,8 +155,9 @@ export const CrearEditarModalEventos = ({
       value: result?.visitante?.equipo?.id,
       label: result?.visitante?.equipo?.nombre,
     };
-    setDefaultValueLocal(equipoLocal);
-    setDefaultValueVisitante(equipoVisitante);
+    if(equipoLocal.value)setDefaultValueLocal(equipoLocal);
+    if(equipoVisitante.value)setDefaultValueVisitante(equipoVisitante);
+    setisLoading(false)
   };
 
   useEffect(() => {
@@ -360,6 +368,7 @@ export const CrearEditarModalEventos = ({
             </>
           )}
           <div className="mt-9 flex w-full content-between justify-between">
+          {isLoading && <div><CircularProgress isIndeterminate color='green.300' /> Cargando</div>}
             <div aria-live="polite" aria-atomic="true" className="mr-4">
               {errors.length > 0 && (
                 <p className="mt-2 text-sm font-bold text-red-500">

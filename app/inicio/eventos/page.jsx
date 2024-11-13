@@ -304,7 +304,7 @@ function Page() {
     try {
       if (eventoSeleccionado.tipoEvento.nombreTipoEvento === 'Partido') {
         const eventoACrear = {
-          Id: eventoSeleccionado.id,
+          Id: eventoSeleccionado.id.toString(),
           Titulo: e.target.Titulo.value,
           FechaInicio: e.target.FechaInicio.value,
           FechaFinEvento: e.target.FechaFinEvento.value,
@@ -489,9 +489,9 @@ function Page() {
         tipo: vnt.evento.tipoEvento.nombreTipoEvento,
         fecha: formatDate(vnt.evento.fechaInicio),
         hora: formatearHoras(vnt.evento.fechaInicio, vnt.evento.fechaFinEvento),
-        instalacion: vnt.evento.instalacion.nombre,
-        disciplina: vnt.evento.disciplinas.map((dis) => `|${dis.nombre}| `),
-        categoria: `${vnt.evento.categoria.genero} - ${vnt.evento.categoria.nombre}`,
+        instalacion: vnt?.evento?.instalacion?.nombre,
+        disciplina: vnt?.evento?.disciplina?.nombre,
+        categoria: `${vnt?.evento?.categoria?.genero} - ${vnt?.evento?.categoria?.nombre}`,
         acciones: ActionTab(
           eventos.find((disc) => disc.evento.id === vnt.evento.id),
         ),
@@ -560,7 +560,7 @@ function Page() {
                 Categoria:
               </label>
               <div className="min-w-[220px]">
-                <thLabel
+                <SelectWithLabel
                   name="categoria"
                   options={categoria}
                   ref={categoriaRef}

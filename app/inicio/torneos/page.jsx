@@ -61,7 +61,7 @@ export default function Page() {
     <section>
       <Toaster />
       <section className="flex w-full flex-row justify-between">
-        <div className="mt-3 self-start text-3xl font-bold">Crear Torneo</div>
+        <div className="mt-3 self-start text-3xl font-bold">Torneos</div>
         <button
           className="rounded-lg bg-blue-600 p-2 text-center text-xl text-white"
           type="button"
@@ -69,7 +69,7 @@ export default function Page() {
             router.push('/inicio/torneos/crear');
           }}
         >
-          Torneos
+          Crear Torneos
         </button>
       </section>
 
