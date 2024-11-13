@@ -159,6 +159,7 @@ function Page() {
           <InputWithLabel
             label="Fecha y hora de inicio"
             name="FechaInicio"
+            min={new Date().toISOString().slice(0, 16)}
             type="datetime-local"
             required
           />
