@@ -68,7 +68,6 @@ function Page() {
         .filter(Boolean);
     setInstalaciones(instalacionesOptions);
     const result = await getReservasVigentes();
-    console.log('result', result);
     const fechaActual = new Date();
     fechaActual.setHours(0, 0, 0, 0); // Establece la hora de fechaActual a las 00:00
 
@@ -85,7 +84,6 @@ function Page() {
     try {
       setErrors([]);
       e.preventDefault();
-
       let errors = [];
 
       if (!usuarioSeleccionado.value) {
@@ -99,6 +97,15 @@ function Page() {
           title: 'fecha',
           message: 'El campo de fecha es obligatorio',
         });
+      }
+      if (fechaReserva) {
+        const fechaFinima = new Date(currentTime);
+        if (fechaFinima > new Date(fechaReserva)) {
+          errors.push({
+            title: 'fecha',
+            message: 'La fecha es anterior a la fecha actual',
+          });
+        }
       }
       if (!horaInicio) {
         errors.push({

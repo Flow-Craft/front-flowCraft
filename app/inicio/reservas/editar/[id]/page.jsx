@@ -126,6 +126,15 @@ function Page() {
           message: 'El campo de fecha es obligatorio',
         });
       }
+      if (fechaReserva) {
+        const fechaFinima = new Date(currentTime);
+        if (fechaFinima > new Date(fechaReserva)) {
+          errors.push({
+            title: 'fecha',
+            message: 'La fecha es anterior a la fecha actual',
+          });
+        }
+      }
       if (!horaInicio) {
         errors.push({
           title: 'horaInicio',
@@ -225,7 +234,7 @@ function Page() {
       router.back();
     } catch (error) {
       const errorMessage =
-        error?.error || error?.message || 'Ocurrió un error inesperado';
+        error?.title || error?.message || 'Ocurrió un error inesperado';
       toast.error(errorMessage);
     }
   };
