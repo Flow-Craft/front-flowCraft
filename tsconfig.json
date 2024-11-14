@@ -38,7 +38,8 @@
     "app/inicio/reportes/page.jsx",
     "app/inicio/lecciones/page.jsx",
     "app/inicio/torneos/page.jsx",
-    "app/inicio/estadisticas/page.jsx"
+    "app/inicio/estadisticas/page.jsx",
+    "app/inicio/reservas/page.jsx"
   ],
   "exclude": ["node_modules"]
 }

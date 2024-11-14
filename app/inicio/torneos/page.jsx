@@ -93,7 +93,7 @@ export default function Page() {
             )}
           </section>
         </div>
-        <div className='mt-20 min-h-[350px]'>
+        <div className="mt-20 min-h-[350px]">
           <span className="ml-6 text-2xl font-bold">En Curso</span>
           <section className="ml-6 flex max-w-[80vw] flex-row gap-2 overflow-x-auto pt-6">
             {torneosEnCurso.length > 0 ? (
@@ -115,7 +115,7 @@ export default function Page() {
             )}
           </section>
         </div>
-        <div className='mt-20 min-h-[350px]'>
+        <div className="mt-20 min-h-[350px]">
           <span className="ml-6 text-2xl font-bold"> Finalizados</span>
           <section className="ml-6 flex max-w-[80vw] flex-row gap-4 overflow-x-auto pt-6">
             {torneosFinalizados.length > 0 ? (

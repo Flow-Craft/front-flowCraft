@@ -1350,3 +1350,25 @@ export async function GetEstadisticasByUsuarioDNI(dniUsuario: any) {
 export async function GetEstadisticasByUsuarioLogin() {
   return await FlowCraftAPI.get(`Partidos/GetEstadisticasByUsuarioLogin`);
 }
+
+/// RESERVAS
+
+export async function getReservasVigentes() {
+  return await FlowCraftAPI.get(`Reservas/GetReservasVigentes`);
+}
+
+export async function eliminarReservaAdmin(idReserva: any) {
+  return await FlowCraftAPI.post(`Reservas/EliminarReserva?id=${idReserva}`);
+}
+
+export async function crearReservaAdmin(body: any) {
+  return await FlowCraftAPI.post(`Reservas/CrearReserva`, body);
+}
+
+export async function getReservasVigentesById(id: any) {
+  return await FlowCraftAPI.get(`Reservas/GetReservaById?id=${id}`);
+}
+
+export async function editarReservaAdmin(body: any) {
+  return await FlowCraftAPI.post(`Reservas/ActualizarReserva`, body);
+}

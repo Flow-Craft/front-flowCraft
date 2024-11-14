@@ -18,7 +18,6 @@ const EventoPage = () => {
   const getEvent = async (id) => {
     try {
       const result = await getEventoByUsuarioByIdAdmin(id);
-      console.log('result', result);
       setEvento(result.evento);
       setInscripto(result.inscripto);
     } catch (error) {

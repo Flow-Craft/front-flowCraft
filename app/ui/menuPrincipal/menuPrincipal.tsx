@@ -43,22 +43,22 @@ export default function MenuPrincipal() {
         <AcmeLogo />
         <div className=" hidden flex-row min-[1100px]:flex">
           <Button
-            className={` mx-3 font-medium ${pathname === DISCIPLINAS_HREF ? 'bg-blue-400' : ''} font-bold`}
+            className={` mx-3 tracking-wide  ${pathname === DISCIPLINAS_HREF ? 'bg-blue-400' : ''} font-bold`}
           >
             <Link href={DISCIPLINAS_HREF}>DISCIPLINAS</Link>
           </Button>
           <Button
-            className={` mx-3 font-medium ${pathname === INSTALACIONES_HREF ? 'bg-blue-400' : ''} font-bold`}
+            className={` mx-3 tracking-wide ${pathname === INSTALACIONES_HREF ? 'bg-blue-400' : ''} font-bold`}
           >
             <Link href={INSTALACIONES_HREF}>INSTALACIONES</Link>
           </Button>
           <Button
-            className={` mx-3 font-medium ${pathname === NOTICIAS_HREF ? 'bg-blue-400' : ''} font-bold`}
+            className={` mx-3 tracking-wide ${pathname === NOTICIAS_HREF ? 'bg-blue-400' : ''} font-bold`}
           >
             <Link href={NOTICIAS_HREF}>NOTICIAS</Link>
           </Button>
           <Button
-            className={` mx-3 font-medium ${pathname === QUIENES_SOMOS_HREF ? 'bg-blue-400' : ''} font-bold`}
+            className={` mx-3 tracking-wide ${pathname === QUIENES_SOMOS_HREF ? 'bg-blue-400' : ''} font-bold`}
           >
             <Link href={QUIENES_SOMOS_HREF}>¿QUIENES SOMOS?</Link>
           </Button>

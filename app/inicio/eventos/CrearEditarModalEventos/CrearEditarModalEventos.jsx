@@ -35,7 +35,7 @@ export const CrearEditarModalEventos = ({
   const [defaultValueVisitante, setDefaultValueVisitante] = useState({});
   const [arbitroSeleccionado, setArbitroSeleccionado] = useState({});
   const [planilleroSeleccionado, setPlanilleroSeleccionado] = useState({});
-  const [isLoading, setisLoading] = useState(false)
+  const [isLoading, setisLoading] = useState(false);
   const [arbitroDefault, setArbitroDefault] = useState({});
   const handleSelectTipo = (e) => {
     if (e.label === 'Partido' && !categoriaSeleccionada?.value) {
@@ -117,23 +117,23 @@ export const CrearEditarModalEventos = ({
   }, []);
 
   const getDataDelPartido = async (id) => {
-    setisLoading(true)
+    setisLoading(true);
     const result = await getPartidoByIdAdmin(id);
     const planilleroYArbitro = await getPlanilleroYArbritroByPartidoId(id);
     const arbitro = planilleroYArbitro.find(
       (user) => user.perfil === 'Arbitro',
     );
-    if(arbitro){
+    if (arbitro) {
       setArbitroSeleccionado({
         value: arbitro.id,
         label: `${arbitro.dni} - ${arbitro.nombre} ${arbitro.apellido}`,
       });
     }
-    
+
     const planillero = planilleroYArbitro.find(
       (user) => user.perfil === 'Planillero',
     );
-    if(planillero){
+    if (planillero) {
       setPlanilleroSeleccionado({
         value: planillero.id,
         label: `${planillero.dni} - ${planillero.nombre} ${planillero.apellido}`,
@@ -155,9 +155,9 @@ export const CrearEditarModalEventos = ({
       value: result?.visitante?.equipo?.id,
       label: result?.visitante?.equipo?.nombre,
     };
-    if(equipoLocal.value)setDefaultValueLocal(equipoLocal);
-    if(equipoVisitante.value)setDefaultValueVisitante(equipoVisitante);
-    setisLoading(false)
+    if (equipoLocal.value) setDefaultValueLocal(equipoLocal);
+    if (equipoVisitante.value) setDefaultValueVisitante(equipoVisitante);
+    setisLoading(false);
   };
 
   useEffect(() => {
@@ -368,7 +368,11 @@ export const CrearEditarModalEventos = ({
             </>
           )}
           <div className="mt-9 flex w-full content-between justify-between">
-          {isLoading && <div><CircularProgress isIndeterminate color='green.300' /> Cargando</div>}
+            {isLoading && (
+              <div>
+                <CircularProgress isIndeterminate color="green.300" /> Cargando
+              </div>
+            )}
             <div aria-live="polite" aria-atomic="true" className="mr-4">
               {errors.length > 0 && (
                 <p className="mt-2 text-sm font-bold text-red-500">

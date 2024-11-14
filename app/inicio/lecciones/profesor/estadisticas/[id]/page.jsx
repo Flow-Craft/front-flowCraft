@@ -182,7 +182,7 @@ const page = () => {
           </div>
         </div>
       </section>
-      <section className="flex w-full flex-row-reverse gap-4 mt-10">
+      <section className="mt-10 flex w-full flex-row-reverse gap-4">
         <Button
           colorScheme="blue"
           onClick={() => {
