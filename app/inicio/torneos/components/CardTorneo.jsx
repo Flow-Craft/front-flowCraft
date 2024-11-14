@@ -5,6 +5,7 @@ import React from 'react';
 export const CardTorneo = ({ torneo, onEdit, onDelete, disabled }) => {
   return (
     <div className="h-50 min-h-50 mx-auto aspect-auto w-80 rounded-lg bg-blue-300 p-2">
+      <p className="ml-2 text-2xl font-bold text-white">{torneo?.nombre}</p>
       <div className="flex items-center">
         {!disabled && (
           <div className="w-1/10 p-2">
@@ -31,7 +32,6 @@ export const CardTorneo = ({ torneo, onEdit, onDelete, disabled }) => {
 
         {/* Columna 2 - 45% */}
         <div className="w-9/20 p-2 ">
-          <p className="text-2xl font-bold text-white">{torneo?.nombre}</p>
           <p className="font-semibold text-white">
             Categoria: {torneo?.categoria?.nombre}
           </p>

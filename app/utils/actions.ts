@@ -1357,6 +1357,10 @@ export async function getReservasVigentes() {
   return await FlowCraftAPI.get(`Reservas/GetReservasVigentes`);
 }
 
+export async function getReservasVigentesByUsuario() {
+  return await FlowCraftAPI.get(`Reservas/GetReservasByUsuario`);
+}
+
 export async function eliminarReservaAdmin(idReserva: any) {
   return await FlowCraftAPI.post(`Reservas/EliminarReserva?id=${idReserva}`);
 }

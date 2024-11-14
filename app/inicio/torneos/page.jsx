@@ -10,6 +10,7 @@ import { CardTorneo } from './components/CardTorneo';
 export default function Page() {
   const [modalEliminarEvento, setModalEliminarEvento] = useState(false);
   const [torneosAbiertos, setTorneosAbiertos] = useState([]);
+  const [torneosCompletos, setTorneosCompletos] = useState([]);
   const [torneosEnCurso, setTorneosEnCurso] = useState([]);
   const [torneosFinalizados, setTorneosFinalizados] = useState([]);
   const [torneoSeleccionado, setTorneoSeleccionado] = useState({});
@@ -26,6 +27,9 @@ export default function Page() {
       );
       setTorneosFinalizados(
         result.filter((torneo) => torneo.torneoEstado === 'Finalizado'),
+      );
+      setTorneosCompletos(
+        result.filter((torneo) => torneo.torneoEstado === 'Completado'),
       );
     } catch (error) {
       toast.error(error.message);
@@ -73,10 +77,10 @@ export default function Page() {
         </button>
       </section>
 
-      <div className="mt-6 grid h-[80vh] w-full grid-rows-3 gap-4">
-        <div className="min-h-[350px]">
+      <div className="mt-6 grid w-full grid-rows-4 gap-4">
+        <div>
           <span className="ml-6 text-2xl font-bold">Abiertos</span>
-          <section className="ml-6 flex max-w-[80vw] flex-row gap-2 overflow-x-auto pt-6">
+          <section className="mx-6 flex max-w-[80vw] flex-row gap-2 overflow-x-scroll pt-6">
             {torneosAbiertos.length > 0 ? (
               torneosAbiertos.map((torneo) => (
                 <CardTorneo
@@ -93,7 +97,29 @@ export default function Page() {
             )}
           </section>
         </div>
-        <div className="mt-20 min-h-[350px]">
+        <div>
+          <span className="ml-6 text-2xl font-bold">Completos</span>
+          <section className="ml-6 flex max-w-[90vw] flex-row gap-2 overflow-x-scroll pt-6">
+            {torneosCompletos.length > 0 ? (
+              torneosEnCurso.map((torneo) => {
+                return (
+                  <CardTorneo
+                    key={torneo.id}
+                    torneo={torneo}
+                    onEdit={onEditTorneo}
+                    onDelete={onDeleteTorneo}
+                  />
+                );
+              })
+            ) : (
+              <span className="ml-6 text-xl font-semibold">
+                {' '}
+                Nada que mostrar
+              </span>
+            )}
+          </section>
+        </div>
+        <div>
           <span className="ml-6 text-2xl font-bold">En Curso</span>
           <section className="ml-6 flex max-w-[80vw] flex-row gap-2 overflow-x-auto pt-6">
             {torneosEnCurso.length > 0 ? (
@@ -115,9 +141,9 @@ export default function Page() {
             )}
           </section>
         </div>
-        <div className="mt-20 min-h-[350px]">
+        <div>
           <span className="ml-6 text-2xl font-bold"> Finalizados</span>
-          <section className="ml-6 flex max-w-[80vw] flex-row gap-4 overflow-x-auto pt-6">
+          <section className="ml-6 flex max-h-[80vw] flex-row gap-4 overflow-x-auto pt-6">
             {torneosFinalizados.length > 0 ? (
               torneosFinalizados.map((torneo) => {
                 return (

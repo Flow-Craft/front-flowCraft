@@ -35,6 +35,7 @@ const links = [
   {
     name: 'Reservas',
     href: '/inicio/reservas',
+    hrefSocio: '/inicio/reservas/socio',
     icon: CalendarIcon,
     nombrePermiso: 'Reservas',
   },
@@ -162,7 +163,7 @@ export default function NavLinks({ onClose = () => {} }) {
         const LinkIcon = link.icon;
         if (
           window?.localStorage?.perfil === 'Socio' &&
-          link.name === 'Torneos'
+          (link.name === 'Torneos' || link.name === 'Reservas')
         ) {
           return (
             <Link
