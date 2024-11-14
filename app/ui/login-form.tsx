@@ -21,7 +21,7 @@ import {
 } from '../utils/const';
 import toast from 'react-hot-toast';
 import { InputWithLabel } from './components/InputWithLabel/InputWithLabel';
-import { ChangePasswordLogin } from './dashboard/changePasswordLogin';
+import { ChangePasswordLogin } from './dashboard/ChangePasswordLogin';
 
 export default function LoginForm() {
   const [tyC, setTyC] = useState<{ tyc: string }>({ tyc: '' });

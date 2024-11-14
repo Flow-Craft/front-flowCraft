@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { InputWithLabel } from '../components/InputWithLabel/InputWithLabel';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 
