@@ -78,7 +78,7 @@ function Page() {
     fechaActual.setHours(0, 0, 0, 0); // Establece la hora de fechaActual a las 00:00
 
     const reservasActuales = result.filter((reserva) => {
-      const fechaReserva = new Date(reserva.fechaReserva);
+      const fechaReserva = new Date(reserva.horaInicio);
       fechaReserva.setHours(0, 0, 0, 0); // Establece la hora de fechaReserva a las 00:00
 
       return fechaReserva >= fechaActual;
@@ -203,10 +203,16 @@ function Page() {
         setErrors(errors);
         return;
       }
-      const horaInicioArray = horaInicio.split(":")
-      const horaFinArray = horaFin.split(":")
-      const formattedHoraInicio = horaInicioArray.length === 3 ? `${fechaReserva}T${horaInicio}` :  `${fechaReserva}T${horaInicio}:00`;
-      const formattedHoraFin = horaFinArray.length === 3 ? `${fechaReserva}T${horaFin}` : `${fechaReserva}T${horaFin}:00`;      
+      const horaInicioArray = horaInicio.split(':');
+      const horaFinArray = horaFin.split(':');
+      const formattedHoraInicio =
+        horaInicioArray.length === 3
+          ? `${fechaReserva}T${horaInicio}`
+          : `${fechaReserva}T${horaInicio}:00`;
+      const formattedHoraFin =
+        horaFinArray.length === 3
+          ? `${fechaReserva}T${horaFin}`
+          : `${fechaReserva}T${horaFin}:00`;
 
       await editarReservaAdmin({
         Id: id,
@@ -218,8 +224,9 @@ function Page() {
       toast.success('reserva editada exitosamente');
       router.back();
     } catch (error) {
-      console.error(error);
-      toast.error(error.title);
+      const errorMessage =
+        error?.error || error?.message || 'Ocurrió un error inesperado';
+      toast.error(errorMessage);
     }
   };
 
@@ -238,7 +245,7 @@ function Page() {
       <section className="flex w-full justify-between">
         <Toaster />
         <div className="mt-6 self-start px-9 pb-9 text-3xl font-bold">
-          Crear Reserva
+          Editar Reserva
         </div>
       </section>
       <section>

@@ -35,7 +35,7 @@ function Page() {
     setInstalacionSeleccionada(result?.instalacion);
     const reservasDeLaInstalacion = reservasActuales
       .filter((res) => res.instalacion.id === result?.instalacion?.id)
-      .sort((a, b) => new Date(b.fechaReserva) - new Date(a.fechaReserva));
+      .sort((a, b) => new Date(b.fechaInicio) - new Date(a.fechaInicio));
     setProximasReservasDeLaInstalacion(reservasDeLaInstalacion);
     setFechaReserva('');
     setHoraInicio('');
@@ -68,11 +68,12 @@ function Page() {
         .filter(Boolean);
     setInstalaciones(instalacionesOptions);
     const result = await getReservasVigentes();
+    console.log('result', result);
     const fechaActual = new Date();
     fechaActual.setHours(0, 0, 0, 0); // Establece la hora de fechaActual a las 00:00
 
     const reservasActuales = result.filter((reserva) => {
-      const fechaReserva = new Date(reserva.fechaReserva);
+      const fechaReserva = new Date(reserva.horaInicio);
       fechaReserva.setHours(0, 0, 0, 0); // Establece la hora de fechaReserva a las 00:00
 
       return fechaReserva >= fechaActual;
@@ -190,7 +191,10 @@ function Page() {
       toast.success('reserva creada exitosamente');
       router.back();
     } catch (error) {
-      toast.error(error.title);
+      const errorMessage =
+        error?.error || error?.message || 'Ocurrió un error inesperado';
+
+      toast.error(errorMessage);
     }
   };
 

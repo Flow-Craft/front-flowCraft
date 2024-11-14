@@ -102,7 +102,7 @@ function Page() {
       fechaActual.setHours(0, 0, 0, 0); // Establece la hora de fechaActual a las 00:00
 
       const reservasActuales = result.filter((reserva) => {
-        const fechaReserva = new Date(reserva.fechaReserva);
+        const fechaReserva = new Date(reserva.horaInicio);
         fechaReserva.setHours(0, 0, 0, 0); // Establece la hora de fechaReserva a las 00:00
 
         return fechaReserva >= fechaActual;
