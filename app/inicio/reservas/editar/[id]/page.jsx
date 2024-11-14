@@ -203,10 +203,10 @@ function Page() {
         setErrors(errors);
         return;
       }
-
-      // Formateo de horas a formato ISO 8601
-      const formattedHoraInicio = `${fechaReserva}T${horaInicio}:00`;
-      const formattedHoraFin = `${fechaReserva}T${horaFin}:00`;
+      const horaInicioArray = horaInicio.split(":")
+      const horaFinArray = horaFin.split(":")
+      const formattedHoraInicio = horaInicioArray.length === 3 ? `${fechaReserva}T${horaInicio}` :  `${fechaReserva}T${horaInicio}:00`;
+      const formattedHoraFin = horaFinArray.length === 3 ? `${fechaReserva}T${horaFin}` : `${fechaReserva}T${horaFin}:00`;      
 
       await editarReservaAdmin({
         Id: id,
