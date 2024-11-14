@@ -548,8 +548,10 @@ export async function createNew(createdNew: any) {
     finalNew.Titulo = nw.titulo;
     finalNew.Descripcion = nw.descripcion;
     finalNew.Imagen = file64;
-    finalNew.FechaInicio = formatDateToISOString(nw.fechaInicio);
-    finalNew.FechaFin = formatDateToISOString(nw.fechaFin);
+    // finalNew.FechaInicio = formatDateToISOString(nw.fechaInicio);
+    // finalNew.FechaFin = formatDateToISOString(nw.fechaFin);
+    finalNew.FechaInicio = nw.fechaInicio ? formatDateToISOString(new Date(nw.fechaInicio)) : null;
+    finalNew.FechaFin = nw.fechaFin ? formatDateToISOString(new Date(nw.fechaFin)) : null;
     delete finalNew.titulo;
     delete finalNew.foto;
     delete finalNew.descripcion;
