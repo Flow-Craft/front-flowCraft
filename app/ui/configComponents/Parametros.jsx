@@ -21,6 +21,7 @@ export const ParametrosTab = () => {
       setOpenModal(false);
     } catch (error) {
       toast.error(error.message);
+      return
     }
   };
 

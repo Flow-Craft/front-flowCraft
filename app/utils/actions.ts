@@ -264,12 +264,7 @@ export async function getQuienesSomosAction() {
 }
 
 export async function actualizarTyC(body: any) {
-  try {
-    return await FlowCraftAPI.post('Configuracion/CrearTYC', body);
-  } catch (error: any) {
-    toast.dismiss();
-    toast.error(error.message);
-  }
+  await FlowCraftAPI.post('Configuracion/CrearTYC', body);
 }
 
 export async function getNewsAction() {
