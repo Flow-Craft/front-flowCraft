@@ -211,7 +211,7 @@ export const UserTab = () => {
 
   const editUserAction = async (event: any) => {
     try {
-      await EditUserByAdmin({
+      const result = await EditUserByAdmin({
         Id: userSelected.id,
         Nombre: event.target.Nombre.value,
         Apellido: event.target.Apellido.value,
@@ -224,9 +224,14 @@ export const UserTab = () => {
         Perfil: event.target.Perfil.value,
         Sexo: event.target.Sexo.value,
       });
+      if (result?.error) {
+        setErrors(result.errors);
+        return;
+      }
       setEditCreateUser(false);
       userToTab();
       toast.success('usuario editado con exito');
+      setErrors([])
     } catch (error: any) {
       toast.error(error.message);
     }
