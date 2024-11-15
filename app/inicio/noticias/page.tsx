@@ -187,6 +187,7 @@ export default function Page() {
       }
       setErrors([]);
       toast.success('Noticia creada con exito');
+      getNews();
       setFirst(false);
     } catch (error: any) {
       toast.error(error.message);

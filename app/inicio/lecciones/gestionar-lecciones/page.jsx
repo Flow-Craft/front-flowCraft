@@ -282,6 +282,7 @@ function Page() {
         type="submit"
         onCancelModal={() => {
           setOpenModalCrearEditarLecciones(false);
+          setNuevaLeccion({})
         }}
       />
       <FlowModal
