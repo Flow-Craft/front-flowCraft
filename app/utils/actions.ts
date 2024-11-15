@@ -512,6 +512,11 @@ export async function crearCategoriaAdmin(dis: any, setErrors: any) {
 }
 
 export async function editarCategoriaAdmin(dis: any) {
+  const result = categoriaSchema.safeParse(dis);
+
+  if (!result.success) {
+    return { error: true, errors: result.error.errors };
+  }
   return await FlowCraftAPI.post(
     `DisciplinasYLecciones/ActualizarCategoria`,
     dis,

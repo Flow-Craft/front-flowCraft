@@ -37,7 +37,7 @@ export const categoriaSchema = z
     Nombre: z.string().min(1, 'El nombre no puede estar vacío'),
     EdadMinima: z.number().min(1, 'La edad mínima debe ser mayor o igual a 1'),
     EdadMaxima: z.number().min(1, 'La edad máxima debe ser mayor o igual a 1'),
-    Genero: z.string().optional(),
+    Genero: z.string().min(1, 'Debe elegir el genero'),
   })
   .refine(
     (data) => {

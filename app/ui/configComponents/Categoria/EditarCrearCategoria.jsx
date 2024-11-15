@@ -55,6 +55,17 @@ export const EditarCrearCategoria = ({ errors, categoria }) => {
           className={`w-full resize-none rounded-lg border border-gray-300 p-2 focus:border-gray-500 focus:outline-none`}
         />
       </label>
+      <div aria-live="polite" aria-atomic="true" className="mr-4">
+        {errors &&
+          errors.map((error) => (
+            <p
+              className="mt-2 text-sm font-bold text-red-500"
+              key={error.message}
+            >
+              {error.message}
+            </p>
+          ))}
+      </div>
     </div>
   );
 };
