@@ -161,6 +161,7 @@ export default function Page() {
         descripcion: e.target.descripcion.value,
       });
       toast.success('Noticia editada con exito');
+      setNewToEdit({});
       setFirst(false);
       getNews();
     } catch (error: any) {
@@ -289,11 +290,11 @@ export default function Page() {
       <FlowModal
         title="Noticia"
         modalBody={<FormModal errors={errors} newToEdit={newToEdit} />}
-        primaryTextButton={newToEdit ? 'Editar' : 'Crear'}
+        primaryTextButton={newToEdit?.id ? 'Editar' : 'Crear'}
         isOpen={first}
         type="submit"
         scrollBehavior="outside"
-        onAcceptModal={newToEdit ? EditNew : onCreateNew}
+        onAcceptModal={newToEdit?.id  ? EditNew : onCreateNew}
         onCancelModal={() => {
           setFirst(false);
           setErrors([]);
