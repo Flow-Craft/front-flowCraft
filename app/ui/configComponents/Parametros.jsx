@@ -53,7 +53,7 @@ export const ParametrosTab = () => {
             setOpenModal(true);
           }}
         >
-          Actualizar terminos y condiciones
+          Actualizar términos y condiciones
         </button>
         <button
           className="mt-7 rounded-lg bg-blue-600 p-2 text-center text-xl text-white"
@@ -62,11 +62,11 @@ export const ParametrosTab = () => {
             getTerminosYcondiciones(nuevosTerminosYCondiciones);
           }}
         >
-          Ver terminos y condiciones
+          Ver términos y condiciones
         </button>
       </section>
       <FlowModal
-        title="Debe aceptar los nuevos terminos y condiciones"
+        title="Debe aceptar los nuevos términos y condiciones"
         isOpen={openModal}
         size="full"
         modalBody={
@@ -99,7 +99,7 @@ export const ParametrosTab = () => {
       />
 
       <FlowModal
-        title="Debe aceptar los nuevos terminos y condiciones"
+        title="Debe aceptar los nuevos términos y condiciones"
         isOpen={openTerminosYcondiciones}
         modalBody={terminosYcondicionesEjemplo}
         scrollBehavior="outside"

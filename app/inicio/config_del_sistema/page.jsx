@@ -23,7 +23,6 @@ function Page() {
   const [menuSelected, setMenuSelected] = useState('');
   const { getPermisosByNombre } = usePermisos();
   const permisos = getPermisosByNombre('Configuracion del sistema');
-  console.log('permisos', permisos);
   const buttonsUser = useMemo(() => {
     return [
       {
@@ -74,7 +73,7 @@ function Page() {
   return (
     <section>
       <div className="mt-6 self-start px-9 pb-9 text-3xl font-bold">
-        Configuracion del sistema
+        Configuración del sistema
       </div>
       <section>
         <div className="flex flex-row flex-wrap gap-7">

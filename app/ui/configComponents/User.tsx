@@ -36,7 +36,7 @@ const HEADER_TABLE = [
   { name: 'Apellido' },
   { name: 'DNI' },
   { name: 'Email' },
-  { name: 'Tef' },
+  { name: 'Teléfono' },
   { name: 'Estado' },
   { name: 'Acciones' },
 ];
@@ -67,7 +67,7 @@ export const UserTab = () => {
   const blanquearContraseña = async (user: any) => {
     try {
       await clearPasswordByEmail(user.email);
-      toast.success(`se blanqueo la contraseña del usuario ${user.email}`);
+      toast.success(`Se blanqueó la contraseña del usuario ${user.email}`);
     } catch (error: any) {
       toast.error(error.message);
     }
@@ -138,7 +138,7 @@ export const UserTab = () => {
   const handleAccept = async (e: any) => {
     try {
       await bloquearUsuarioAdmin(userSelected.id, e.target.razon.value);
-      toast.success('usuario bloqueado con exito');
+      toast.success('usuario bloqueado con éxito');
       userToTab();
       setOpenBlockUserModal(false);
     } catch (error) {
@@ -149,7 +149,7 @@ export const UserTab = () => {
   const onDesbloquearUsuario = async (e: any) => {
     try {
       await desbloquearUsuarioAdmin(userSelected.id, e.target.razon.value);
-      toast.success('usuario desbloqueado con exito');
+      toast.success('usuario desbloqueado con éxito');
       userToTab();
       setOpenDetailUserModal(false);
     } catch (error) {
@@ -201,7 +201,7 @@ export const UserTab = () => {
       if (result.data) {
         await registrarUsuarioAdmin(result.data);
         setEditCreateUser(false);
-        toast.success('Usuario creado con exito');
+        toast.success('Usuario creado con éxito');
         userToTab();
       }
     } catch (error: any) {
@@ -230,7 +230,7 @@ export const UserTab = () => {
       }
       setEditCreateUser(false);
       userToTab();
-      toast.success('usuario editado con exito');
+      toast.success('usuario editado con éxito');
       setErrors([])
     } catch (error: any) {
       toast.error(error.message);

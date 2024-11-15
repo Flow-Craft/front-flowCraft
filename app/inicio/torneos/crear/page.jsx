@@ -115,7 +115,7 @@ function Page() {
           <SelectWithLabel
             name="IdInstalacion"
             options={instalacion}
-            label="Instalacion"
+            label="Instalación"
             value={instalacionSeleccionada}
             onChange={setInstalacionSeleccionada}
             required
@@ -135,7 +135,7 @@ function Page() {
           <SelectWithLabel
             name="IdCategoria"
             options={categoria}
-            label="Categoria"
+            label="Categoría"
             onChange={setCategoriaSeleccionada}
             required
           />
@@ -167,7 +167,7 @@ function Page() {
             className="mb-3 mt-5 block text-lg font-medium text-gray-900"
             htmlFor={'descripcion'}
           >
-            Descripcion
+            Descripción
             <label className="text-red-600"> *</label>
             <textarea
               name="Descripcion"

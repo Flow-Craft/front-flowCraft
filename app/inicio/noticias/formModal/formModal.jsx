@@ -6,7 +6,7 @@ export const FormModal = ({ errors, newToEdit = null }) => {
       <InputWithLabel
         name={'titulo'}
         type="text"
-        label="Titulo de la noticia"
+        label="Título de la noticia"
         required
         wrong={!!errors.find((e) => e.path[0] === 'titulo')}
         defaultValue={newToEdit?.titulo}
@@ -40,7 +40,7 @@ export const FormModal = ({ errors, newToEdit = null }) => {
         className="mb-3 mt-5 block text-lg font-medium text-gray-900"
         htmlFor={'descripcion'}
       >
-        Descripcion
+        Descripción
         <label className="text-red-600"> *</label>
         <textarea
           name="descripcion"

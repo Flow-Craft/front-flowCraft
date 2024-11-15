@@ -33,7 +33,7 @@ export const FormEditarCrearLeccion = ({
           }}
         />
         <InputWithLabel
-          label="Cantidad Maxima"
+          label="Cantidad Máxima"
           name={'CantMaxima'}
           type="number"
           min={1}
@@ -74,7 +74,7 @@ export const FormEditarCrearLeccion = ({
       <div className="w-full md:w-[40%]">
         <SelectWithLabel
           name="categiria"
-          label="Categoria"
+          label="Categoría"
           options={categorias}
           value={value?.Categoria}
           onChange={(seleccion) => {
@@ -83,7 +83,7 @@ export const FormEditarCrearLeccion = ({
         />
         <SelectWithLabel
           name="dias"
-          label="Dias de la semana"
+          label="Días de la semana"
           options={diasDeLaSemana}
           value={value?.DiasDeLaSemana}
           isMulti
@@ -113,7 +113,7 @@ export const FormEditarCrearLeccion = ({
           className="mb-3 mt-5 block text-lg font-medium text-gray-900"
           htmlFor={'descripcion'}
         >
-          Descripcion
+          Descripción
           <textarea
             name="Descripcion"
             rows="7"

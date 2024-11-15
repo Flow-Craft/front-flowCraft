@@ -78,7 +78,7 @@ export default function ChangePassword({ email, code }: any) {
             required
           />
           <Button className="mt-4 w-full bg-blue-600 text-lg">
-            Enviar Codigo{' '}
+            Reestablecer contraseña{' '}
             <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
           </Button>
           <div className="mt-9 flex w-full content-between justify-between">

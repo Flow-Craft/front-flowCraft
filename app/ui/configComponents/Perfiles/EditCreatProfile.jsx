@@ -20,7 +20,7 @@ export const EditCreatProfile = ({
         required
       />
       <InputWithLabel
-        label="Descripcion"
+        label="Descripción"
         name={'descripcion'}
         type="text"
         defaultValue={perfil?.descripcion}

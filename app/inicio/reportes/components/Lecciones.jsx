@@ -18,7 +18,7 @@ const OPTIONS_PER_SAVE = [
     value: 1,
   },
   {
-    label: 'Por disciplina, categoria y periodo',
+    label: 'Por disciplina, categoría y periodo',
     value: 2,
   },
 ];
@@ -85,7 +85,7 @@ export const Lecciones = () => {
             </div>
             <div className="min-w-[170px] max-w-[330px]">
               <SelectWithLabel
-                label="Categoria"
+                label="Categoría"
                 name="filtro"
                 value={categoriaSeleccionada}
                 options={categoria}
@@ -105,7 +105,7 @@ export const Lecciones = () => {
               </div>
               <div className="min-w-[220px]">
                 <label className="mb-2 mt-6 block text-lg font-bold text-gray-900">
-                  Fecha unica:
+                  Fecha única:
                 </label>
                 <InputWithLabel
                   name={'nombre'}

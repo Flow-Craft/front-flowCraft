@@ -47,7 +47,7 @@ export default function GetVerificationCode({
     if (result?.error) {
       setErrors(result.errors);
     } else {
-      toast.success('Codigo correcto!');
+      toast.success('¡Código correcto!');
       await createTimer(2000);
       setValidCode(e.target.code.value);
       nextStep(3);
@@ -100,7 +100,7 @@ export default function GetVerificationCode({
             className="mb-3 mt-5 block text-lg font-medium text-gray-900 "
             htmlFor="code"
           >
-            Por favor ingrese su codigo de verificacion
+            Por favor ingrese su código de verificación
           </label>
           <div className="relative">
             <input
@@ -113,11 +113,11 @@ export default function GetVerificationCode({
             <AdjustmentsHorizontalIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
           </div>
           <Button className="mt-4 w-full bg-blue-600 text-lg">
-            Verificar Codigo{' '}
+            Verificar Código{' '}
             <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
           </Button>
           <div className="mt-4 flex flex-col items-end">
-            <p>{`¿No recibiste tu codigo? Prueba intentarlo ${!timerFinished ? 'nuevamente en' : 'ahora mismo!!'}`}</p>
+            <p>{`¿No recibiste tu código? Prueba intentarlo ${!timerFinished ? 'nuevamente en' : 'ahora mismo!!'}`}</p>
             {!timerFinished ? (
               <p>{formatTime(timeLeft)}</p>
             ) : (

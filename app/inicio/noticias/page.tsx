@@ -125,7 +125,7 @@ export default function Page() {
   const deleteNew = async () => {
     try {
       await deleteNewAction(newToDelete);
-      toast.success('Exito');
+      toast.success('éxito');
       setSecond(false);
       setNewToDelete(null);
       getNews();
@@ -160,7 +160,7 @@ export default function Page() {
         fechaFin: fechaFin,
         descripcion: e.target.descripcion.value,
       });
-      toast.success('Noticia editada con exito');
+      toast.success('Noticia editada con éxito');
       setNewToEdit({});
       setFirst(false);
       getNews();
@@ -187,7 +187,7 @@ export default function Page() {
         return setErrors(result.errors);
       }
       setErrors([]);
-      toast.success('Noticia creada con exito');
+      toast.success('Noticia creada con éxito');
       getNews();
       setFirst(false);
     } catch (error: any) {
@@ -303,8 +303,8 @@ export default function Page() {
       />
       <FlowModal
         title="Noticia"
-        modalBody={<>¿Esta seguro que desea eliminar esta noticia</>}
-        primaryTextButton={'Si'}
+        modalBody={<>¿Está seguro que desea eliminar esta noticia</>}
+        primaryTextButton={'Sí'}
         isOpen={second}
         scrollBehavior="outside"
         onAcceptModal={deleteNew}

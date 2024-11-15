@@ -39,7 +39,7 @@ const HEADER_TABLE = [
   { name: 'Tipo' },
   { name: 'Fecha' },
   { name: 'Hora' },
-  { name: 'Instalacion' },
+  { name: 'Instalación' },
   { name: 'Disciplina' },
   { name: 'Categoria' },
   { name: 'Acciones' },
@@ -292,7 +292,7 @@ function Page() {
           return;
         }
       }
-      toast.success('Evento creado con exito');
+      toast.success('Evento creado con éxito');
       setEditCreateEvento(false);
       getEventos();
     } catch (error) {
@@ -321,7 +321,7 @@ function Page() {
           Planillero: e.target.planillero.value,
         };
         await editarEventoAdmin(eventoACrear);
-        toast.success('Evento editado con exito');
+        toast.success('Evento editado con éxito');
       } else {
         const eventoACrear = {
           Id: eventoSeleccionado.id,
@@ -342,7 +342,7 @@ function Page() {
           setErrors(result?.errors);
           return;
         }
-        toast.success('Evento editado con exito');
+        toast.success('Evento editado con éxito');
       }
       setEventoSeleccionado({});
       setEditCreateEvento(false);
@@ -367,7 +367,7 @@ function Page() {
   const tomarAsistencia = async (userId, eventoId) => {
     try {
       await tomarAsistenciaAdmin({ IdEvento: eventoId, IdUsuario: userId });
-      toast.success('Usuario Registrado con exito');
+      toast.success('Usuario Registrado con éxito');
     } catch (error) {
       toast.error(error.message);
     }
@@ -533,7 +533,7 @@ function Page() {
             </section>
             <div className="flex min-w-[170px] flex-row items-center gap-3">
               <label className="mb-3 mt-5 block text-lg font-bold text-gray-900">
-                Instalacion:
+                Instalación:
               </label>
               <div className="min-w-[170px]">
                 <SelectWithLabel
@@ -557,7 +557,7 @@ function Page() {
             </div>
             <div className="flex min-w-[170px] flex-row items-center gap-3">
               <label className="mb-3 mt-5 block text-lg font-bold text-gray-900">
-                Categoria:
+                Categoría:
               </label>
               <div className="min-w-[220px]">
                 <SelectWithLabel

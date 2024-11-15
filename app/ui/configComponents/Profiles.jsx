@@ -18,9 +18,9 @@ import { formatDate } from '@/app/utils/functions';
 
 const HEADER_TABLE = [
   { name: 'Nombre' },
-  { name: 'Descripcion' },
+  { name: 'Descripción' },
   { name: 'Alta' },
-  { name: 'Edicion' },
+  { name: 'Edición' },
   { name: 'Acciones' },
 ];
 
@@ -50,7 +50,7 @@ export const ProfilesTab = () => {
   const deleteDicipline = async () => {
     try {
       await eliminarPerfilAdmin(profileToDelte.perfil.id);
-      toast.success('Perfil eliminado con exito');
+      toast.success('Perfil eliminado con éxito');
       PerfilesToTab();
     } catch (error) {
       toast.error(error.message);
@@ -123,7 +123,7 @@ export const ProfilesTab = () => {
           Permisos: permisosSelected.map((perm) => perm.value),
         };
         await editPerfilAction(perfil);
-        toast.success('perfil editado con exito');
+        toast.success('perfil editado con éxito');
         PerfilesToTab();
         return;
       }
@@ -131,7 +131,7 @@ export const ProfilesTab = () => {
       if (result?.error) {
         setErrors(result.errors);
       }
-      toast.success('perfil creado con exito');
+      toast.success('perfil creado con éxito');
       PerfilesToTab();
     } catch (error) {
       toast.error(error.message);
@@ -242,7 +242,7 @@ export const ProfilesTab = () => {
       <FlowModal
         title={`Eliminar Perfil ${profileToDelte?.perfil?.nombrePerfil}`}
         modalBody={<div>{profileToDelte?.perfil?.descripcionPerfil}</div>}
-        primaryTextButton="¿Esta seguro que desea eliminar este perfil?"
+        primaryTextButton="¿Está seguro que desea eliminar este perfil?"
         isOpen={openDeleteProfile}
         scrollBehavior="outside"
         onAcceptModal={deleteDicipline}

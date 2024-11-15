@@ -86,7 +86,7 @@ export const TiposAccionPartido = () => {
         IdDisciplina: e.target.disciplina?.value?.toString(),
       };
       await editarTipoAccionPartidoAdmin(tipoAccionPartido);
-      toast.success('Tipo editado exitosamente');
+      toast.success('Tipo editado samente');
       TipoAccionPartidoToTab();
       setTipoAccionPartidoToDelte(null);
       setOpenCreateEditAccionPartido(false);

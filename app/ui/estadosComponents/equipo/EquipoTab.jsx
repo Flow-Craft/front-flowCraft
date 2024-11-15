@@ -16,7 +16,7 @@ import { EditarCrearEquipo } from '../equipo/EditarCrearEquipo';
 
 const HEADER_TABLE = [
   { name: 'Nombre' },
-  { name: 'Descripcion' },
+  { name: 'Descripción' },
   { name: 'Acciones' },
 ];
 
@@ -32,7 +32,7 @@ export const EquiposTab = () => {
   const deleteCategoria = async () => {
     try {
       await eliminarEquipoEstadoAdmin(equipoToDelte.id);
-      toast.success('Perfil eliminado con exito');
+      toast.success('Perfil eliminado con éxito');
       equipoToTab();
     } catch (error) {
       toast.error(error.message);
@@ -89,7 +89,7 @@ export const EquiposTab = () => {
         setErrors(result.errors);
         return;
       }
-      toast.success('Equipo Estado creado con exito');
+      toast.success('Equipo Estado creado con éxito');
       equipoToTab();
       setOpenCreateEquipo(false);
     } catch (error) {
@@ -105,7 +105,7 @@ export const EquiposTab = () => {
         DescripcionEstado: e.target.descripcion.value,
       };
       await editarEquipoAdmin(categoria);
-      toast.success('Equipo editado con exito');
+      toast.success('Equipo editado con éxito');
       equipoToTab();
       setOpenCreateEquipo(false);
       setEquipoToEdit({});

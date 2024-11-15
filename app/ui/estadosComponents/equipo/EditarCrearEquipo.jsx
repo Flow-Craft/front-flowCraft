@@ -16,7 +16,7 @@ export const EditarCrearEquipo = ({ errors, equipo }) => {
         className="mb-3 mt-5 block text-lg font-medium text-gray-900"
         htmlFor={'descripcion'}
       >
-        Descripcion
+        Descripción
         <textarea
           name="descripcion"
           rows="5"

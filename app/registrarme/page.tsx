@@ -54,7 +54,7 @@ export default function Page() {
         type: 'string',
         inclusive: true,
         exact: false,
-        message: 'Debe aceptar los terminos y condiciones para registrarse',
+        message: 'Debe aceptar los términos y condiciones para registrarse',
         path: ['TyC'],
       },
     ]);
@@ -235,12 +235,12 @@ export default function Page() {
         </div>
         {openModal && (
           <FlowModal
-            title="Debe aceptar los terminos y condiciones"
+            title="Debe aceptar los términos y condiciones"
             isOpen={openModal}
             modalBody={tyc}
             onAcceptModal={handleRegistryUser}
             onCancelModal={handleCancel}
-            primaryTextButton="Aceptar terminos y condiciones"
+            primaryTextButton="Aceptar términos y condiciones"
           />
         )}
       </form>

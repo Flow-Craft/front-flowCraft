@@ -237,7 +237,7 @@ function Page() {
       <section>
         <div className="flex min-w-[370px] flex-row items-center gap-3">
           <label className="mb-3 mt-5 block text-lg font-bold text-gray-900">
-            Instalacion:
+            Instalación:
           </label>
           <div className="min-w-[370px]">
             <SelectWithLabel
@@ -256,7 +256,7 @@ function Page() {
           <>
             <div className="w-1/2 p-4">
               <InputWithLabel
-                label="Dia"
+                label="Día"
                 name={'fecha'}
                 type="date"
                 value={fechaReserva}
@@ -291,7 +291,7 @@ function Page() {
               />
               <div className="mt-5 flex w-full flex-col gap-4">
                 <span className="text-xl">
-                  <span className="font-bold">Ubicacion: </span>
+                  <span className="font-bold">Ubicación: </span>
                   {instalacionSeleccionada?.ubicacion}
                 </span>
                 <span className="text-xl">
@@ -329,7 +329,7 @@ function Page() {
             </div>
             <div className="w-1/2 p-4">
               <div className="mt-6 self-start px-9 pb-9 text-xl font-bold">
-                Proximos eventos
+               Próximos eventos
               </div>
               {proximasReservasDeLaInstalacion.map((reserva) => {
                 const formatDate = (dateString) => {

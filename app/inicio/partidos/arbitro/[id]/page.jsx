@@ -120,7 +120,7 @@ const PartidoScreen = () => {
   const suspenderPartido = async (e) => {
     try {
       await suspenderPartidoAdmin(partidoId, e.target.descripcion.value);
-      toast.success('Partido suspendido con exito');
+      toast.success('Partido suspendido con éxito');
       router.back();
     } catch (error) {
       toast.error(error?.message);
@@ -130,7 +130,7 @@ const PartidoScreen = () => {
   const iniciarTiempo = async () => {
     try {
       await iniciarTiempoAdmin(partidoId);
-      toast.success('Tiempo iniciado con exito');
+      toast.success('Tiempo iniciado con éxito');
       getDataDelPatido(partidoId);
       setModalIniciarTiempo(false);
     } catch (error) {
@@ -141,7 +141,7 @@ const PartidoScreen = () => {
   const finalizarTiempo = async () => {
     try {
       await finalizarTiempoAdmin(partidoId);
-      toast.success('Tiempo finalizado con exito');
+      toast.success('Tiempo finalizado con éxito');
       getDataDelPatido(partidoId);
       setModalFinalizarTiempo(false);
     } catch (error) {

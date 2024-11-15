@@ -19,8 +19,8 @@ const HEADER_TABLE = [
   { name: 'Jugadores' },
   { name: 'Jugadores Banca' },
   { name: 'tarjetas advertencia' },
-  { name: 'tarjetas expulsion' },
-  { name: 'cant tiempos' },
+  { name: 'tarjetas expulsión' },
+  { name: 'cantidad de tiempos' },
   { name: 'Eliminada' },
   { name: 'Acciones' },
 ];
@@ -77,7 +77,7 @@ export const DisciplinasTab = () => {
   const deleteDicipline = async () => {
     try {
       await deleteDisciplineAction(disciplineToDelte.id);
-      toast.success('disciplina eliminada con exito');
+      toast.success('disciplina eliminada con éxito');
       disciplinasToTab();
     } catch (error: any) {
       toast.error(error.message);
@@ -129,10 +129,10 @@ export const DisciplinasTab = () => {
     try {
       if (!disciplineToEdit.id) {
         await createDisciplineAction(disciplineToEdit);
-        toast.success('Disciplina creada con exito');
+        toast.success('Disciplina creada con éxito');
       } else {
         await editDisciplineAction(disciplineToEdit);
-        toast.success('Disciplina editada con exito');
+        toast.success('Disciplina editada con éxito');
       }
       disciplinasToTab();
     } catch (error: any) {
@@ -252,7 +252,7 @@ export const DisciplinasTab = () => {
       <FlowModal
         title={`Eliminar Disciplina ${disciplineToDelte?.nombre}`}
         modalBody={<div>{disciplineToDelte?.descripcion}</div>}
-        primaryTextButton="¿Esta seguro que desea eliminar esta disciplina?"
+        primaryTextButton="¿Está seguro que desea eliminar esta disciplina?"
         isOpen={openDeleteDiscipline}
         scrollBehavior="outside"
         onAcceptModal={deleteDicipline}

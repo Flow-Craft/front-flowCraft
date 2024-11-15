@@ -24,7 +24,7 @@ import usePermisos from '@/app/utils/permisos';
 
 const HEADER_TABLE = [
   { name: 'Nombre' },
-  { name: 'Ubicacion' },
+  { name: 'Ubicación' },
   { name: 'Precio por hora' },
   { name: 'Apertura' },
   { name: 'Cierre' },
@@ -106,7 +106,7 @@ function Page() {
         setErrors(result.errors);
         return;
       }
-      toast.success('instalacion editada con exito');
+      toast.success('instalación editada con éxito');
       getInstalacionesAction();
       setOpenCreateEditInstalacion(false);
       setEdit(false);
@@ -133,7 +133,7 @@ function Page() {
         setErrors(result.errors);
         return;
       }
-      toast.success('instalacion creada con exito');
+      toast.success('instalación creada con éxito');
       getInstalacionesAction();
       setOpenCreateEditInstalacion(false);
     } catch (error) {
@@ -144,7 +144,7 @@ function Page() {
   const handleEliminarInstalacion = async () => {
     try {
       await eliminarInstalacionAdmin(instalacionSeleccionada.instalacion.id);
-      toast.success('instalacion eliminada con exito');
+      toast.success('instalación eliminada con éxito');
       getInstalacionesAction();
       setInstalacionEliminar(false);
     } catch (error) {
@@ -241,7 +241,7 @@ function Page() {
                   setInstalacionSeleccionada(null);
                 }}
               >
-                Crear Nueva instalacion
+                Crear nueva instalación
               </button>
             )}
           </div>
@@ -250,7 +250,7 @@ function Page() {
           </section>
           <Toaster />
           <FlowModal
-            title={`${disable ? 'Ver' : instalacionSeleccionada ? 'Editar' : 'Crear'} Instalacion`}
+            title={`${disable ? 'Ver' : instalacionSeleccionada ? 'Editar' : 'Crear'} Instalación`}
             modalBody={
               <EditCreateInstall
                 errors={errors}
@@ -281,9 +281,9 @@ function Page() {
             }}
           />
           <FlowModal
-            title={`Seguro que desea eliminar la siguiente instalacion ${instalacionSeleccionada?.instalacion?.nombre}`}
+            title={`Seguro que desea eliminar la siguiente instalación ${instalacionSeleccionada?.instalacion?.nombre}`}
             modalBody={<div></div>}
-            primaryTextButton={`Si`}
+            primaryTextButton={`Sí`}
             isOpen={instalacionEliminar}
             scrollBehavior="outside"
             onAcceptModal={handleEliminarInstalacion}

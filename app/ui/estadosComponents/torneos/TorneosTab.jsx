@@ -44,7 +44,7 @@ export const TorneosTab = () => {
   const deleteCategoria = async () => {
     try {
       await eliminarTorneoEstadoAdmin(equipoToDelte.id);
-      toast.success('Torneo Estado eliminado con exito');
+      toast.success('Torneo Estado eliminado con éxito');
       equipoToTab();
     } catch (error) {
       toast.error(error.message);
@@ -101,7 +101,7 @@ export const TorneosTab = () => {
         setErrors(result.errors);
         return;
       }
-      toast.success('Torneo Estado creado con exito');
+      toast.success('Torneo Estado creado con éxito');
       equipoToTab();
       setOpenCreateEquipo(false);
     } catch (error) {
@@ -117,7 +117,7 @@ export const TorneosTab = () => {
         DescripcionEstado: e.target.descripcion.value,
       };
       await editarTorneoEstadoAdmin(categoria);
-      toast.success('Torneo Estado editado con exito');
+      toast.success('Torneo Estado editado con éxito');
       equipoToTab();
       setOpenCreateEquipo(false);
       setEquipoToEdit({});

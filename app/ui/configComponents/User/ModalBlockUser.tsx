@@ -20,7 +20,7 @@ export const ModalBlockUser = ({ userSelected, showReazon = false }: any) => {
             className="mb-3 mt-5 block text-lg font-medium text-gray-900"
             htmlFor={'razon'}
           >
-            Razon
+            Razón
             <textarea
               name="razon"
               placeholder="Opcional"
@@ -40,7 +40,7 @@ export const ModalBlockUser = ({ userSelected, showReazon = false }: any) => {
         </section>
         <section className="flex flex-row gap-3">
           <label className="mb-3 mt-5 block text-lg font-bold text-gray-900">
-            Dirrecion:
+          Dirección:
           </label>
           <label className="mb-3 mt-5 block text-lg font-medium text-gray-900">
             {userSelected.direccion || ''}
@@ -64,7 +64,7 @@ export const ModalBlockUser = ({ userSelected, showReazon = false }: any) => {
         </section>
         <section className="flex flex-row gap-3">
           <label className="mb-3 mt-5 block text-lg font-bold text-gray-900">
-            Telefono:
+            Teléfono:
           </label>
           <label className="mb-3 mt-5 block text-lg font-medium text-gray-900">
             {userSelected.telefono || ''}

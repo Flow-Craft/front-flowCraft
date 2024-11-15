@@ -33,7 +33,7 @@ export const CardTorneo = ({ torneo, onEdit, onDelete, disabled }) => {
         {/* Columna 2 - 45% */}
         <div className="w-9/20 p-2 ">
           <p className="font-semibold text-white">
-            Categoria: {torneo?.categoria?.nombre}
+            Categoría: {torneo?.categoria?.nombre}
           </p>
           <p className="font-semibold text-white">
             Disciplina: {torneo?.disciplina?.nombre}

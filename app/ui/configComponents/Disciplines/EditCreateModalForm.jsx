@@ -59,7 +59,7 @@ const EditCreateDisciplineModalForm = ({ disciplina = null, onChange }) => {
         required
       />
       <InputWithLabel
-        label="Tarjetas expulsion"
+        label="Tarjetas expulsión"
         name={'tarjetasExpulsion'}
         type="number"
         defaultValue={initialValues?.tarjetasExpulsion}
@@ -67,7 +67,7 @@ const EditCreateDisciplineModalForm = ({ disciplina = null, onChange }) => {
         required
       />
       <InputWithLabel
-        label="Descripcion"
+        label="Descripción"
         name={'descripcion'}
         type="text"
         defaultValue={initialValues?.descripcion}

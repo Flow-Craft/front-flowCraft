@@ -26,7 +26,7 @@ const OPTIONS_PER_SAVE = [
     value: 3,
   },
   {
-    label: 'Por instalacion y periodo',
+    label: 'Por instalación y periodo',
     value: 4,
   },
 ];
@@ -148,7 +148,7 @@ export const Eventos = () => {
             />
             <div className="min-w-[170px] max-w-[330px]">
               <SelectWithLabel
-                label="Instalacion"
+                label="Instalación"
                 name="filtro"
                 value={instalacionSeleccionada}
                 options={instalaciones}

@@ -64,7 +64,7 @@ const page = () => {
       IdEquipo: jugadorSeleccionado.idEquipo,
       IdPartido: partido.id,
     });
-    toast.success('accion cargada con exito');
+    toast.success('accion cargada con éxito');
     getAccionesParaEseUsuario(jugadorSeleccionado?.id);
   };
 

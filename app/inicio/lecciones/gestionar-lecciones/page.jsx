@@ -21,10 +21,10 @@ import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
 
 const HEADER_TABLE = [
   { name: 'Nombre' },
-  { name: 'Dias' },
+  { name: 'Días' },
   { name: 'Cantidad Alumnos' },
   { name: 'Disciplina' },
-  { name: 'Categoria' },
+  { name: 'Categoría' },
   { name: 'Acciones' },
 ];
 
@@ -114,7 +114,7 @@ function Page() {
         IdCategoria: nuevaLeccion.Categoria.value,
         IdProfesor: nuevaLeccion.Profesor.value,
       });
-      toast.success('leccion creada correctamente');
+      toast.success('Lección creada correctamente');
       setNuevaLeccion({});
       setOpenModalCrearEditarLecciones(false);
       getLecciones();
@@ -141,7 +141,7 @@ function Page() {
         IdCategoria: nuevaLeccion.Categoria.value,
         IdProfesor: nuevaLeccion.Profesor.value,
       });
-      toast.success('leccion creada correctamente');
+      toast.success('Lección editada correctamente');
       setNuevaLeccion({});
       setOpenModalCrearEditarLecciones(false);
       getLecciones();
@@ -229,7 +229,7 @@ function Page() {
   const eliminarLeccion = async () => {
     try {
       await eliminarLeccionAdmin({ Id: leccionSeleccionada.id });
-      toast.success('leccion eliminada con exito');
+      toast.success('Lección eliminada con éxito');
       getLecciones();
       setModalEliminarLeccion(false);
       setLeccionSeleccionada({});
@@ -252,7 +252,7 @@ function Page() {
             setOpenModalCrearEditarLecciones(true);
           }}
         >
-          Crear Leccion
+          Crear Lección
         </button>
       </div>
       <section>
@@ -260,7 +260,7 @@ function Page() {
       </section>
       <Toaster />
       <FlowModal
-        title={`${nuevaLeccion.Id ? 'Editar leccion' : 'Crear leccion'}`}
+        title={`${nuevaLeccion.Id ? 'Editar lección' : 'Crear lección'}`}
         sx={{ minWidth: '900px' }}
         modalBody={
           <div>
@@ -286,12 +286,12 @@ function Page() {
         }}
       />
       <FlowModal
-        title={`Eliminar leccion`}
+        title={`Eliminar lección`}
         modalBody={
           <div>
             <span className="text-3xl">
-              Esta seguro que desea eliminar la leccion{' '}
-              {leccionSeleccionada.nombre}
+            ¿Está seguro que desea eliminar la lección{' '}
+              {leccionSeleccionada.nombre}?
             </span>
           </div>
         }

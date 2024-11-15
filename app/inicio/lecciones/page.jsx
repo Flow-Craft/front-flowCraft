@@ -147,7 +147,7 @@ function Page() {
         </div>
       </section>
       <FlowModal
-        title={`Detalles de la leccion`}
+        title={`Detalles de la lección`}
         modalBody={
           <div className="grid w-full grid-cols-2 gap-4">
             <div className="flex justify-center">

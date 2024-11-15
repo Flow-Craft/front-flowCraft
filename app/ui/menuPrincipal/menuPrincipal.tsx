@@ -60,7 +60,7 @@ export default function MenuPrincipal() {
           <Button
             className={` mx-3 tracking-wide ${pathname === QUIENES_SOMOS_HREF ? 'bg-blue-400' : ''} font-bold`}
           >
-            <Link href={QUIENES_SOMOS_HREF}>¿QUIENES SOMOS?</Link>
+            <Link href={QUIENES_SOMOS_HREF}>¿QUIÉNES SOMOS?</Link>
           </Button>
         </div>
         <div className=" hidden flex-row min-[1100px]:flex">
@@ -113,7 +113,7 @@ export default function MenuPrincipal() {
             <Button
               className={` mx-3 text-xl font-semibold ${pathname === QUIENES_SOMOS_HREF ? 'bg-blue-400 font-bold ' : ''} `}
             >
-              <Link href={QUIENES_SOMOS_HREF}>¿QUIENES SOMOS?</Link>
+              <Link href={QUIENES_SOMOS_HREF}>¿QUIÉNES SOMOS?</Link>
             </Button>
           </li>
           <li className="my-6">

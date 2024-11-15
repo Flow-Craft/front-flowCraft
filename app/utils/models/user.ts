@@ -21,17 +21,17 @@ export const RegistryUserSchemaZod = z
       }),
     Contrasena: z
       .string()
-      .min(8, { message: "El campo 'Contrasena' no fue enviado" })
+      .min(8, { message: "El campo 'Contraseña' no fue enviado" })
       .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])/, {
         message:
-          'La contraseña no cumple con los parámetros mínimos de seguridad. Debe contener un número, una letra mayúscula, una letra minúscula, y un símbolo.',
+          'La contraseña no cumple con los parámetros mínimos de seguridad. Debe contener un número, una letra mayúscula, una letra minúscula,  un símbolo y minimo 8 caracteres.',
       }),
     OtraContrasena: z
       .string()
-      .min(8, { message: "El campo 'OtraContrasena' no fue enviado" })
+      .min(8, { message: "El campo 'Confirmar Contraseña' no fue enviado" })
       .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])/, {
         message:
-          'La contraseña no cumple con los parámetros mínimos de seguridad. Debe contener un número, una letra mayúscula, una letra minúscula, y un símbolo.',
+          'La contraseña no cumple con los parámetros mínimos de seguridad. Debe contener un número, una letra mayúscula, una letra minúscula, un símbolo y minimo 8 caracteres.',
       }),
     Direccion: z
       .string()
@@ -53,7 +53,7 @@ export const RegistryUserSchemaZod = z
       .string()
       .min(1, { message: "El campo 'Email' no fue enviado" })
       .refine((val) => val === '' || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val), {
-        message: 'El email es invalido',
+        message: 'El email es inválido',
       }),
     FechaNacimiento: z
       .string()
@@ -115,7 +115,7 @@ export const RegistryUserByAdminSchemaZod = z.object({
     .string()
     .min(1, { message: "El campo 'Email' no fue enviado" })
     .refine((val) => val === '' || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val), {
-      message: 'El email es invalido',
+      message: 'El email es inválido',
     }),
   FechaNacimiento: z
     .string()
@@ -172,7 +172,7 @@ export const EditUserByAdminSchemaZod = z.object({
     .string()
     .min(1, { message: "El campo 'Email' no fue enviado" })
     .refine((val) => val === '' || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val), {
-      message: 'El email es invalido',
+      message: 'El email es inválido',
     }),
   FechaNacimiento: z
     .string()
@@ -190,7 +190,7 @@ export const verifyEmail = z.object({
     .string()
     .min(1, { message: "El campo 'Email' no fue enviado" })
     .refine((val) => val === '' || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val), {
-      message: 'El email es invalido',
+      message: 'El email es inválido',
     }),
 });
 
@@ -257,7 +257,7 @@ export const UpdateUserSchemaZod = z.object({
     .string()
     .min(1, { message: "El campo 'Email' no fue enviado" })
     .refine((val) => val === '' || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val), {
-      message: 'El email es invalido',
+      message: 'El email es inválido',
     }),
   FechaNacimiento: z
     .string()

@@ -172,7 +172,7 @@ export default function Page() {
             <CardBody>
               <VStack spacing={4} align="stretch">
                 <Flex justify="space-between" align="center">
-                  <Text>LINK A LA GUIA PARA GENERAR BACKUP DEL SISTEMA</Text>
+                  <Text>LINK A LA GUÍA PARA GENERAR BACKUP DEL SISTEMA</Text>
                   {GenerarFile ? (
                     <>
                       <div className="flex gap-2 ">
@@ -236,7 +236,7 @@ export default function Page() {
                 </Flex>
                 <Flex justify="space-between" align="center">
                   <Text>
-                    LINK A LA GUIA PARA RESTAURAR UN BACKUP EN EL SISTEMA
+                    LINK A LA GUÍA PARA RESTAURAR UN BACKUP EN EL SISTEMA
                   </Text>
                   {RestaurarFile ? (
                     <>

@@ -32,7 +32,7 @@ export const EditCreateInstall = ({
       <InputWithLabel
         name={'ubicacion'}
         type="text"
-        label="Ubicacion"
+        label="Ubicación"
         defaultValue={instalacionSeleccionada?.instalacion?.ubicacion}
         readOnly={disable}
         required
@@ -68,7 +68,7 @@ export const EditCreateInstall = ({
       />
       <SelectWithLabel
         name={'estadoInstalacion'}
-        label="Estado Instalacion"
+        label="Estado Instalación"
         options={estadoInstalacion}
         defaultValue={defaultEstadoInstalacion}
         isDisabled={disable}

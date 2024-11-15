@@ -83,7 +83,7 @@ function Page() {
         AlumnosAsist: alumnosPresentes.map((alumno) => alumno.value),
         IdLeccion: leccionSeleccionada.id,
       });
-      toast.success('leccion creada con exito');
+      toast.success('leccion creada con ');
       setLeccionSeleccionada({});
       setModalInicioDeClase(false);
       setAlumnosPresentes([]);

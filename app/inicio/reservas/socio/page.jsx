@@ -234,7 +234,7 @@ function Page() {
             </section>
             <div className="flex min-w-[170px] flex-row items-center gap-3">
               <label className="mb-3 mt-5 block text-lg font-bold text-gray-900">
-                Instalacion:
+                Instalación:
               </label>
               <div className="min-w-[170px]">
                 <SelectWithLabel
@@ -279,9 +279,9 @@ function Page() {
         </section>
       </section>
       <FlowModal
-        title={`Seguro que desea eliminar la reserva para: ${reservaSeleccionada?.fechaReserva?.split('T')[0]} de ${reservaSeleccionada?.horaInicio?.split('T')[1]}  a  ${reservaSeleccionada?.horaFin?.split('T')[1]} `}
+        title={`¿Seguro que desea eliminar la reserva para: ${reservaSeleccionada?.fechaReserva?.split('T')[0]} de ${reservaSeleccionada?.horaInicio?.split('T')[1]}  a  ${reservaSeleccionada?.horaFin?.split('T')[1]}? `}
         modalBody={<></>}
-        primaryTextButton={'Si'}
+        primaryTextButton={'Sí'}
         isOpen={modalEliminarReservas}
         scrollBehavior="outside"
         onAcceptModal={eliminarReserva}

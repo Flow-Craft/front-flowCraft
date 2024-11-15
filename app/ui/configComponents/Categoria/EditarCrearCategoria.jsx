@@ -15,7 +15,7 @@ export const EditarCrearCategoria = ({ errors, categoria }) => {
         required
       />
       <InputWithLabel
-        label="Edad Minima"
+        label="Edad Mínima"
         name={'edadMinima'}
         type="number"
         min={1}
@@ -24,7 +24,7 @@ export const EditarCrearCategoria = ({ errors, categoria }) => {
         required
       />
       <InputWithLabel
-        label="Edad Maxima"
+        label="Edad Máxima"
         name={'edadMaxima'}
         type="number"
         min={1}
@@ -34,7 +34,7 @@ export const EditarCrearCategoria = ({ errors, categoria }) => {
       />
       <SelectWithLabel
         name="genero"
-        label="Genero"
+        label="Género"
         options={SEX_CATEGORIA_SELECT_OPTIONS}
         defaultValue={SEX_CATEGORIA_SELECT_OPTIONS.find(
           (option) => option.value === categoria?.genero,
@@ -46,7 +46,7 @@ export const EditarCrearCategoria = ({ errors, categoria }) => {
         className="mb-3 mt-5 block text-lg font-medium text-gray-900"
         htmlFor={'descripcion'}
       >
-        Descripcion
+        Descripción
         <textarea
           name="descripcion"
           rows="5"

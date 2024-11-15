@@ -18,7 +18,7 @@ const OPTIONS_PER_SAVE = [
     value: 1,
   },
   {
-    label: 'Por disciplina, usuario, leccion y periodo',
+    label: 'Por disciplina, usuario, lección y periodo',
     value: 2,
   },
   ,
@@ -110,7 +110,7 @@ export const Estadisticas = () => {
             </div>
             <div className="min-w-[170px] max-w-[330px]">
               <SelectWithLabel
-                label="Leccion"
+                label="Lección"
                 name="filtro"
                 value={leccionSeleccionada}
                 options={lecciones}

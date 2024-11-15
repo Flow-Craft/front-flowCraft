@@ -29,7 +29,7 @@ import usePermisos from '@/app/utils/permisos';
 
 const HEADER_TABLE = [
   { name: 'Nombre' },
-  { name: 'Descripcion' },
+  { name: 'Descripción' },
   { name: 'Acciones' },
 ];
 
@@ -45,7 +45,7 @@ export const InstalacionTab = () => {
   const deleteCategoria = async () => {
     try {
       await eliminarInstalacionEstadoAdmin(equipoToDelte.id);
-      toast.success('Instalacion Estado eliminado con exito');
+      toast.success('Instalacion Estado eliminado con éxito');
       equipoToTab();
     } catch (error) {
       toast.error(error.message);
@@ -102,7 +102,7 @@ export const InstalacionTab = () => {
         setErrors(result.errors);
         return;
       }
-      toast.success('Instalacion Estado creado con exito');
+      toast.success('Instalacion Estado creado con éxito');
       equipoToTab();
       setOpenCreateEquipo(false);
     } catch (error) {
@@ -118,7 +118,7 @@ export const InstalacionTab = () => {
         DescripcionEstado: e.target.descripcion.value,
       };
       await editarInstalacionEstadoAdmin(categoria);
-      toast.success('Instalacion Estado editado con exito');
+      toast.success('Instalacion Estado editado con éxito');
       equipoToTab();
       setOpenCreateEquipo(false);
       setEquipoToEdit({});
@@ -205,7 +205,7 @@ export const InstalacionTab = () => {
             setOpenCreateEquipo(true);
           }}
         >
-          Crear Estado Instalacion
+          Crear Estado Instalación
         </button>
       </form>
       <section>

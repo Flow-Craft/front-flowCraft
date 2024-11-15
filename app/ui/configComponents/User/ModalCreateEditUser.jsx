@@ -28,7 +28,7 @@ export const ModalCreateEditUser = ({ errors = [], user, perfiles }) => {
             wrong={!!errors.find((e) => e.path[0] === 'Apellido')}
           />
           <InputWithLabel
-            label="Telefono"
+            label="Teléfono"
             name="Telefono"
             type="number"
             placeHolder="2616738554"
@@ -37,7 +37,7 @@ export const ModalCreateEditUser = ({ errors = [], user, perfiles }) => {
             required
           />
           <InputWithLabel
-            label="Direccion"
+            label="Dirección"
             name="Direccion"
             type="string"
             placeHolder="Calle false 123"

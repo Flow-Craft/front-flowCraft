@@ -16,7 +16,7 @@ const OPTIONS_PER_SAVE = [
     value: 1,
   },
   {
-    label: 'Por instalacion y periodo',
+    label: 'Por instalación y periodo',
     value: 2,
   },
   {

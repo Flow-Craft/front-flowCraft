@@ -8,6 +8,7 @@ import {
   getEventosActivos,
   getEventosAdmin,
   getInstalacionesActionAdmin,
+  getPartidoAdmin,
   getPartidoByIdAdmin,
   getPartidosAsignadosAdmin,
   IniciarPartidoAdmin,
@@ -131,12 +132,8 @@ function Page() {
   };
 
   const getTodosLosPartidos = async () => {
-    const eventos = await getEventosAdmin();
-    const partidos = eventos
-      .filter((ev) => ev?.evento?.tipoEvento?.nombreTipoEvento === 'Partido')
-      .map((part) => part.evento.id);
-    const promises = partidos.map((part) => getPartidoByIdAdmin(part));
-    const result = await Promise.all(promises);
+    const result = await getPartidoAdmin()
+    console.log('result', result)
     setPartidos(result);
     const partidosAVer = result.map((partido) => ({
       id: partido.id,
@@ -198,7 +195,7 @@ function Page() {
         eventosSeleccionado.id,
         e.target.descripcion.value,
       );
-      toast.success('Partido suspendido con exito');
+      toast.success('Partido suspendido con éxito');
       getInstalaciones();
       getTodosLosPartidos();
       setEventosSeleccionado({});

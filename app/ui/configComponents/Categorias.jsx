@@ -16,10 +16,10 @@ import {
 
 const HEADER_TABLE = [
   { name: 'Nombre' },
-  { name: 'Descripcion' },
-  { name: 'Edad Minima' },
-  { name: 'Edad Maxima' },
-  { name: 'Genero' },
+  { name: 'Descripción' },
+  { name: 'Edad Mínima' },
+  { name: 'Edad Máxima' },
+  { name: 'Género' },
   { name: 'Acciones' },
 ];
 
@@ -35,7 +35,7 @@ export const CategoriasTab = () => {
   const deleteCategoria = async () => {
     try {
       await eliminarCategoriaAdmin(categoriaToDelte.id);
-      toast.success('Perfil eliminado con exito');
+      toast.success('Perfil eliminado con éxito');
       categoriasToTab();
     } catch (error) {
       toast.error(error.message);
@@ -97,7 +97,7 @@ export const CategoriasTab = () => {
         setErrors(result.errors);
         return
       }
-      toast.success('Categoria creada con exito');
+      toast.success('Categoria creada con éxito');
       categoriasToTab();
       setOpenCreateCategoria(false);
     } catch (error) {
@@ -121,7 +121,7 @@ export const CategoriasTab = () => {
         setErrors(result.errors);
         return
       }
-      toast.success('Categoria editada con exito');
+      toast.success('Categoria editada con éxito');
       categoriasToTab();
       setOpenCreateCategoria(false);
       setCategoriaToEdit({});
@@ -219,10 +219,10 @@ export const CategoriasTab = () => {
       </section>
       <Toaster />
       <FlowModal
-        title={`Eliminar Categoria ${categoriaToDelte?.nombre}`}
+        title={`Eliminar categoría ${categoriaToDelte?.nombre}`}
         modalBody={
           <div>
-            ¿Esta seguro que desea eliminar esta categoria?{' '}
+            ¿Está seguro que desea eliminar esta categoría?{' '}
             {categoriaToDelte?.descripcion}
           </div>
         }
@@ -236,7 +236,7 @@ export const CategoriasTab = () => {
         }}
       />
       <FlowModal
-        title={`${categoriaToEdit?.id ? 'Editar categoria' : 'Crear categoria'}`}
+        title={`${categoriaToEdit?.id ? 'Editar categoría' : 'Crear categoría'}`}
         modalBody={
           <div>
             <EditarCrearCategoria errors={errors} categoria={categoriaToEdit} />

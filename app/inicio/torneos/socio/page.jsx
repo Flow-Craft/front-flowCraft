@@ -71,7 +71,7 @@ export default function Page() {
         torneoSeleccionado.idEquipoInscriptoUsuario,
         torneoSeleccionado.id,
       );
-      toast.success('Te desinscribiste con exito');
+      toast.success('Te desinscribiste con éxito');
       setDarseDeBajaTorneo(false);
       setTorneoSeleccionado({});
       getTorneos();
@@ -86,7 +86,7 @@ export default function Page() {
         equipoSeleccionado.value,
         torneoSeleccionado.id,
       );
-      toast.success('te inscribiste con exito');
+      toast.success('te inscribiste con éxito');
       setModalSeleccionarEquipo(false);
       setEquipoSeleccionado({});
       setTorneoSeleccionado({});

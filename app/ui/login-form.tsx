@@ -42,7 +42,7 @@ export default function LoginForm() {
       if (openModal) {
         setOpenModal(false);
         toast.success(
-          'AC aceptados con exito por favor vuelva a presionar el boton iniciar sesion',
+          'AC aceptados con éxito por favor vuelva a presionar el boton iniciar sesion',
         );
       }
       if (debeCambiarContraseña) {
@@ -190,7 +190,7 @@ export default function LoginForm() {
                 }}
                 className="pointer hover:text-blue-600"
               >
-                no recuerdo mi usuario
+                No recuerdo mi usuario
               </a>
             </div>
             <div className="mt-4">
@@ -219,11 +219,11 @@ export default function LoginForm() {
               href={'/cambiar_contrasena'}
               className="pointer hover:text-blue-600"
             >
-              cambiar contraseña
+              Cambiar contraseña
             </Link>
           </div>
           <Button className="mt-4 w-full bg-blue-600 text-lg">
-            Iniciar Sesion{' '}
+              Iniciar Sesión{' '}
             <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
           </Button>
         </div>
@@ -243,7 +243,7 @@ export default function LoginForm() {
         }
         onAcceptModal={!userName ? getUserEmail : handleCloseWithUserName}
         onCancelModal={handleCancelFindUser}
-        primaryTextButton={!userName ? 'Recuperar mi usuario' : 'Gracias!'}
+        primaryTextButton={!userName ? 'Recuperar mi usuario' : '¡Gracias!'}
         type="submit"
       />
       <FlowModal

@@ -21,7 +21,7 @@ const HEADER_TABLE = [
   { name: 'DNI' },
   { name: 'Email' },
   { name: 'Estado' },
-  { name: 'fechaCreacion' },
+  { name: 'Fecha de creacion' },
   { name: 'Acciones' },
 ];
 
@@ -212,7 +212,7 @@ export const SolicitudesTab = () => {
       </section>
       <Toaster />
       <FlowModal
-        title={`Razon del rechazo de la solicitud de ${solicitudesToDelte?.nombre} ${solicitudesToDelte?.apellido} DNI: ${solicitudesToDelte?.dni}`}
+        title={`Razón del rechazo de la solicitud de ${solicitudesToDelte?.nombre} ${solicitudesToDelte?.apellido} DNI: ${solicitudesToDelte?.dni}`}
         modalBody={
           <div>
             <textarea
@@ -223,7 +223,7 @@ export const SolicitudesTab = () => {
             />
           </div>
         }
-        primaryTextButton="¿Esta seguro que desea eliminar este perfil?"
+        primaryTextButton="Rechazar solicitud"
         isOpen={openDeleteSocilitudes}
         scrollBehavior="outside"
         onAcceptModal={rechazarSolicutud}

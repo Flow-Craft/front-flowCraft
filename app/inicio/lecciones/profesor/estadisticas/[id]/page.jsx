@@ -62,7 +62,7 @@ const page = () => {
       Secuencial: true,
       IdAsistencia: jugadorSeleccionado.id,
     });
-    toast.success('accion cargada con exito');
+    toast.success('accion cargada con éxito');
     getAccionesParaEseUsuario(jugadorSeleccionado?.usuario?.id);
   };
 
@@ -93,7 +93,7 @@ const page = () => {
         await finalizarLeccionAdmin(partido.id);
       }
       toast.success(
-        `${esEdicion ? 'Leccion editada con exito' : 'Leccion finalizada con exito'}`,
+        `${esEdicion ? 'Leccion editada con éxito' : 'Leccion finalizada con éxito'}`,
       );
       router.back();
     } catch (error) {

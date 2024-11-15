@@ -191,7 +191,7 @@ export const CrearEditarModalEventos = ({
             className="mb-3 mt-5 block text-lg font-medium text-gray-900"
             htmlFor={'descripcion'}
           >
-            Descripcion
+            Descripción
             <label className="text-red-600"> *</label>
             <textarea
               name="Descripcion"
@@ -215,7 +215,7 @@ export const CrearEditarModalEventos = ({
             defaultValue={instalacion.find(
               (option) => option.value === evento?.instalacion?.id,
             )}
-            label="Instalacion"
+            label="Instalación"
             required
             wrong={!!errors.find((e) => e.path[0] === 'IdInstalacion')}
           />
@@ -229,7 +229,7 @@ export const CrearEditarModalEventos = ({
             required
           />
           <InputWithLabel
-            label="Fecha y hora de finalizacion"
+            label="Fecha y hora de finalización"
             name="FechaFinEvento"
             type="datetime-local"
             min={minDate}
@@ -238,7 +238,7 @@ export const CrearEditarModalEventos = ({
             required
           />
           <InputWithLabel
-            label="Cupo Maximo"
+            label="Cupo Máximo"
             name="CupoMaximo"
             type="number"
             min={0}
@@ -261,7 +261,7 @@ export const CrearEditarModalEventos = ({
             defaultValue={categoria.find(
               (option) => option.value === evento?.categoria?.id,
             )}
-            label="Categoria"
+            label="Categoría"
             required
             wrong={!!errors.find((e) => e.path[0] === 'IdCategoria')}
             onChange={(e) => {
@@ -347,7 +347,7 @@ export const CrearEditarModalEventos = ({
                 name="arbitro"
                 options={arbitros}
                 value={arbitroSeleccionado}
-                label="Arbitro"
+                label="Árbtitro"
                 onChange={(e) => {
                   setArbitroSeleccionado(e);
                 }}

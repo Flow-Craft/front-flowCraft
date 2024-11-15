@@ -111,7 +111,7 @@ export async function registryUser(RegistryUserSchema: any) {
     await FlowCraftAPI.post('Users/Registro', finalUserToSend);
     toast.dismiss();
     toast.success(
-      'Usuario Creado con exito. Sera redirigido a la pantalla de login',
+      'Usuario creado con éxito. Será redirigido a la pantalla de login',
     );
     await createTimer(2000);
     window.location.href = '/login';
@@ -992,6 +992,10 @@ export async function getPerfilByNombreAdmin(nombrePerfil: any) {
 
 export async function getPartidoByIdAdmin(id: any) {
   return await FlowCraftAPI.get(`Partidos/GetPartidoById?id=${id}`);
+}
+
+export async function getPartidoAdmin(id: any) {
+  return await FlowCraftAPI.get(`Partidos/GetPartidos`);
 }
 
 export async function getPartidosAsignadosAdmin() {
