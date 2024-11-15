@@ -174,11 +174,9 @@ export const Lecciones = () => {
           });
           break;
         case 2:
-          reporteLeccionDisciplinaCategoriaPeriodo;
           pdf = await reporteLeccionDisciplinaCategoriaPeriodo({
-            idUsuario: usuarioSeleccionado.value.toString(),
             periodoInicio: `${fechaInicio}`,
-            periodoFin: `${fechaFin}`,
+            periodoFin: fechaUnica ?`${fechaInicio}` : `${fechaFin}`,
             idDisciplina: disciplinaSeleccionada.value,
             idCategoria: categoriaSeleccionada.value,
           });
