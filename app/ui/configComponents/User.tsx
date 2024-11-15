@@ -231,7 +231,7 @@ export const UserTab = () => {
       setEditCreateUser(false);
       userToTab();
       toast.success('usuario editado con éxito');
-      setErrors([])
+      setErrors([]);
     } catch (error: any) {
       toast.error(error.message);
     }

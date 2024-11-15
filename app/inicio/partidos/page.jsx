@@ -132,8 +132,7 @@ function Page() {
   };
 
   const getTodosLosPartidos = async () => {
-    const result = await getPartidoAdmin()
-    console.log('result', result)
+    const result = await getPartidoAdmin();
     setPartidos(result);
     const partidosAVer = result.map((partido) => ({
       id: partido.id,

@@ -282,7 +282,7 @@ function Page() {
         type="submit"
         onCancelModal={() => {
           setOpenModalCrearEditarLecciones(false);
-          setNuevaLeccion({})
+          setNuevaLeccion({});
         }}
       />
       <FlowModal
@@ -290,7 +290,7 @@ function Page() {
         modalBody={
           <div>
             <span className="text-3xl">
-            ¿Está seguro que desea eliminar la lección{' '}
+              ¿Está seguro que desea eliminar la lección{' '}
               {leccionSeleccionada.nombre}?
             </span>
           </div>

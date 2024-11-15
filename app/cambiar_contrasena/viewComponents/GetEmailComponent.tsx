@@ -37,8 +37,8 @@ export default function GetEmailComponent({ nextStep, setEmail }: any) {
             className="mb-3 mt-5 block text-lg font-medium text-gray-900 "
             htmlFor="email"
           >
-            Por favor ingrese el email al cual le enviaremos el código de verificación
-            para recuperar su contraseña
+            Por favor ingrese el email al cual le enviaremos el código de
+            verificación para recuperar su contraseña
           </label>
           <div className="relative">
             <input
@@ -50,7 +50,7 @@ export default function GetEmailComponent({ nextStep, setEmail }: any) {
             <AtSymbolIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
           </div>
           <Button className="mt-4 w-full bg-blue-600 text-lg">
-              Enviar Código{' '}
+            Enviar Código{' '}
             <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
           </Button>
           <div className="mt-9 flex w-full content-between justify-between">

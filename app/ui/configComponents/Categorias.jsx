@@ -95,7 +95,7 @@ export const CategoriasTab = () => {
       const result = await crearCategoriaAdmin(categoria, setErrors);
       if (result?.error) {
         setErrors(result.errors);
-        return
+        return;
       }
       toast.success('Categoria creada con éxito');
       categoriasToTab();
@@ -107,7 +107,7 @@ export const CategoriasTab = () => {
 
   const editarCategoria = async (e) => {
     try {
-      setErrors([])
+      setErrors([]);
       let categoria = {
         Id: categoriaToEdit.id,
         Nombre: e.target.nombre.value,
@@ -119,7 +119,7 @@ export const CategoriasTab = () => {
       const result = await editarCategoriaAdmin(categoria);
       if (result?.error) {
         setErrors(result.errors);
-        return
+        return;
       }
       toast.success('Categoria editada con éxito');
       categoriasToTab();

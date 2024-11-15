@@ -226,7 +226,7 @@ function Page() {
       <section>
         <div className="flex min-w-[370px] flex-row items-center gap-3">
           <label className="mb-3 mt-5 block text-lg font-bold text-gray-900">
-           Instalación:
+            Instalación:
           </label>
           <div className="min-w-[370px]">
             <SelectWithLabel

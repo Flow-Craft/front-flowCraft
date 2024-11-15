@@ -176,7 +176,7 @@ export const Lecciones = () => {
         case 2:
           pdf = await reporteLeccionDisciplinaCategoriaPeriodo({
             periodoInicio: `${fechaInicio}`,
-            periodoFin: fechaUnica ?`${fechaInicio}` : `${fechaFin}`,
+            periodoFin: fechaUnica ? `${fechaInicio}` : `${fechaFin}`,
             idDisciplina: disciplinaSeleccionada.value,
             idCategoria: categoriaSeleccionada.value,
           });

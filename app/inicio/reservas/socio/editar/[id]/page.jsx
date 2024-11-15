@@ -329,7 +329,7 @@ function Page() {
             </div>
             <div className="w-1/2 p-4">
               <div className="mt-6 self-start px-9 pb-9 text-xl font-bold">
-               Próximos eventos
+                Próximos eventos
               </div>
               {proximasReservasDeLaInstalacion.map((reserva) => {
                 const formatDate = (dateString) => {

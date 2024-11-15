@@ -194,23 +194,19 @@ export async function registrarUsuarioAdmin(userToCreate: any) {
 export async function EditUserByAdmin(userToEdit: any) {
   try {
     const result = EditUserByAdminSchemaZod.safeParse(userToEdit);
-    console.log('result', result)
+    console.log('result', result);
     if (!result.success) {
       return { error: true, errors: result.error.errors };
     }
 
     const finalUserToSend = JSON.parse(JSON.stringify(userToEdit));
     //convertir File to base 64
-    if(userToEdit.FotoPerfilNo64){
+    if (userToEdit.FotoPerfilNo64) {
       const fileType = userToEdit.FotoPerfilNo64.type;
       let file64 = await handleFileConversion(
-        new File(
-          [userToEdit.FotoPerfilNo64],
-          userToEdit.FotoPerfilNo64.name,
-          {
-            type: userToEdit.FotoPerfilNo64.type,
-          },
-        ),
+        new File([userToEdit.FotoPerfilNo64], userToEdit.FotoPerfilNo64.name, {
+          type: userToEdit.FotoPerfilNo64.type,
+        }),
       );
       finalUserToSend.FotoPerfil = file64;
       finalUserToSend.type = fileType;

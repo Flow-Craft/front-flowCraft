@@ -223,7 +223,7 @@ export default function LoginForm() {
             </Link>
           </div>
           <Button className="mt-4 w-full bg-blue-600 text-lg">
-              Iniciar Sesión{' '}
+            Iniciar Sesión{' '}
             <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
           </Button>
         </div>

@@ -108,6 +108,7 @@ export default function Page() {
                     torneo={torneo}
                     onEdit={onEditTorneo}
                     onDelete={onDeleteTorneo}
+                    disabledEditar
                   />
                 );
               })
@@ -130,6 +131,7 @@ export default function Page() {
                     torneo={torneo}
                     onEdit={onEditTorneo}
                     onDelete={onDeleteTorneo}
+                    disabledEditar
                   />
                 );
               })
@@ -152,6 +154,7 @@ export default function Page() {
                     torneo={torneo}
                     onEdit={onEditTorneo}
                     onDelete={onDeleteTorneo}
+                    disabledEditar
                   />
                 );
               })

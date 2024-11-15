@@ -2,7 +2,13 @@ import { Tooltip } from '@chakra-ui/react';
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
 import React from 'react';
 
-export const CardTorneo = ({ torneo, onEdit, onDelete, disabled }) => {
+export const CardTorneo = ({
+  torneo,
+  onEdit,
+  onDelete,
+  disabled,
+  disabledEditar,
+}) => {
   return (
     <div className="h-50 min-h-50 mx-auto aspect-auto w-80 rounded-lg bg-blue-300 p-2">
       <p className="ml-2 text-2xl font-bold text-white">{torneo?.nombre}</p>
@@ -10,14 +16,16 @@ export const CardTorneo = ({ torneo, onEdit, onDelete, disabled }) => {
         {!disabled && (
           <div className="w-1/10 p-2">
             <div className="flex flex-col gap-4">
-              <Tooltip label="Editar">
-                <PencilIcon
-                  className={`w-[30px] cursor-pointer text-slate-500`}
-                  onClick={() => {
-                    onEdit(torneo);
-                  }}
-                />
-              </Tooltip>
+              {!disabledEditar && (
+                <Tooltip label="Editar">
+                  <PencilIcon
+                    className={`w-[30px] cursor-pointer text-slate-500`}
+                    onClick={() => {
+                      onEdit(torneo);
+                    }}
+                  />
+                </Tooltip>
+              )}
               <Tooltip label="Eliminar">
                 <TrashIcon
                   className={`w-[30px] cursor-pointer text-slate-500`}

@@ -294,7 +294,7 @@ export default function Page() {
         isOpen={first}
         type="submit"
         scrollBehavior="outside"
-        onAcceptModal={newToEdit?.id  ? EditNew : onCreateNew}
+        onAcceptModal={newToEdit?.id ? EditNew : onCreateNew}
         onCancelModal={() => {
           setFirst(false);
           setErrors([]);
