@@ -4,7 +4,7 @@ export const CarrouselDeLecciones = ({ lecciones, onClick, otroColor }) => {
     return <span className="text-2xl">No hay lecciones que mostrar</span>;
   }
   return (
-    <div className="flex max-w-[80vw]  flex-row gap-3 overflow-x-scroll">
+    <div className="flex max-w-[80vw]  flex-row gap-3 overflow-x-auto">
       {lecciones.map((leccion) => {
         return (
           <button

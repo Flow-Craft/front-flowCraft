@@ -257,6 +257,7 @@ export default function LoginForm() {
       />
       <FlowModal
         title="Debe actualizar su contraseña"
+        scrollBehavior="outside"
         isOpen={openChangePassword}
         modalBody={
           <div>

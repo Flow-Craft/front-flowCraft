@@ -19,8 +19,8 @@ const HEADER_TABLE = [
   { name: 'Jugadores' },
   { name: 'Jugadores Banca' },
   { name: 'tarjetas advertencia' },
-  { name: 'tarjetas expulsión' },
   { name: 'cantidad de tiempos' },
+  { name: 'tarjetas expulsión' },
   { name: 'Eliminada' },
   { name: 'Acciones' },
 ];

@@ -55,7 +55,7 @@ export default function Page() {
     <main className="flex min-h-screen flex-col p-2">
       <MenuPrincipal />
       <div className="mt-6 self-start px-9 text-3xl font-bold">Noticias</div>
-      <div className="mt-4 flex grow flex-col gap-4  p-7 md:flex-row">
+      <div className="mt-4 flex grow flex-col gap-4 overflow-x-hidden p-7 md:flex-row md:flex-wrap">
         {news?.map((nw: any) => {
           return (
             <div className="cursor-pointer" key={nw.id}>

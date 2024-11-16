@@ -668,7 +668,6 @@ function Page() {
         }
         primaryTextButton={eventoSeleccionado?.id ? 'Editar' : 'Crear'}
         isOpen={editCreateEvento}
-        scrollBehavior="outside"
         onAcceptModal={eventoSeleccionado?.id ? editarEvento : crearEvento}
         onCancelModal={() => {
           setEditCreateEvento(false);
