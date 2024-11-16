@@ -80,7 +80,7 @@ export default function Page() {
       <div className="mt-6 grid w-full grid-rows-4 gap-4">
         <div>
           <span className="ml-6 text-2xl font-bold">Abiertos</span>
-          <section className="mx-6 flex max-w-[80vw] flex-row gap-2 overflow-x-scroll pt-6">
+          <section className="mx-6 flex max-w-[80vw] flex-row gap-2 overflow-x-auto pt-6">
             {torneosAbiertos.length > 0 ? (
               torneosAbiertos.map((torneo) => (
                 <CardTorneo
@@ -99,7 +99,7 @@ export default function Page() {
         </div>
         <div>
           <span className="ml-6 text-2xl font-bold">Completos</span>
-          <section className="ml-6 flex max-w-[90vw] flex-row gap-2 overflow-x-scroll pt-6">
+          <section className="ml-6 flex max-w-[90vw] flex-row gap-2 overflow-x-auto pt-6">
             {torneosCompletos.length > 0 ? (
               torneosEnCurso.map((torneo) => {
                 return (
