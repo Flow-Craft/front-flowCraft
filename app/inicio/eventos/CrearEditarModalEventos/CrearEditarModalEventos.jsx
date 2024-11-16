@@ -20,6 +20,7 @@ export const CrearEditarModalEventos = ({
   tipo,
   setDisciplinasSeleccionadas,
 }) => {
+  console.log('errors', errors)
   const [minDate, setMinDate] = useState('');
   const [showPartido, setShowPartido] = useState(false);
   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState({});
@@ -315,7 +316,7 @@ export const CrearEditarModalEventos = ({
                 onChange={(e) => {
                   getEquiposByCategoriaDisciplina(e);
                 }}
-                wrong={!!errors.find((e) => e.path[0] === 'IdsDisciplinas')}
+                wrong={!!errors.find((e) => e.path[0] === 'IdsDisciplinaPartido')}
               />
               <SelectWithLabel
                 name="equipoLocal"

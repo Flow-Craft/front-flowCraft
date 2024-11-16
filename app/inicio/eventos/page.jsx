@@ -655,6 +655,7 @@ function Page() {
       <Toaster />
       <FlowModal
         title={eventoSeleccionado?.id ? 'Editar Evento' : 'Crear Evento'}
+        sx={{ minWidth: '90vw'}}
         modalBody={
           <CrearEditarModalEventos
             errors={errors}
@@ -676,7 +677,8 @@ function Page() {
           setDisciplinasSeleccionadas({});
         }}
         type="submit"
-        size="full"
+        scrollBehavior="outside"
+        size="xl"
       />
       <FlowModal
         title={`Seguro que desea eliminar el evento: ${eventoSeleccionado.titulo}`}
