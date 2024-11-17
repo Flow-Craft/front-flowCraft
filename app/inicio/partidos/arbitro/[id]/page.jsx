@@ -188,7 +188,7 @@ const PartidoScreen = () => {
     }
     opciones = opciones.map((us) => ({
       value: us.id,
-      label: `${us.numCamiseta} - ${us.usuario.apellido} ${us.usuario.apellido} `,
+      label: `${us.numCamiseta} - ${us.usuario.apellido} ${us.usuario.nombre} `,
     }));
     return opciones;
   };
