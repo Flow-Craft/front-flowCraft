@@ -353,7 +353,7 @@ function Page() {
             ) !== -1 && (
               <>
                 <label className="mb-3 mt-5 block text-lg font-bold text-gray-900">
-                  Asingados:
+                  Asignados:
                 </label>
                 <InputWithLabel
                   name="Socio"
@@ -381,7 +381,7 @@ function Page() {
         </div>
         <div className="flex min-w-[170px] flex-row items-center gap-3">
           <label className="mb-3 mt-5 block text-lg font-bold text-gray-900">
-            Instalacion:
+            Instalación:
           </label>
           <div className="min-w-[170px]">
             <SelectWithLabel
