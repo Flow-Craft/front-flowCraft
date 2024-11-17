@@ -23,9 +23,16 @@ const HEADER_TABLE = [
   { name: 'Descripcion' },
   { name: 'Modifica Advertencia' },
   { name: 'Modifica expulsion' },
+  { name: 'Se visualizara en' },
   { name: 'secuencial' },
   { name: 'Acciones' },
 ];
+
+const opcionesDePartido = [
+  {value:0 , label:"Leccion y partido "},
+  {value:1 , label:"Solo en partido "},
+  {value:2 , label:"Solo en lección "},
+]
 export const TiposAccionPartido = () => {
   const [tipoAccionPartido, setTipoAccionPartido] = useState([]);
   const [tipoAccionPartidoToShow, setTipoAccionPartidoToShow] = useState([]);
@@ -47,8 +54,8 @@ export const TiposAccionPartido = () => {
         ModificaTarjetasExpulsion: e.target.tarjExpulsion.checked,
         secuencial: e.target.secuencial.checked,
         IdDisciplina: e.target.disciplina?.value?.toString(),
+        EsPartido: e.target.esPartido?.value?.toString(),
       };
-      console.log('tipoAccionPartido', tipoAccionPartido);
       const result = await crearTipoAccionPartidosAdmin(tipoAccionPartido);
       if (result?.errors) {
         setErrors(result?.errors);
@@ -84,6 +91,7 @@ export const TiposAccionPartido = () => {
         ModificaTarjetasExpulsion: e.target.tarjExpulsion.checked,
         secuencial: e.target.secuencial.checked,
         IdDisciplina: e.target.disciplina?.value?.toString(),
+        EsPartido: e.target.esPartido?.value?.toString(),
       };
       await editarTipoAccionPartidoAdmin(tipoAccionPartido);
       toast.success('Tipo editado samente');
@@ -113,7 +121,7 @@ export const TiposAccionPartido = () => {
   const TipoAccionPartidoToTab = async () => {
     try {
       const result = await getTipoAccionPartidosAdmin();
-      console.log('result', result);
+      console.log('result', result)
       setTipoAccionPartido(result);
       const newtipoAccionPartidoToShow =
         result &&
@@ -129,6 +137,7 @@ export const TiposAccionPartido = () => {
             modificaTarjetasExpulsion: dis.modificaTarjetasExpulsion && (
               <CheckIcon className={`w-[50px] text-slate-500`} />
             ),
+            esPartido:`${opcionesDePartido[dis.esPartido].label}`,
             secuencial: dis.secuencial && (
               <CheckIcon className={`w-[50px] text-slate-500`} />
             ),
@@ -219,6 +228,18 @@ export const TiposAccionPartido = () => {
               defaultValue={disciplinas.find(
                 (dis) => tipoAccionPartidoToDelte?.disciplina?.id === dis.value,
               )}
+            />
+            <SelectWithLabel
+              name="esPartido"
+              options={opcionesDePartido}
+              label="Visible en"
+              required
+              defaultValue={()=>{
+                if(tipoAccionPartidoToDelte?.esPartido){
+                  return opcionesDePartido[tipoAccionPartidoToDelte?.esPartido]
+                }
+                return opcionesDePartido[0]
+              }}
             />
             <InputWithLabel
               label="Modifica tarjetas advertencia"
