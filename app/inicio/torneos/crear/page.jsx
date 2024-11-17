@@ -60,7 +60,7 @@ function Page() {
         return value !== undefined && value !== null && value !== '';
       });
       if (!tieneValoresValidos) {
-        toast.error('Error al crear el torneo, todos los cambos son obligatorios');
+        toast.error('Error al crear el torneo, todos los campos son obligatorios');
         return
       }
       await AltaDeTorneo(torneoACrear);
