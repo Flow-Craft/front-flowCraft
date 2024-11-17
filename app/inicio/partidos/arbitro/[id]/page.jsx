@@ -467,9 +467,9 @@ const PartidoScreen = () => {
             </div>
           </div>
         </div>
-        <section className="mb-8 grid grid-cols-3 items-center gap-8">
+        <section className="mb-8 grid grid-cols-3 items-center gap-20 overflow-x-auto">
           {/* Equipo Local */}
-          <div className="h-full min-w-[300px]">
+          <div className="h-full min-w-[300px] mr-10">
             <Tabs isFitted variant="enclosed">
               <TabList>
                 <Tab>Goles</Tab>
@@ -565,7 +565,7 @@ const PartidoScreen = () => {
           </div>
 
           {/* Acciones (en el centro) */}
-          <div className="flex h-full flex-col items-center justify-center space-y-4">
+          <div className="flex h-full flex-col items-center ml-32 justify-center space-y-4">
             {accionPartido.map((accion) => {
               if (accion.nombreTipoAccion.includes('Gol')) {
                 return <></>;
@@ -663,7 +663,7 @@ const PartidoScreen = () => {
           </div>
 
           {/* Equipo Visitante */}
-          <div className="h-full min-w-[300px]">
+          <div className="h-full min-w-[300px] ml-20">
             <Tabs isFitted variant="enclosed">
               <TabList>
                 <Tab>Goles</Tab>
