@@ -196,7 +196,7 @@ function Page() {
           </>
         )}
         {evento.activo &&
-        permisos.some((perm) => perm.funcionalidades === 'Asistencia evento') &&
+        permisos.some((perm) => perm.funcionalidades === 'Gestionar evento') &&
         fechaFin > new Date() &&
         new Date() > fechaInicio ? (
           <>
