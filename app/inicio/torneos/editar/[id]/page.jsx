@@ -62,6 +62,15 @@ function Page() {
         BannerNo64: e.target.BannerNo64.files[0],
         IdEquipos: IdEquipos,
       };
+      const tieneValoresValidos = Object.entries(torneoACrear).every(([key, value]) => {
+        if (key === 'IdEquipos') return true; // Ignorar validación para IdEquipos
+        if (key === 'BannerNo64') return true; // Ignorar validación para IdEquipos
+        return value !== undefined && value !== null && value !== '';
+      });
+      if (!tieneValoresValidos) {
+        toast.error('Error al crear el torneo, todos los cambos son obligatorios');
+        return
+      }
       await EditarTorneo(torneoACrear);
       toast.success('torneo editado correctamente');
       router.back();
