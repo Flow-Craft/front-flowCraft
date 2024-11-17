@@ -146,7 +146,7 @@ function Page() {
         })),
       };
       await crearNuevoEquipo(equipoAcrear);
-      toast.success('equipo creado con existo');
+      toast.success('equipo creado con éxito');
       router.back();
     } catch (error) {
       toast.error(error.message);

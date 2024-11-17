@@ -393,6 +393,8 @@ const PartidoScreen = () => {
               <Button
                 isDisabled={estadoDelPartido === ENTRETIEMPO_CONST}
                 onClick={() => {
+                  
+                  console.log('accionPartido', accionPartido)
                   const accionSeleccionada = accionPartido.find((acc) =>
                     acc.nombreTipoAccion.includes('Gol'),
                   );

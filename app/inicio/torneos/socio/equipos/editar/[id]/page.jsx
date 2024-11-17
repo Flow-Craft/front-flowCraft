@@ -187,7 +187,7 @@ function Page() {
       };
 
       await editarEquipoExistente(equipoAcrear);
-      toast.success('equipo editado con existo');
+      toast.success('equipo editado con éxito');
       router.back();
     } catch (error) {
       toast.error(error.message);
