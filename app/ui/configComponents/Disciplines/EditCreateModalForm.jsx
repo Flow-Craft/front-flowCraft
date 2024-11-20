@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { InputWithLabel } from '../../components/InputWithLabel/InputWithLabel';
 
-const EditCreateDisciplineModalForm = ({ disciplina = null, onChange }) => {
+const EditCreateDisciplineModalForm = ({
+  disciplina = null,
+  onChange,
+  errors,
+}) => {
   const [initialValues, setInitialValues] = useState(disciplina);
   const handleChange = (e) => {
     onChange((current) => ({
@@ -72,6 +76,19 @@ const EditCreateDisciplineModalForm = ({ disciplina = null, onChange }) => {
         type="text"
         defaultValue={initialValues?.descripcion}
       />
+      <div className="mt-9 flex w-full content-between justify-between">
+        <div aria-live="polite" aria-atomic="true" className="mr-4">
+          {errors &&
+            errors.map((error) => (
+              <p
+                className="mt-2 text-sm font-bold text-red-500"
+                key={error.message}
+              >
+                {error.message}
+              </p>
+            ))}
+        </div>
+      </div>
     </form>
   );
 };

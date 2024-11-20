@@ -55,13 +55,17 @@ function Page() {
         BannerNo64: e.target.BannerNo64.files[0],
         IdEquipos: IdEquipos,
       };
-      const tieneValoresValidos = Object.entries(torneoACrear).every(([key, value]) => {
-        if (key === 'IdEquipos') return true; // Ignorar validación para IdEquipos
-        return value !== undefined && value !== null && value !== '';
-      });
+      const tieneValoresValidos = Object.entries(torneoACrear).every(
+        ([key, value]) => {
+          if (key === 'IdEquipos') return true; // Ignorar validación para IdEquipos
+          return value !== undefined && value !== null && value !== '';
+        },
+      );
       if (!tieneValoresValidos) {
-        toast.error('Error al crear el torneo, todos los campos son obligatorios');
-        return
+        toast.error(
+          'Error al crear el torneo, todos los campos son obligatorios',
+        );
+        return;
       }
       await AltaDeTorneo(torneoACrear);
       toast.success('torneo creado correctamente');

@@ -655,7 +655,7 @@ function Page() {
       <Toaster />
       <FlowModal
         title={eventoSeleccionado?.id ? 'Editar Evento' : 'Crear Evento'}
-        sx={{ minWidth: '90vw'}}
+        sx={{ minWidth: '90vw' }}
         modalBody={
           <CrearEditarModalEventos
             errors={errors}

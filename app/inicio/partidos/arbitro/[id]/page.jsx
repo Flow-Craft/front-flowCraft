@@ -393,8 +393,7 @@ const PartidoScreen = () => {
               <Button
                 isDisabled={estadoDelPartido === ENTRETIEMPO_CONST}
                 onClick={() => {
-                  
-                  console.log('accionPartido', accionPartido)
+                  console.log('accionPartido', accionPartido);
                   const accionSeleccionada = accionPartido.find((acc) =>
                     acc.nombreTipoAccion.includes('Gol'),
                   );
@@ -469,7 +468,7 @@ const PartidoScreen = () => {
         </div>
         <section className="mb-8 grid grid-cols-3 items-center gap-20 overflow-x-auto">
           {/* Equipo Local */}
-          <div className="h-full min-w-[300px] mr-10">
+          <div className="mr-10 h-full min-w-[300px]">
             <Tabs isFitted variant="enclosed">
               <TabList>
                 <Tab>Goles</Tab>
@@ -565,7 +564,7 @@ const PartidoScreen = () => {
           </div>
 
           {/* Acciones (en el centro) */}
-          <div className="flex h-full flex-col items-center ml-32 justify-center space-y-4">
+          <div className="ml-32 flex h-full flex-col items-center justify-center space-y-4">
             {accionPartido.map((accion) => {
               if (accion.nombreTipoAccion.includes('Gol')) {
                 return <></>;
@@ -663,7 +662,7 @@ const PartidoScreen = () => {
           </div>
 
           {/* Equipo Visitante */}
-          <div className="h-full min-w-[300px] ml-20">
+          <div className="ml-20 h-full min-w-[300px]">
             <Tabs isFitted variant="enclosed">
               <TabList>
                 <Tab>Goles</Tab>

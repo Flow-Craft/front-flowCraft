@@ -34,6 +34,7 @@ export const DisciplinasTab = () => {
   const [disciplineToDelte, setDisciplineToDelte] = useState<any>(null);
   const [openCreateDiscipline, setOpenCreateDiscipline] = useState(false);
   const [disciplineToEdit, setDisciplineToEdit] = useState<any>(null);
+  const [errors, setErrors] = useState<any>([]);
 
   const isValidDiscipline = (disciplineToEdit: any) => {
     if (!disciplineToEdit) {
@@ -127,9 +128,31 @@ export const DisciplinasTab = () => {
 
   const handleFormDiscipline = async () => {
     try {
+      if (
+        disciplinas.find(
+          (dis: any) =>
+            dis.nombre.toLowerCase() === disciplineToEdit.nombre.toLowerCase(),
+        )
+      ) {
+        setErrors([
+          {
+            code: 'too_small',
+            minimum: 1,
+            type: 'string',
+            inclusive: true,
+            exact: false,
+            message: 'Ya existe una disciplina con ese nombre.',
+            path: [],
+          },
+        ]);
+        return;
+      }
       if (!disciplineToEdit.id) {
         await createDisciplineAction(disciplineToEdit);
         toast.success('Disciplina creada con éxito');
+        setDisciplineToEdit(null);
+        setOpenCreateDiscipline(false);
+        setErrors([]);
       } else {
         await editDisciplineAction(disciplineToEdit);
         toast.success('Disciplina editada con éxito');
@@ -137,9 +160,6 @@ export const DisciplinasTab = () => {
       disciplinasToTab();
     } catch (error: any) {
       toast.error(error.message);
-    } finally {
-      setDisciplineToEdit(null);
-      setOpenCreateDiscipline(false);
     }
   };
   const disciplinasToTab = async () => {
@@ -259,6 +279,7 @@ export const DisciplinasTab = () => {
         onCancelModal={() => {
           setOpenDeleteDiscipline(false);
           setDisciplineToDelte(null);
+          setErrors([]);
         }}
       />
       <FlowModal
@@ -268,6 +289,7 @@ export const DisciplinasTab = () => {
             <EditCreateDisciplineModalForm
               disciplina={disciplineToEdit}
               onChange={setDisciplineToEdit}
+              errors={errors}
             />
           </div>
         }
@@ -279,6 +301,7 @@ export const DisciplinasTab = () => {
         onCancelModal={() => {
           setOpenCreateDiscipline(false);
           setDisciplineToEdit(false);
+          setErrors([]);
         }}
       />
     </div>

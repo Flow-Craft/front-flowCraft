@@ -47,6 +47,7 @@ export const UserTab = () => {
   const [openBlockUserModal, setOpenBlockUserModal] = useState(false);
   const [openDetailUserModal, setOpenDetailUserModal] = useState(false);
   const [editCreateUser, setEditCreateUser] = useState(false);
+  const [usuarioADesbloquear, setUsuarioADesbloquear] = useState(false);
   const [userSelected, setUserSelected] = useState<any>({});
   const [errors, setErrors] = useState<any>([]);
   const [perfiles, setPerfiles] = React.useState([]);
@@ -62,6 +63,11 @@ export const UserTab = () => {
   const openModalUsuarioEditar = (user: JSON) => {
     setUserSelected(user);
     setOpenDetailUserModal(true);
+  };
+
+  const openModalUsuarioADesbloquear = (user: JSON) => {
+    setUserSelected(user);
+    setUsuarioADesbloquear(true);
   };
 
   const blanquearContraseña = async (user: any) => {
@@ -151,7 +157,7 @@ export const UserTab = () => {
       await desbloquearUsuarioAdmin(userSelected.id, e.target.razon.value);
       toast.success('usuario desbloqueado con éxito');
       userToTab();
-      setOpenDetailUserModal(false);
+      setUsuarioADesbloquear(false);
     } catch (error) {
       console.log(error);
     }
@@ -238,6 +244,7 @@ export const UserTab = () => {
   };
 
   const ActionTab = (user: any) => {
+    console.log('user', user);
     return (
       <div className="flex flex-row gap-4">
         {user.estado === 'Activo' && (
@@ -250,14 +257,26 @@ export const UserTab = () => {
             />
           </Tooltip>
         )}
-        <Tooltip label="Mas detalles">
-          <UserIcon
-            onClick={() => {
-              openModalUsuarioEditar(user);
-            }}
-            className="w-[50px] cursor-pointer text-slate-500"
-          />
-        </Tooltip>
+        {user.estado === 'Bloqueado' && (
+          <Tooltip label="Desbloquear Usuario">
+            <UserIcon
+              onClick={() => {
+                openModalUsuarioADesbloquear(user);
+              }}
+              className="w-[50px] cursor-pointer text-slate-500"
+            />
+          </Tooltip>
+        )}
+        {user.estado === 'Activo' && (
+          <Tooltip label="Mas detalles">
+            <UserIcon
+              onClick={() => {
+                openModalUsuarioEditar(user);
+              }}
+              className="w-[50px] cursor-pointer text-slate-500"
+            />
+          </Tooltip>
+        )}
         {user.estado === 'Activo' && (
           <Tooltip label="Editar">
             <PencilIcon
@@ -328,6 +347,7 @@ export const UserTab = () => {
         <button
           className="rounded-lg bg-blue-500 p-2 text-center text-xl text-white lg:ml-auto"
           onClick={() => {
+            setUserSelected({});
             setEditCreateUser(true);
           }}
         >
@@ -353,17 +373,30 @@ export const UserTab = () => {
       />
       <FlowModal
         title="Usuario"
+        modalBody={<ModalBlockUser userSelected={userSelected} />}
+        primaryTextButton={'Ok'}
+        isOpen={openDetailUserModal}
+        scrollBehavior="outside"
+        onAcceptModal={() => {
+          setOpenDetailUserModal(false);
+        }}
+        onCancelModal={() => {
+          setOpenDetailUserModal(false);
+        }}
+        type="submit"
+      />
+      <FlowModal
+        title="Usuario"
         modalBody={
           <ModalBlockUser userSelected={userSelected} showReazon={true} />
         }
-        primaryTextButton={
-          userSelected ? 'Bloquear Usuario' : 'Desbloquear Usuario'
-        }
-        isOpen={openDetailUserModal}
+        primaryTextButton={'Desbloquear Usuario'}
+        isOpen={usuarioADesbloquear}
         scrollBehavior="outside"
         onAcceptModal={onDesbloquearUsuario}
         onCancelModal={() => {
-          setOpenDetailUserModal(false);
+          setUsuarioADesbloquear(false);
+          setUserSelected({});
         }}
         type="submit"
       />

@@ -37,18 +37,18 @@ export const EditCreatProfile = ({
         wrong={errors.some((error) => error.path.includes('Permisos'))}
       />
       <div className="mt-9 flex w-full content-between justify-between">
-          <div aria-live="polite" aria-atomic="true" className="mr-4">
-            {errors &&
-              errors.map((error) => (
-                <p
-                  className="mt-2 text-sm font-bold text-red-500"
-                  key={error.message}
-                >
-                  {error.message}
-                </p>
-              ))}
-          </div>
+        <div aria-live="polite" aria-atomic="true" className="mr-4">
+          {errors &&
+            errors.map((error) => (
+              <p
+                className="mt-2 text-sm font-bold text-red-500"
+                key={error.message}
+              >
+                {error.message}
+              </p>
+            ))}
         </div>
+      </div>
     </div>
   );
 };

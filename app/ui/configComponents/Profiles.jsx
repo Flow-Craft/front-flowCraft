@@ -122,15 +122,56 @@ export const ProfilesTab = () => {
           },
           Permisos: permisosSelected.map((perm) => perm.value),
         };
+        if (
+          profiles.find(
+            (pref) =>
+              pref.perfil.nombrePerfil.toLowerCase() ===
+              perfil.Perfil.NombrePerfil.toLowerCase(),
+          )
+        ) {
+          setErrors([
+            {
+              code: 'too_small',
+              minimum: 1,
+              type: 'string',
+              inclusive: true,
+              exact: false,
+              message: 'Ya existe un perfil con ese nombre.',
+              path: [],
+            },
+          ]);
+          return;
+        }
         await editPerfilAction(perfil);
         toast.success('perfil editado con éxito');
         PerfilesToTab();
         return;
       }
+      if (
+        profiles.find(
+          (pref) =>
+            pref.perfil.nombrePerfil.toLowerCase() ===
+            serPerfilToEdit.Perfil.NombrePerfil.toLowerCase(),
+        )
+      ) {
+        setErrors([
+          {
+            code: 'too_small',
+            minimum: 1,
+            type: 'string',
+            inclusive: true,
+            exact: false,
+            message: 'Ya existe un perfil con ese nombre.',
+            path: [],
+          },
+        ]);
+        return;
+      }
       const result = await createPerfilAction(serPerfilToEdit, setErrors);
       if (result?.error) {
+        console.log('result.errors', result.errors);
         setErrors(result.errors);
-        return
+        return;
       }
       toast.success('perfil creado con éxito');
       PerfilesToTab();
@@ -144,6 +185,7 @@ export const ProfilesTab = () => {
   const PerfilesToTab = async () => {
     try {
       const result = await getPerfilesAdmin();
+      console.log('result', result);
       setProfiles(result);
       const newProfilesToShow =
         result &&
@@ -230,7 +272,7 @@ export const ProfilesTab = () => {
           className="rounded-lg bg-blue-500 p-2 text-center text-xl text-white lg:ml-auto"
           onClick={() => {
             setOpenCreateProfile(true);
-            setErrors([])
+            setErrors([]);
           }}
         >
           Crear Perfil

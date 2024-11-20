@@ -29,10 +29,10 @@ const HEADER_TABLE = [
 ];
 
 const opcionesDePartido = [
-  {value:0 , label:"Leccion y partido "},
-  {value:1 , label:"Solo en partido "},
-  {value:2 , label:"Solo en lección "},
-]
+  { value: 0, label: 'Leccion y partido ' },
+  { value: 1, label: 'Solo en partido ' },
+  { value: 2, label: 'Solo en lección ' },
+];
 export const TiposAccionPartido = () => {
   const [tipoAccionPartido, setTipoAccionPartido] = useState([]);
   const [tipoAccionPartidoToShow, setTipoAccionPartidoToShow] = useState([]);
@@ -121,7 +121,7 @@ export const TiposAccionPartido = () => {
   const TipoAccionPartidoToTab = async () => {
     try {
       const result = await getTipoAccionPartidosAdmin();
-      console.log('result', result)
+      console.log('result', result);
       setTipoAccionPartido(result);
       const newtipoAccionPartidoToShow =
         result &&
@@ -137,7 +137,7 @@ export const TiposAccionPartido = () => {
             modificaTarjetasExpulsion: dis.modificaTarjetasExpulsion && (
               <CheckIcon className={`w-[50px] text-slate-500`} />
             ),
-            esPartido:`${opcionesDePartido[dis.esPartido].label}`,
+            esPartido: `${opcionesDePartido[dis.esPartido].label}`,
             secuencial: dis.secuencial && (
               <CheckIcon className={`w-[50px] text-slate-500`} />
             ),
@@ -234,11 +234,11 @@ export const TiposAccionPartido = () => {
               options={opcionesDePartido}
               label="Visible en"
               required
-              defaultValue={()=>{
-                if(tipoAccionPartidoToDelte?.esPartido){
-                  return opcionesDePartido[tipoAccionPartidoToDelte?.esPartido]
+              defaultValue={() => {
+                if (tipoAccionPartidoToDelte?.esPartido) {
+                  return opcionesDePartido[tipoAccionPartidoToDelte?.esPartido];
                 }
-                return opcionesDePartido[0]
+                return opcionesDePartido[0];
               }}
             />
             <InputWithLabel
