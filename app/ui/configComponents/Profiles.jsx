@@ -130,15 +130,15 @@ export const ProfilesTab = () => {
       const result = await createPerfilAction(serPerfilToEdit, setErrors);
       if (result?.error) {
         setErrors(result.errors);
+        return
       }
       toast.success('perfil creado con éxito');
       PerfilesToTab();
-    } catch (error) {
-      toast.error(error.message);
-    } finally {
       setPerfilToEdit(null);
       setOpenCreateProfile(false);
       setPermisosSelected([]);
+    } catch (error) {
+      toast.error(error.message);
     }
   };
   const PerfilesToTab = async () => {
@@ -230,6 +230,7 @@ export const ProfilesTab = () => {
           className="rounded-lg bg-blue-500 p-2 text-center text-xl text-white lg:ml-auto"
           onClick={() => {
             setOpenCreateProfile(true);
+            setErrors([])
           }}
         >
           Crear Perfil
