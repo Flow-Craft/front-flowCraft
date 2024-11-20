@@ -241,6 +241,7 @@ export default function Page() {
             onAcceptModal={handleRegistryUser}
             onCancelModal={handleCancel}
             primaryTextButton="Aceptar términos y condiciones"
+            scrollBehavior="outside"
           />
         )}
       </form>
