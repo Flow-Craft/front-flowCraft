@@ -66,7 +66,7 @@ export const ParametrosTab = () => {
         </button>
       </section>
       <FlowModal
-        title="Debe aceptar los nuevos términos y condiciones"
+        title="Actualizar los nuevos términos y condiciones"
         isOpen={openModal}
         size="full"
         modalBody={
@@ -95,7 +95,7 @@ export const ParametrosTab = () => {
         onCancelModal={() => {
           setOpenModal(false);
         }}
-        primaryTextButton="Aceptar terminos y condiciones"
+        primaryTextButton="Actualizar terminos y condiciones"
       />
 
       <FlowModal
