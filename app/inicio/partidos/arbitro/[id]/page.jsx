@@ -68,6 +68,7 @@ const PartidoScreen = () => {
   const [modalSuspenderPartido, setModalSuspenderPartido] = useState(false);
   const [accionesLocal, setAccionesLocal] = useState([]);
   const [accionesVisitantes, setAccionesVisitantes] = useState([]);
+  console.log('accionesVisitantes', accionesVisitantes)
   const [timeDifference, setTimeDifference] = useState(0);
   const router = useRouter();
 
@@ -404,7 +405,6 @@ const PartidoScreen = () => {
               <Button
                 isDisabled={estadoDelPartido === ENTRETIEMPO_CONST}
                 onClick={() => {
-                  console.log('accionPartido', accionPartido);
                   const accionSeleccionada = accionPartido.find((acc) =>
                     acc.nombreTipoAccion.includes('Gol'),
                   );
@@ -668,9 +668,10 @@ const PartidoScreen = () => {
                   </span>
                   <Button
                     isDisabled={estadoDelPartido === ENTRETIEMPO_CONST}
-                    onClick={() =>
-                      setPartido({ ...partido, equipo1: partido.equipo1 + 1 })
-                    }
+                    onClick={() =>{
+                      setModalBajaAccion(true);
+                      setAccionSeleccionada({ accion, esLocal: false });
+                    }}
                   >
                     -
                   </Button>
@@ -721,10 +722,10 @@ const PartidoScreen = () => {
 
                 <TabPanel className="min-h-[300px]">
                   {accionesVisitantes.filter((accion) =>
-                    accion.descripcion.includes('Falta'),
+                    accion?.descripcion?.includes('Falta'),
                   ).length > 0 ? (
                     accionesVisitantes
-                      .filter((accion) => accion.descripcion.includes('Falta'))
+                      .filter((accion) => accion?.descripcion?.includes('Falta'))
                       .map((accion) => {
                         return (
                           <p key={accion.id}>
@@ -739,11 +740,11 @@ const PartidoScreen = () => {
                 </TabPanel>
                 <TabPanel className="min-h-[300px]">
                   {accionesVisitantes.filter((accion) =>
-                    accion.descripcion.includes('Tarjetas'),
+                    accion?.descripcion?.includes('Tarjeta'),
                   ).length > 0 ? (
                     accionesVisitantes
                       .filter((accion) =>
-                        accion.descripcion.includes('Tarjetas'),
+                        accion.descripcion?.includes('Tarjeta'),
                       )
                       .map((accion) => {
                         return (
@@ -754,16 +755,16 @@ const PartidoScreen = () => {
                         );
                       })
                   ) : (
-                    <p>No hay faltas registradas</p>
+                    <p>No hay tarjetas registradas</p>
                   )}
                 </TabPanel>
 
                 <TabPanel className="min-h-[300px]">
                   {accionesVisitantes.filter((accion) =>
-                    accion.descripcion.includes('Cambio'),
+                    accion?.descripcion?.includes('Cambio'),
                   ).length > 0 ? (
                     accionesVisitantes
-                      .filter((accion) => accion.descripcion.includes('Cambio'))
+                      .filter((accion) => accion.descripcion?.includes('Cambio'))
                       .map((accion) => {
                         return (
                           <p key={accion.id}>
