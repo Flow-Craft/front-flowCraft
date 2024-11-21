@@ -11,6 +11,7 @@ export const Fases = ({
   equiposDefault = null,
 }) => {
   const [fases, setFases] = useState([]);
+  console.log('fases', fases)
   const [equipos, setEquipos] = useState([]);
 
   const getEquipos = async () => {
@@ -53,7 +54,7 @@ export const Fases = ({
     if (cantidadDeFases) {
       generarLlaveDeTorneo(cantidadDeFases, equiposDefault);
     }
-  }, [cantidadDeFases, equiposDefault]);
+  }, [cantidadDeFases]);
 
   useEffect(() => {
     if (disciplina?.value && categoria?.value && cantidadDeFases) getEquipos();

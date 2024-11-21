@@ -11,6 +11,7 @@ export default function Page() {
   const [modalEliminarEvento, setModalEliminarEvento] = useState(false);
   const [torneosAbiertos, setTorneosAbiertos] = useState([]);
   const [torneosCompletos, setTorneosCompletos] = useState([]);
+  console.log('torneosCompletos', torneosCompletos)
   const [torneosEnCurso, setTorneosEnCurso] = useState([]);
   const [torneosFinalizados, setTorneosFinalizados] = useState([]);
   const [torneoSeleccionado, setTorneoSeleccionado] = useState({});
@@ -101,7 +102,7 @@ export default function Page() {
           <span className="ml-6 text-2xl font-bold">Completos</span>
           <section className="ml-6 flex max-w-[90vw] flex-row gap-2 overflow-x-auto pt-6">
             {torneosCompletos.length > 0 ? (
-              torneosEnCurso.map((torneo) => {
+              torneosCompletos.map((torneo) => {
                 return (
                   <CardTorneo
                     key={torneo.id}
