@@ -128,10 +128,11 @@ export const DisciplinasTab = () => {
 
   const handleFormDiscipline = async () => {
     try {
+      console.log('disciplinas', disciplinas)
       if (
         disciplinas.find(
           (dis: any) =>
-            dis.nombre.toLowerCase() === disciplineToEdit.nombre.toLowerCase(),
+            (dis.nombre.trim().toLowerCase() === disciplineToEdit.nombre.trim().toLowerCase() && dis.id !== disciplineToEdit.id && !dis.fechaBaja),
         )
       ) {
         setErrors([
@@ -150,13 +151,13 @@ export const DisciplinasTab = () => {
       if (!disciplineToEdit.id) {
         await createDisciplineAction(disciplineToEdit);
         toast.success('Disciplina creada con éxito');
-        setDisciplineToEdit(null);
-        setOpenCreateDiscipline(false);
-        setErrors([]);
       } else {
         await editDisciplineAction(disciplineToEdit);
         toast.success('Disciplina editada con éxito');
       }
+      setDisciplineToEdit(null);
+      setOpenCreateDiscipline(false);
+      setErrors([]);
       disciplinasToTab();
     } catch (error: any) {
       toast.error(error.message);

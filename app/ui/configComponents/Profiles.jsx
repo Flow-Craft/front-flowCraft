@@ -126,7 +126,8 @@ export const ProfilesTab = () => {
           profiles.find(
             (pref) =>
               pref.perfil.nombrePerfil.toLowerCase() ===
-              perfil.Perfil.NombrePerfil.toLowerCase(),
+              perfil.Perfil.NombrePerfil.toLowerCase() &&
+              perfil.Perfil.Id !==  pref.perfil.id,
           )
         ) {
           setErrors([
@@ -145,6 +146,9 @@ export const ProfilesTab = () => {
         await editPerfilAction(perfil);
         toast.success('perfil editado con éxito');
         PerfilesToTab();
+        setPerfilToEdit(null);
+        setOpenCreateProfile(false);
+        setPermisosSelected([]);
         return;
       }
       if (

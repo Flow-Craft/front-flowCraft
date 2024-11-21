@@ -224,6 +224,17 @@ const PartidoScreen = () => {
           accionAMandar['IdJugadorEnBanca'] = usuarioParaCambio.value;
         }
       } else {
+        accionAMandar = {
+          IdPartido: partidoId,
+          IdTipoAccion: accionSeleccionada.accion.id,
+          IdJugador: usuarioSeleccionado.value,
+          EquipoLocal: accionSeleccionada.esLocal,
+          IdJugadorEnBanca: 0,
+          Minuto: calcularHoraAccion(),
+        };
+        if (accionSeleccionada?.accion?.nombreTipoAccion?.includes('Cambio')) {
+          accionAMandar['IdJugadorEnBanca'] = usuarioParaCambio.value;
+        }
       }
       await cargarAccionPartidoAdmin(accionAMandar);
       toast.success('accion cargada exitosamente');
@@ -437,7 +448,7 @@ const PartidoScreen = () => {
                 isDisabled={estadoDelPartido === ENTRETIEMPO_CONST}
                 onClick={() => {
                   const accionSeleccionada = accionPartido.find((acc) =>
-                    acc.nombreTipoAccion.includes('Gol'),
+                    (acc.nombreTipoAccion.includes('Gol')||acc.nombreTipoAccion.includes('Punto')),
                   );
                   setModalAltaAccion(true);
                   setAccionSeleccionada({
@@ -452,7 +463,7 @@ const PartidoScreen = () => {
                 isDisabled={estadoDelPartido === ENTRETIEMPO_CONST}
                 onClick={() => {
                   const accionSeleccionada = accionPartido.find((acc) =>
-                    acc.nombreTipoAccion.includes('Gol'),
+                    (acc.nombreTipoAccion.includes('Gol')||acc.nombreTipoAccion.includes('Punto')),
                   );
                   setModalBajaAccion(true);
                   setAccionSeleccionada({
@@ -480,10 +491,10 @@ const PartidoScreen = () => {
               <TabPanels>
                 <TabPanel>
                   {accionesLocal.filter((accion) =>
-                    accion.descripcion.includes('Gol'),
+                    (accion.descripcion.includes('Gol')||accion.descripcion.includes('Punto')),
                   ).length > 0 ? (
                     accionesLocal
-                      .filter((accion) => accion.descripcion.includes('Gol'))
+                      .filter((accion) => (accion.descripcion.includes('Gol')||accion.descripcion.includes('Punto')))
                       .map((accion) => {
                         return (
                           <p key={accion.id}>
@@ -566,7 +577,7 @@ const PartidoScreen = () => {
           {/* Acciones (en el centro) */}
           <div className="ml-32 flex h-full flex-col items-center justify-center space-y-4">
             {accionPartido.map((accion) => {
-              if (accion.nombreTipoAccion.includes('Gol')) {
+              if (accion.nombreTipoAccion.includes('Gol') || accion.nombreTipoAccion.includes('Punto')) {
                 return <></>;
               }
               if (accion.nombreTipoAccion.includes('Cambio Jugador')) {
@@ -583,6 +594,14 @@ const PartidoScreen = () => {
                     >
                       +
                     </Button>
+                    {accion.secuencial === false && <Button
+                      onClick={() => {
+                        setModalBajaAccion(true);
+                        setAccionSeleccionada({ accion, esLocal: true });
+                      }}
+                    >
+                      /
+                    </Button>}
                     <Button
                       onClick={() => {
                         setModalBajaAccion(true);
@@ -602,6 +621,14 @@ const PartidoScreen = () => {
                     >
                       -
                     </Button>
+                    {accion.secuencial === false && <Button
+                      onClick={() => {
+                        setModalBajaAccion(true);
+                        setAccionSeleccionada({ accion, esLocal: false });
+                      }}
+                    >
+                      /
+                    </Button>}
                     <Button
                       onClick={() => {
                         setModalAltaAccion(true);
