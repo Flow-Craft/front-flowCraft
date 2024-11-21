@@ -50,7 +50,7 @@ export const Fases = ({
   }
 
   useEffect(() => {
-    if (cantidadDeFases && fases.length === 0) {
+    if (cantidadDeFases) {
       generarLlaveDeTorneo(cantidadDeFases, equiposDefault);
     }
   }, [cantidadDeFases, equiposDefault]);

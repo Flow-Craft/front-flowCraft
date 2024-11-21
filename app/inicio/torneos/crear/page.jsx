@@ -25,6 +25,7 @@ function Page() {
   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState({});
   const [disciplinaSeleccinada, setDisciplinaSeleccinada] = useState({});
   const [cantidadDeEquipos, setCantidadDeEquipos] = useState({});
+  console.log('cantidadDeEquipos', cantidadDeEquipos)
   const [instalacionSeleccionada, setInstalacionSeleccionada] = useState({});
   const [fase, setFase] = useState({});
   const router = useRouter();
@@ -188,16 +189,6 @@ function Page() {
               className={`w-full resize-none rounded-lg border border-gray-300 p-2 focus:border-gray-500 focus:outline-none`}
             />
           </label>
-        </div>
-        <div className="flex flex-col space-y-4">
-          {cantidadDeEquipos && (
-            <Fases
-              cantidadDeFases={cantidadDeEquipos?.value}
-              categoria={categoriaSeleccionada}
-              disciplina={disciplinaSeleccinada}
-              onChangeFase={setFase}
-            />
-          )}
           <div className="flex w-full flex-row justify-end gap-4">
             <button
               className="rounded-lg bg-blue-600 p-2 text-center text-xl text-white"
@@ -215,6 +206,16 @@ function Page() {
               Volver
             </button>
           </div>
+        </div>
+        <div className="flex flex-col space-y-4">
+          {cantidadDeEquipos && (
+            <Fases
+              cantidadDeFases={cantidadDeEquipos?.value}
+              categoria={categoriaSeleccionada}
+              disciplina={disciplinaSeleccinada}
+              onChangeFase={setFase}
+            />
+          )}
         </div>
       </form>
     </section>
