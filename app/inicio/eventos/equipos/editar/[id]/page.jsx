@@ -201,7 +201,7 @@ function Page() {
     <section>
       <div>
         <div className="mt-6 self-start px-9 pb-9 text-3xl font-bold">
-          Crear Equipo
+          Editar Equipo
         </div>
         <div className="flex w-full flex-wrap items-center gap-8">
           <Toaster />
