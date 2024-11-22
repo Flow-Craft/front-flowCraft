@@ -58,7 +58,6 @@ export default function Page() {
   }, []);
   const cardHeader = useCallback(
     (nw: any, edit = (id: any) => {}, allowDel = (id: any) => {}) => {
-      console.log('permisos', permisos);
       return (
         <section className="relative">
           <section className="absolute right-0 top-0 z-20">
@@ -154,11 +153,11 @@ export default function Page() {
       await editNew({
         ...newToEdit,
         id: newToEdit.id,
-        titulo: e.target.titulo.value,
+        titulo: e.target.titulo.value || newToEdit.titulo  ,
         foto: e.target.imagenDeLaNoticia.files[0] || newToEdit.imagen,
         fechaInicio: fechaInicio,
         fechaFin: fechaFin,
-        descripcion: e.target.descripcion.value,
+        descripcion: e.target.descripcion.value || newToEdit.descripcion,
       });
       toast.success('Noticia editada con éxito');
       setNewToEdit({});
@@ -203,12 +202,12 @@ export default function Page() {
             .includes(e.target?.titulo?.value.toLowerCase())
         : true;
 
-      const coincideFechaInicio = e.target?.fechaDesde?.value
-        ? new Date(noticia.fechaInicio) >= new Date(e.target?.fechaDesde?.value)
+      const coincideFechaInicio = e.target?.fechaInicio?.value
+        ? new Date(noticia.fechaInicio) >= new Date(e.target?.fechaInicio?.value)
         : true;
 
-      const coincideFechaFin = e.target?.fechaHasta?.value
-        ? new Date(noticia.fechaFin) <= new Date(e.target?.fechaHasta?.value)
+      const coincideFechaFin = e.target?.fechaFin?.value
+        ? new Date(noticia.fechaFin) <= new Date(e.target?.fechaFin?.value)
         : true;
 
       return coincideTitulo && coincideFechaInicio && coincideFechaFin;
