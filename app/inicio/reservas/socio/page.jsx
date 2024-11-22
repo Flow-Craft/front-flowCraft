@@ -125,22 +125,12 @@ function Page() {
   const aplicarFitros = (e) => {
     e.preventDefault();
     const filters = {
-      nombre: e.target.nombre.value,
       fecha: e.target.fecha.value,
       instalacion: e.target.instalacion.value,
     };
     const instalacionesFiltradas = reservasVigentes.filter((reserva) => {
-      const { nombre, fecha, instalacion, instalaciones } = filters;
+      const { fecha, instalacion } = filters;
 
-      // Verificar nombre (parcial)
-      const coincideNombre =
-        !nombre ||
-        reserva.usuario.nombre.toLowerCase().includes(nombre.toLowerCase()) ||
-        reserva.usuario.apellido.toLowerCase().includes(nombre.toLowerCase()) ||
-        reserva.usuario.dni?.toString().includes(nombre) ||
-        `${reserva.usuario.nombre.toLowerCase()} ${reserva.usuario.apellido.toLowerCase()} ${reserva.usuario.dni.toString()}`.includes(
-          nombre.toLowerCase(),
-        );
       // Verificar fecha de inicio
       const coincideFecha = !fecha || reserva.fechaReserva.startsWith(fecha);
 
@@ -148,17 +138,10 @@ function Page() {
       const coincideInstalacion =
         !instalacion || reserva.instalacion.id === Number(instalacion);
 
-      // Verificar instalaciones
-      const coincideInstalaciones =
-        !instalaciones ||
-        instalaciones.length === 0 ||
-        instalaciones.some((inst) => inst.value === reserva.instalacion.id);
 
       return (
-        coincideNombre &&
         coincideFecha &&
-        coincideInstalacion &&
-        coincideInstalaciones
+        coincideInstalacion 
       );
     });
     const reservasAMostrar = instalacionesFiltradas.map((inst) => ({
@@ -215,12 +198,6 @@ function Page() {
           id="filterEvents"
         >
           <div className="flex flex-row flex-wrap gap-5">
-            <section className="flex flex-row items-center gap-3">
-              <label className="mb-3 mt-5 block text-lg font-bold text-gray-900">
-                Nombre:
-              </label>
-              <InputWithLabel name={'nombre'} type="text" ref={nombreRef} />
-            </section>
             <section className="flex flex-row items-center gap-3">
               <label className="mb-3 mt-5 block text-lg font-bold text-gray-900">
                 Fecha:
