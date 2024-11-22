@@ -223,7 +223,7 @@ export const ProfilesTab = () => {
                   descripcion: perfil.perfil.descripcionPerfil,
                 };
                 const permisosToEdit = perfil.permisos?.map((per) => ({
-                  label: `${per.modulo} - ${per.nombrePermiso}`,
+                  label: `${per.modulo} - ${per.funcionalidades}`,
                   value: per.id,
                 }));
                 setPerfilToEdit(perfilToEdit);
