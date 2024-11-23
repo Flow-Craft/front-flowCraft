@@ -205,14 +205,20 @@ export const verifyPasswords = z
   .object({
     Contrasena: z
       .string()
-      .min(8, { message: "El campo 'Contraseña' no tiene la longitud minima de 8 caracteres" })
+      .min(8, {
+        message:
+          "El campo 'Contraseña' no tiene la longitud minima de 8 caracteres",
+      })
       .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])/, {
         message:
           'La contraseña no cumple con los parámetros mínimos de seguridad. Debe contener un número, una letra mayúscula, una letra minúscula, y un símbolo.',
       }),
     OtraContrasena: z
       .string()
-      .min(8, { message: "El campo 'Repetir Contraseña' no tiene la longitud minima de 8 caracteres" })
+      .min(8, {
+        message:
+          "El campo 'Repetir Contraseña' no tiene la longitud minima de 8 caracteres",
+      })
       .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])/, {
         message:
           'La contraseña no cumple con los parámetros mínimos de seguridad. Debe contener un número, una letra mayúscula, una letra minúscula, y un símbolo.',

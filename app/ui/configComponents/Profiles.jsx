@@ -126,8 +126,8 @@ export const ProfilesTab = () => {
           profiles.find(
             (pref) =>
               pref.perfil.nombrePerfil.toLowerCase() ===
-              perfil.Perfil.NombrePerfil.toLowerCase() &&
-              perfil.Perfil.Id !==  pref.perfil.id,
+                perfil.Perfil.NombrePerfil.toLowerCase() &&
+              perfil.Perfil.Id !== pref.perfil.id,
           )
         ) {
           setErrors([

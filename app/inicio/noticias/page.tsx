@@ -153,7 +153,7 @@ export default function Page() {
       await editNew({
         ...newToEdit,
         id: newToEdit.id,
-        titulo: e.target.titulo.value || newToEdit.titulo  ,
+        titulo: e.target.titulo.value || newToEdit.titulo,
         foto: e.target.imagenDeLaNoticia.files[0] || newToEdit.imagen,
         fechaInicio: fechaInicio,
         fechaFin: fechaFin,
@@ -203,7 +203,8 @@ export default function Page() {
         : true;
 
       const coincideFechaInicio = e.target?.fechaInicio?.value
-        ? new Date(noticia.fechaInicio) >= new Date(e.target?.fechaInicio?.value)
+        ? new Date(noticia.fechaInicio) >=
+          new Date(e.target?.fechaInicio?.value)
         : true;
 
       const coincideFechaFin = e.target?.fechaFin?.value

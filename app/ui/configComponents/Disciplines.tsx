@@ -128,11 +128,14 @@ export const DisciplinasTab = () => {
 
   const handleFormDiscipline = async () => {
     try {
-      console.log('disciplinas', disciplinas)
+      console.log('disciplinas', disciplinas);
       if (
         disciplinas.find(
           (dis: any) =>
-            (dis.nombre.trim().toLowerCase() === disciplineToEdit.nombre.trim().toLowerCase() && dis.id !== disciplineToEdit.id && !dis.fechaBaja),
+            dis.nombre.trim().toLowerCase() ===
+              disciplineToEdit.nombre.trim().toLowerCase() &&
+            dis.id !== disciplineToEdit.id &&
+            !dis.fechaBaja,
         )
       ) {
         setErrors([

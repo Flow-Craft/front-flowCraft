@@ -11,7 +11,7 @@ export const Fases = ({
   equiposDefault = null,
 }) => {
   const [fases, setFases] = useState([]);
-  console.log('fases', fases)
+  console.log('fases', fases);
   const [equipos, setEquipos] = useState([]);
 
   const getEquipos = async () => {

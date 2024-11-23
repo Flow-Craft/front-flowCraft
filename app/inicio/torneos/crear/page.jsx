@@ -25,7 +25,7 @@ function Page() {
   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState({});
   const [disciplinaSeleccinada, setDisciplinaSeleccinada] = useState({});
   const [cantidadDeEquipos, setCantidadDeEquipos] = useState({});
-  console.log('cantidadDeEquipos', cantidadDeEquipos)
+  console.log('cantidadDeEquipos', cantidadDeEquipos);
   const [instalacionSeleccionada, setInstalacionSeleccionada] = useState({});
   const [fase, setFase] = useState({});
   const router = useRouter();

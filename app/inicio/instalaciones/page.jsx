@@ -34,7 +34,7 @@ const HEADER_TABLE = [
 
 function Page() {
   const [instalaciones, setInstalaciones] = useState([]);
-  console.log('instalaciones', instalaciones)
+  console.log('instalaciones', instalaciones);
   const [instalacionesToShow, setInstalacionesToShow] = useState([]);
   const [errors, setErrors] = useState([]);
   const [openCreateEditInstalacion, setOpenCreateEditInstalacion] =
@@ -66,7 +66,7 @@ function Page() {
             ),
             acciones: ActionTab(
               result.find((disc) => disc.instalacion.id === dis.instalacion.id),
-              setErrors
+              setErrors,
             ),
           };
         });
@@ -103,12 +103,14 @@ function Page() {
         EstadoId: Number(e.target.estadoInstalacion.value),
       };
       if (
-        instalaciones.find(
-          (instalacion) =>
-            {
-               return (instalacion.instalacion.nombre.trim().toLowerCase() === instalacionAEditar.Nombre.trim().toLowerCase()) &&  instalacion.instalacion.id !== instalacionAEditar.Id && instalacion.activo
-            },
-        )
+        instalaciones.find((instalacion) => {
+          return (
+            instalacion.instalacion.nombre.trim().toLowerCase() ===
+              instalacionAEditar.Nombre.trim().toLowerCase() &&
+            instalacion.instalacion.id !== instalacionAEditar.Id &&
+            instalacion.activo
+          );
+        })
       ) {
         setErrors([
           {
@@ -118,7 +120,7 @@ function Page() {
             inclusive: true,
             exact: false,
             message: 'Ya existe una instalacion con ese nombre.',
-            path: ["MismoNombre"],
+            path: ['MismoNombre'],
           },
         ]);
         return;
@@ -151,13 +153,13 @@ function Page() {
       };
 
       if (
-        instalaciones.find(
-          (instalacion) =>
-            {
-              console.log('instalacion', instalacion)
-               return (instalacion.instalacion.nombre.trim().toLowerCase() === instalacionACrear.Nombre.trim().toLowerCase()) && instalacion.activo
-            },
-        )
+        instalaciones.find((instalacion) => {
+          return (
+            instalacion.instalacion.nombre.trim().toLowerCase() ===
+              instalacionACrear.Nombre.trim().toLowerCase() &&
+            instalacion.activo
+          );
+        })
       ) {
         setErrors([
           {
@@ -167,7 +169,7 @@ function Page() {
             inclusive: true,
             exact: false,
             message: 'Ya existe una instalacion con ese nombre.',
-            path: ["MismoNombre"],
+            path: ['MismoNombre'],
           },
         ]);
         return;
@@ -225,7 +227,7 @@ function Page() {
               <PencilIcon
                 className={`w-[50px] cursor-pointer text-slate-500`}
                 onClick={() => {
-                  setErrors([])
+                  setErrors([]);
                   setInstalacionSeleccionada(instalacion);
                   setOpenCreateEditInstalacion(true);
                   setEdit(true);

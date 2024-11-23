@@ -68,7 +68,7 @@ const PartidoScreen = () => {
   const [modalSuspenderPartido, setModalSuspenderPartido] = useState(false);
   const [accionesLocal, setAccionesLocal] = useState([]);
   const [accionesVisitantes, setAccionesVisitantes] = useState([]);
-  console.log('accionesVisitantes', accionesVisitantes)
+  console.log('accionesVisitantes', accionesVisitantes);
   const [timeDifference, setTimeDifference] = useState(0);
   const router = useRouter();
 
@@ -447,8 +447,10 @@ const PartidoScreen = () => {
               <Button
                 isDisabled={estadoDelPartido === ENTRETIEMPO_CONST}
                 onClick={() => {
-                  const accionSeleccionada = accionPartido.find((acc) =>
-                    (acc.nombreTipoAccion.includes('Gol')||acc.nombreTipoAccion.includes('Punto')),
+                  const accionSeleccionada = accionPartido.find(
+                    (acc) =>
+                      acc.nombreTipoAccion.includes('Gol') ||
+                      acc.nombreTipoAccion.includes('Punto'),
                   );
                   setModalAltaAccion(true);
                   setAccionSeleccionada({
@@ -462,8 +464,10 @@ const PartidoScreen = () => {
               <Button
                 isDisabled={estadoDelPartido === ENTRETIEMPO_CONST}
                 onClick={() => {
-                  const accionSeleccionada = accionPartido.find((acc) =>
-                    (acc.nombreTipoAccion.includes('Gol')||acc.nombreTipoAccion.includes('Punto')),
+                  const accionSeleccionada = accionPartido.find(
+                    (acc) =>
+                      acc.nombreTipoAccion.includes('Gol') ||
+                      acc.nombreTipoAccion.includes('Punto'),
                   );
                   setModalBajaAccion(true);
                   setAccionSeleccionada({
@@ -490,11 +494,17 @@ const PartidoScreen = () => {
 
               <TabPanels>
                 <TabPanel>
-                  {accionesLocal.filter((accion) =>
-                    (accion.descripcion.includes('Gol')||accion.descripcion.includes('Punto')),
+                  {accionesLocal.filter(
+                    (accion) =>
+                      accion.descripcion.includes('Gol') ||
+                      accion.descripcion.includes('Punto'),
                   ).length > 0 ? (
                     accionesLocal
-                      .filter((accion) => (accion.descripcion.includes('Gol')||accion.descripcion.includes('Punto')))
+                      .filter(
+                        (accion) =>
+                          accion.descripcion.includes('Gol') ||
+                          accion.descripcion.includes('Punto'),
+                      )
                       .map((accion) => {
                         return (
                           <p key={accion.id}>
@@ -577,7 +587,10 @@ const PartidoScreen = () => {
           {/* Acciones (en el centro) */}
           <div className="ml-32 flex h-full flex-col items-center justify-center space-y-4">
             {accionPartido.map((accion) => {
-              if (accion.nombreTipoAccion.includes('Gol') || accion.nombreTipoAccion.includes('Punto')) {
+              if (
+                accion.nombreTipoAccion.includes('Gol') ||
+                accion.nombreTipoAccion.includes('Punto')
+              ) {
                 return <></>;
               }
               if (accion.nombreTipoAccion.includes('Cambio Jugador')) {
@@ -594,14 +607,16 @@ const PartidoScreen = () => {
                     >
                       +
                     </Button>
-                    {accion.secuencial === false && <Button
-                      onClick={() => {
-                        setModalBajaAccion(true);
-                        setAccionSeleccionada({ accion, esLocal: true });
-                      }}
-                    >
-                      /
-                    </Button>}
+                    {accion.secuencial === false && (
+                      <Button
+                        onClick={() => {
+                          setModalBajaAccion(true);
+                          setAccionSeleccionada({ accion, esLocal: true });
+                        }}
+                      >
+                        /
+                      </Button>
+                    )}
                     <Button
                       onClick={() => {
                         setModalBajaAccion(true);
@@ -621,14 +636,16 @@ const PartidoScreen = () => {
                     >
                       -
                     </Button>
-                    {accion.secuencial === false && <Button
-                      onClick={() => {
-                        setModalBajaAccion(true);
-                        setAccionSeleccionada({ accion, esLocal: false });
-                      }}
-                    >
-                      /
-                    </Button>}
+                    {accion.secuencial === false && (
+                      <Button
+                        onClick={() => {
+                          setModalBajaAccion(true);
+                          setAccionSeleccionada({ accion, esLocal: false });
+                        }}
+                      >
+                        /
+                      </Button>
+                    )}
                     <Button
                       onClick={() => {
                         setModalAltaAccion(true);
@@ -668,7 +685,7 @@ const PartidoScreen = () => {
                   </span>
                   <Button
                     isDisabled={estadoDelPartido === ENTRETIEMPO_CONST}
-                    onClick={() =>{
+                    onClick={() => {
                       setModalBajaAccion(true);
                       setAccionSeleccionada({ accion, esLocal: false });
                     }}
@@ -725,7 +742,9 @@ const PartidoScreen = () => {
                     accion?.descripcion?.includes('Falta'),
                   ).length > 0 ? (
                     accionesVisitantes
-                      .filter((accion) => accion?.descripcion?.includes('Falta'))
+                      .filter((accion) =>
+                        accion?.descripcion?.includes('Falta'),
+                      )
                       .map((accion) => {
                         return (
                           <p key={accion.id}>
@@ -764,7 +783,9 @@ const PartidoScreen = () => {
                     accion?.descripcion?.includes('Cambio'),
                   ).length > 0 ? (
                     accionesVisitantes
-                      .filter((accion) => accion.descripcion?.includes('Cambio'))
+                      .filter((accion) =>
+                        accion.descripcion?.includes('Cambio'),
+                      )
                       .map((accion) => {
                         return (
                           <p key={accion.id}>

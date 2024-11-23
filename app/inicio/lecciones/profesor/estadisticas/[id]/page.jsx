@@ -171,7 +171,8 @@ const page = () => {
                     <Button
                       isDisabled={!jugadorSeleccionado}
                       onClick={() => {
-                        if(verTotalPorAccion(accion)  !== 0 ) bajaAccionEstadistica(accion.id);
+                        if (verTotalPorAccion(accion) !== 0)
+                          bajaAccionEstadistica(accion.id);
                       }}
                     >
                       -

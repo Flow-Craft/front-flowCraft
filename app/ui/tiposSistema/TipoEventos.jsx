@@ -194,7 +194,7 @@ export const TipoEventos = () => {
             )}
           </div>
         }
-        primaryTextButton={tipoEventosToDelte ? "Editar ": `Crear`}
+        primaryTextButton={tipoEventosToDelte ? 'Editar ' : `Crear`}
         isOpen={openCreateEditTipoEvento}
         scrollBehavior="outside"
         onAcceptModal={tipoEventosToDelte ? editTipoEvento : crearTipoEvento}

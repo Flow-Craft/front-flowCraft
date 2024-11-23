@@ -138,11 +138,7 @@ function Page() {
       const coincideInstalacion =
         !instalacion || reserva.instalacion.id === Number(instalacion);
 
-
-      return (
-        coincideFecha &&
-        coincideInstalacion 
-      );
+      return coincideFecha && coincideInstalacion;
     });
     const reservasAMostrar = instalacionesFiltradas.map((inst) => ({
       id: inst.id,
