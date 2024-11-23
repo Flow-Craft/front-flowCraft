@@ -8,9 +8,10 @@ const EditCreateDisciplineModalForm = ({
 }) => {
   const [initialValues, setInitialValues] = useState(disciplina);
   const handleChange = (e) => {
-    onChange((current) => ({
-      ...current,
-      [e.target.name]: e.target.value,
+    const { name, value, type } = e.target;
+    onChange((prevValues) => ({
+      ...prevValues,
+      [name]: type === 'number' ? parseInt(value, 10) || 0 : value,
     }));
     setInitialValues((current) => ({
       ...current,
@@ -35,7 +36,7 @@ const EditCreateDisciplineModalForm = ({
         name={'cantJugadores'}
         defaultValue={initialValues?.cantJugadores}
         type="number"
-        min="1"
+        min={1}
         required
       />
       <InputWithLabel
@@ -43,7 +44,7 @@ const EditCreateDisciplineModalForm = ({
         name={'cantJugadoresEnBanca'}
         type="number"
         defaultValue={initialValues?.cantJugadoresEnBanca}
-        min="1"
+        min={1}
         required
       />
       <InputWithLabel
@@ -51,7 +52,7 @@ const EditCreateDisciplineModalForm = ({
         name={'periodosMax'}
         defaultValue={initialValues?.periodosMax}
         type="number"
-        min="1"
+        min={1}
         required
       />
       <InputWithLabel
@@ -59,7 +60,7 @@ const EditCreateDisciplineModalForm = ({
         name={'tarjetasAdvertencia'}
         defaultValue={initialValues?.tarjetasAdvertencia}
         type="number"
-        min="1"
+        min={1}
         required
       />
       <InputWithLabel
@@ -67,7 +68,7 @@ const EditCreateDisciplineModalForm = ({
         name={'tarjetasExpulsion'}
         type="number"
         defaultValue={initialValues?.tarjetasExpulsion}
-        min="1"
+        min={1}
         required
       />
       <InputWithLabel
