@@ -136,7 +136,7 @@ export const RegistryUserByAdminSchemaZod = z.object({
     .refine((file) => file.size === 0 || file.size <= 3 * 1024 * 1024, {
       message: 'La imagen no debe ser mayor a 3MB',
     }),
-  Perfil: z.string({ message: "El campo 'Perfil' no fue enviado" }),
+  Perfil: z.string().min(1, { message: "El campo 'Perfil' no fue enviado" }),
   FotoPerfil: z.any(),
 });
 export const EditUserByAdminSchemaZod = z.object({
