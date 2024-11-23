@@ -93,11 +93,27 @@ export const EditCreateInstall = ({
         <div className="text-red-600">
           Las horas seleccionadas son incompatibles
         </div>
+      ) : ( errors.length > 0  && errors.find((e) => e.path[0] === 'MismoNombre') ?
+      <div className="text-red-600">
+        Ya existe una instalacion con ese nombre
+      </div>
+      : 
+      (
+        errors.length > 0 && (
+          <div className="text-red-600">Todos los campos son obligatorios</div>
+        )
+      )
+      )}
+
+{/* {errors.length > 0 && errors.find((e) => e.path[0] === 'HoraFin') ? (
+        <div className="text-red-600">
+          Las horas seleccionadas son incompatibles
+        </div>
       ) : (
         errors.length > 0 && (
           <div className="text-red-600">Todos los campos son obligatorios</div>
         )
-      )}
+      )} */}
     </div>
   );
 };

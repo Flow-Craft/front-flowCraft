@@ -34,6 +34,7 @@ const HEADER_TABLE = [
 
 function Page() {
   const [instalaciones, setInstalaciones] = useState([]);
+  console.log('instalaciones', instalaciones)
   const [instalacionesToShow, setInstalacionesToShow] = useState([]);
   const [errors, setErrors] = useState([]);
   const [openCreateEditInstalacion, setOpenCreateEditInstalacion] =
@@ -65,7 +66,7 @@ function Page() {
             ),
             acciones: ActionTab(
               result.find((disc) => disc.instalacion.id === dis.instalacion.id),
-              permisos,
+              setErrors
             ),
           };
         });
@@ -101,6 +102,27 @@ function Page() {
         HoraCierre: `${e.target.cierre.value.split(':').length === 2 ? `${e.target.cierre.value}:00` : e.target.cierre.value}`,
         EstadoId: Number(e.target.estadoInstalacion.value),
       };
+      if (
+        instalaciones.find(
+          (instalacion) =>
+            {
+               return (instalacion.instalacion.nombre.trim().toLowerCase() === instalacionAEditar.Nombre.trim().toLowerCase()) &&  instalacion.instalacion.id !== instalacionAEditar.Id && instalacion.activo
+            },
+        )
+      ) {
+        setErrors([
+          {
+            code: 'too_small',
+            minimum: 1,
+            type: 'string',
+            inclusive: true,
+            exact: false,
+            message: 'Ya existe una instalacion con ese nombre.',
+            path: ["MismoNombre"],
+          },
+        ]);
+        return;
+      }
       const result = await editarInstalacionAction(instalacionAEditar);
       if (result?.errors) {
         setErrors(result.errors);
@@ -128,6 +150,29 @@ function Page() {
         EstadoId: Number(e.target.estadoInstalacion.value),
       };
 
+      if (
+        instalaciones.find(
+          (instalacion) =>
+            {
+              console.log('instalacion', instalacion)
+               return (instalacion.instalacion.nombre.trim().toLowerCase() === instalacionACrear.Nombre.trim().toLowerCase()) && instalacion.activo
+            },
+        )
+      ) {
+        setErrors([
+          {
+            code: 'too_small',
+            minimum: 1,
+            type: 'string',
+            inclusive: true,
+            exact: false,
+            message: 'Ya existe una instalacion con ese nombre.',
+            path: ["MismoNombre"],
+          },
+        ]);
+        return;
+      }
+
       const result = await crearInstalacionAction(instalacionACrear);
       if (result?.errors) {
         setErrors(result.errors);
@@ -152,7 +197,7 @@ function Page() {
     }
   };
 
-  const ActionTab = (instalacion) => {
+  const ActionTab = (instalacion, setErrors) => {
     const estadoInstalacion =
       instalacion?.instalacion?.instalacionHistoriales.reverse();
     const ultimoEstado = estadoInstalacion[0];
@@ -180,6 +225,7 @@ function Page() {
               <PencilIcon
                 className={`w-[50px] cursor-pointer text-slate-500`}
                 onClick={() => {
+                  setErrors([])
                   setInstalacionSeleccionada(instalacion);
                   setOpenCreateEditInstalacion(true);
                   setEdit(true);
