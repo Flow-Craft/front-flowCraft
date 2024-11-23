@@ -101,6 +101,7 @@ export const UserTab = () => {
       dni: e.target.dni.value.trim(), // Asegura que no haya espacios vacíos
       estado: e.target.activo.value === 'true' ? 'Activo' : 'Desactivado',
     };
+    console.log('users', users)
 
     // Filtramos los usuarios
     const userFiltered = users.filter((usuario: any) => {
@@ -119,7 +120,7 @@ export const UserTab = () => {
         filtros.estado === 'Activo'
           ? usuario.estado === 'Activo'
           : filtros.estado === 'Desactivado'
-            ? usuario.estado === 'Desactivado'
+            ? (usuario.estado === 'Desactivado'|| usuario.estado ==="Bloqueado")
             : usuario.estado === null;
 
       // Devuelve true si pasa todos los filtros aplicables
