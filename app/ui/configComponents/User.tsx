@@ -134,7 +134,7 @@ export const UserTab = () => {
         email: user.email,
         telefono: user.telefono,
         estado: user.estado,
-        acciones: ActionTab(user), // Esto asumo es un componente que ya tienes
+        acciones: ActionTab(user, setErrors), // Esto asumo es un componente que ya tienes
         id: user.id,
       };
     });
@@ -178,6 +178,7 @@ export const UserTab = () => {
             estado: user.estado,
             acciones: ActionTab(
               result.usuarios.find((usr: any) => usr.id === user.id),
+              setErrors
             ),
             id: user.id,
           };
@@ -188,6 +189,7 @@ export const UserTab = () => {
 
   const createUser = async (event: any) => {
     try {
+      setErrors([]);
       const result: any = await verifyRegistryUserByAdmin({
         Nombre: event.target.Nombre.value,
         Apellido: event.target.Apellido.value,
@@ -217,6 +219,7 @@ export const UserTab = () => {
 
   const editUserAction = async (event: any) => {
     try {
+      setErrors([]);
       const result = await EditUserByAdmin({
         Id: userSelected.id,
         Nombre: event.target.Nombre.value,
@@ -243,8 +246,7 @@ export const UserTab = () => {
     }
   };
 
-  const ActionTab = (user: any) => {
-    console.log('user', user);
+  const ActionTab = (user: any, setErrors:any) => {
     return (
       <div className="flex flex-row gap-4">
         {user.estado === 'Activo' && (
@@ -281,6 +283,7 @@ export const UserTab = () => {
           <Tooltip label="Editar">
             <PencilIcon
               onClick={() => {
+                setErrors([]);
                 handleClick(user);
               }}
               className="w-[50px] cursor-pointer text-slate-500"
@@ -347,6 +350,7 @@ export const UserTab = () => {
         <button
           className="rounded-lg bg-blue-500 p-2 text-center text-xl text-white lg:ml-auto"
           onClick={() => {
+            setErrors([]);
             setUserSelected({});
             setEditCreateUser(true);
           }}
