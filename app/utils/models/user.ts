@@ -21,14 +21,14 @@ export const RegistryUserSchemaZod = z
       }),
     Contrasena: z
       .string()
-      .min(8, { message: "El campo 'Contraseña' no fue enviado" })
+      .min(8, { message: "La Contraseña debe tener minimo 8 caracteres." })
       .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])/, {
         message:
-          'La contraseña no cumple con los parámetros mínimos de seguridad. Debe contener un número, una letra mayúscula, una letra minúscula,  un símbolo y minimo 8 caracteres.',
+          'La contraseña no cumple con los parámetros mínimos de seguridad. Debe contener un número, una letra mayúscula, una letra minúscula y un símbolo.',
       }),
     OtraContrasena: z
       .string()
-      .min(8, { message: "El campo 'Confirmar Contraseña' no fue enviado" })
+      .min(8, { message: "La contraseña a confirmar debe tener minimo 8 caracteres." })
       .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])/, {
         message:
           'La contraseña no cumple con los parámetros mínimos de seguridad. Debe contener un número, una letra mayúscula, una letra minúscula, un símbolo y minimo 8 caracteres.',
