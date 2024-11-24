@@ -103,7 +103,7 @@ function Page() {
         setErrors(result.errors);
         return;
       }
-      toast.success('usuario editador correctamente');
+      toast.success('Usuario editador correctamente');
       setEditMode(false);
       setImageSelected(undefined);
       getUser();
@@ -392,8 +392,7 @@ function Page() {
         title="Darse de baja"
         modalBody={
           <div className="text-2xl font-bold text-neutral-950">
-            ¿Esta seguro de esta decision, tendra que volver al club para poder
-            volver a activar su cuenta?{' '}
+            ¿Está seguro de esta decisión?{' '}
           </div>
         }
         primaryTextButton="Si, estoy seguro"
