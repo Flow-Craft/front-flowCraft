@@ -15,6 +15,10 @@ export const ParametrosTab = () => {
 
   const ActualizarnuevosTerminosYCondiciones = async () => {
     try {
+      if(!nuevosTerminosYCondiciones){
+        toast.error("Los TyC no pueden ser vacios");
+        return
+      }
       await actualizarTyC({ TYC: nuevosTerminosYCondiciones });
       toast.success('TyC actualizados correctamente');
       setNuevosTerminosYCondiciones('');
