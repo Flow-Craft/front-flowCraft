@@ -749,6 +749,10 @@ export async function crearEventoAdmin(equipo: any) {
 }
 
 export async function editarEventoEstadoAdmin(equipo: any) {
+  const result = equipoEstadoSchema.safeParse(equipo);
+  if (!result.success) {
+    return { error: true, errors: result.error.errors };
+  }
   return await FlowCraftAPI.post(
     `Configuracion/ActualizarEventoEstado`,
     equipo,
@@ -772,6 +776,10 @@ export async function crearUsuarioEstadoAdmin(equipo: any) {
 }
 
 export async function editarUsuarioEstadoAdmin(equipo: any) {
+  const result = equipoEstadoSchema.safeParse(equipo);
+  if (!result.success) {
+    return { error: true, errors: result.error.errors };
+  }
   return await FlowCraftAPI.post(
     `Configuracion/ActualizarUsuarioEstado`,
     equipo,

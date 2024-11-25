@@ -7,6 +7,7 @@ import { FlowModal } from '../../components/FlowModal/FlowModal';
 import { Tooltip } from '@chakra-ui/react';
 import toast, { Toaster } from 'react-hot-toast';
 import {
+  crearEventoAdmin,
   crearUsuarioEstadoAdmin,
   editarEventoEstadoAdmin,
   editarUsuarioEstadoAdmin,
@@ -87,7 +88,7 @@ export const EventosTab = () => {
         NombreEstado: e.target.nombre.value,
         DescripcionEstado: e.target.descripcion.value,
       };
-      const result = await crearUsuarioEstadoAdmin(equipo, setErrors);
+      const result = await crearEventoAdmin(equipo, setErrors);
       if (result?.error) {
         setErrors(result.errors);
         return;
@@ -107,7 +108,11 @@ export const EventosTab = () => {
         NombreEstado: e.target.nombre.value,
         DescripcionEstado: e.target.descripcion.value,
       };
-      await editarEventoEstadoAdmin(categoria);
+      const result = await editarEventoEstadoAdmin(categoria);
+      if (result?.error) {
+        setErrors(result.errors);
+        return;
+      }
       toast.success('Evento Estado editado con éxito');
       equipoToTab();
       setOpenCreateEquipo(false);
@@ -206,8 +211,7 @@ export const EventosTab = () => {
         title={`Eliminar Estado Evento ${equipoToDelte?.nombreEstado}`}
         modalBody={
           <div>
-            ¿Esta seguro que desea eliminar esta evento Estado?{' '}
-            {equipoToDelte?.descripcionEstado}
+            ¿Esta seguro que desea eliminar esta evento Estado?
           </div>
         }
         primaryTextButton="Si"

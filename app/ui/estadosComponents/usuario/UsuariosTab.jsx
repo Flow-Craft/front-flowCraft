@@ -40,7 +40,7 @@ export const UsuariosTab = () => {
   const deleteCategoria = async () => {
     try {
       await eliminarUsuarioEstadoAdmin(equipoToDelte.id);
-      toast.success('Evento Estado eliminado con éxito');
+      toast.success('Usuario Estado eliminado con éxito');
       equipoToTab();
     } catch (error) {
       toast.error(error.message);
@@ -86,7 +86,6 @@ export const UsuariosTab = () => {
 
   const handleFormEquipo = async (e) => {
     try {
-      e.target.nombreEstado;
       setErrors([]);
       let equipo = {
         NombreEstado: e.target.nombre.value,
@@ -107,12 +106,17 @@ export const UsuariosTab = () => {
 
   const editarEquipo = async (e) => {
     try {
+      setErrors([]);
       let categoria = {
         Id: equipoToEdit.id,
         NombreEstado: e.target.nombre.value,
         DescripcionEstado: e.target.descripcion.value,
       };
-      await editarUsuarioEstadoAdmin(categoria);
+      const result = await editarUsuarioEstadoAdmin(categoria);
+      if (result?.error) {
+        setErrors(result.errors);
+        return;
+      }
       toast.success('Usuario Estado editado con éxito');
       equipoToTab();
       setOpenCreateEquipo(false);

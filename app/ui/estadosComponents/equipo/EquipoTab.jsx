@@ -32,7 +32,7 @@ export const EquiposTab = () => {
   const deleteCategoria = async () => {
     try {
       await eliminarEquipoEstadoAdmin(equipoToDelte.id);
-      toast.success('Perfil eliminado con éxito');
+      toast.success('Equipo estado eliminado con éxito');
       equipoToTab();
     } catch (error) {
       toast.error(error.message);
