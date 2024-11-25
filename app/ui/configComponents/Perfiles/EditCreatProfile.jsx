@@ -25,6 +25,7 @@ export const EditCreatProfile = ({
         type="text"
         defaultValue={perfil?.descripcion}
         wrong={errors.some((error) => error.path.includes('DescripcionPerfil'))}
+        required
       />
       <SelectWithLabel
         name="permisos"

@@ -9,6 +9,7 @@ import {
   createTimer,
   desbloquearUsuarioAdmin,
   EditUserByAdmin,
+  eliminarUsuarioAction,
   getPerfilesAction,
   getUsersAdmin,
   registrarUsuarioAdmin,
@@ -48,6 +49,7 @@ export const UserTab = () => {
   const [openDetailUserModal, setOpenDetailUserModal] = useState(false);
   const [editCreateUser, setEditCreateUser] = useState(false);
   const [usuarioADesbloquear, setUsuarioADesbloquear] = useState(false);
+  const [usuarioDadoDeBaja, setUsuarioDadoDeBaja] = useState(false);
   const [userSelected, setUserSelected] = useState<any>({});
   const [errors, setErrors] = useState<any>([]);
   const [perfiles, setPerfiles] = React.useState([]);
@@ -63,6 +65,10 @@ export const UserTab = () => {
   const openModalUsuarioEditar = (user: JSON) => {
     setUserSelected(user);
     setOpenDetailUserModal(true);
+  };
+  const openModalUsuarioDetalles = (user: JSON) => {
+    setUserSelected(user);
+    setUsuarioDadoDeBaja(true);
   };
 
   const openModalUsuarioADesbloquear = (user: JSON) => {
@@ -101,7 +107,7 @@ export const UserTab = () => {
       dni: e.target.dni.value.trim(), // Asegura que no haya espacios vacíos
       estado: e.target.activo.value === 'true' ? 'Activo' : 'Desactivado',
     };
-    console.log('users', users)
+    console.log('users', users);
 
     // Filtramos los usuarios
     const userFiltered = users.filter((usuario: any) => {
@@ -120,7 +126,7 @@ export const UserTab = () => {
         filtros.estado === 'Activo'
           ? usuario.estado === 'Activo'
           : filtros.estado === 'Desactivado'
-            ? (usuario.estado === 'Desactivado'|| usuario.estado ==="Bloqueado")
+            ? usuario.estado === 'Desactivado' || usuario.estado === 'Bloqueado'
             : usuario.estado === null;
 
       // Devuelve true si pasa todos los filtros aplicables
@@ -145,6 +151,19 @@ export const UserTab = () => {
   const handleAccept = async (e: any) => {
     try {
       await bloquearUsuarioAdmin(userSelected.id, e.target.razon.value);
+      toast.success('usuario bloqueado con éxito');
+      setUserSelected({});
+      userToTab();
+      setOpenDetailUserModal(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const onDarDeBajaUsuario = async (e: any) => {
+    try {
+      await eliminarUsuarioAction(userSelected.id);
+      setUserSelected({});
       toast.success('usuario bloqueado con éxito');
       userToTab();
       setOpenBlockUserModal(false);
@@ -179,7 +198,7 @@ export const UserTab = () => {
             estado: user.estado,
             acciones: ActionTab(
               result.usuarios.find((usr: any) => usr.id === user.id),
-              setErrors
+              setErrors,
             ),
             id: user.id,
           };
@@ -247,7 +266,7 @@ export const UserTab = () => {
     }
   };
 
-  const ActionTab = (user: any, setErrors:any) => {
+  const ActionTab = (user: any, setErrors: any) => {
     return (
       <div className="flex flex-row gap-4">
         {user.estado === 'Activo' && (
@@ -280,6 +299,16 @@ export const UserTab = () => {
             />
           </Tooltip>
         )}
+        {user.estado === 'Desactivado' && (
+          <Tooltip label="Mas detalles">
+            <UserIcon
+              onClick={() => {
+                openModalUsuarioDetalles(user);
+              }}
+              className="w-[50px] cursor-pointer text-slate-500"
+            />
+          </Tooltip>
+        )}
         {user.estado === 'Activo' && (
           <Tooltip label="Editar">
             <PencilIcon
@@ -292,7 +321,7 @@ export const UserTab = () => {
           </Tooltip>
         )}
         {user.estado === 'Activo' && (
-          <Tooltip label="Bloquear">
+          <Tooltip label="Dar de baja">
             <TrashIcon
               onClick={() => {
                 openUserModalBlock(user);
@@ -364,13 +393,11 @@ export const UserTab = () => {
       </section>
       <FlowModal
         title="Usuario a dar de baja"
-        modalBody={
-          <ModalBlockUser userSelected={userSelected} showReazon={true} />
-        }
+        modalBody={<ModalBlockUser userSelected={userSelected} />}
         primaryTextButton="Dar de baja al Usuario"
         isOpen={openBlockUserModal}
         scrollBehavior="outside"
-        onAcceptModal={handleAccept}
+        onAcceptModal={onDarDeBajaUsuario}
         onCancelModal={() => {
           setOpenBlockUserModal(false);
         }}
@@ -378,15 +405,29 @@ export const UserTab = () => {
       />
       <FlowModal
         title="Usuario"
-        modalBody={<ModalBlockUser userSelected={userSelected} />}
-        primaryTextButton={'Ok'}
+        modalBody={<ModalBlockUser userSelected={userSelected} showReazon />}
+        primaryTextButton={'Bloquear'}
         isOpen={openDetailUserModal}
         scrollBehavior="outside"
-        onAcceptModal={() => {
-          setOpenDetailUserModal(false);
-        }}
+        onAcceptModal={handleAccept}
         onCancelModal={() => {
           setOpenDetailUserModal(false);
+        }}
+        type="submit"
+      />
+      <FlowModal
+        title="Usuario"
+        modalBody={<ModalBlockUser userSelected={userSelected} />}
+        primaryTextButton={'Ok'}
+        isOpen={usuarioDadoDeBaja}
+        scrollBehavior="outside"
+        onAcceptModal={() => {
+          setUserSelected({});
+          setUsuarioDadoDeBaja(false);
+        }}
+        onCancelModal={() => {
+          setUserSelected({});
+          setUsuarioDadoDeBaja(false);
         }}
         type="submit"
       />

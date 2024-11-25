@@ -5,7 +5,7 @@ import { SelectWithLabel } from '../../components/SelectWithLabel/SelectWithLabe
 import { getPerfilesAction } from '@/app/utils/actions';
 
 export const ModalCreateEditUser = ({ errors = [], user, perfiles }) => {
-  console.log('errors', errors)
+  console.log('errors', errors);
   return (
     <div className="mt-2 flex w-full flex-col items-center justify-center">
       <section className=" flex w-full flex-col md:flex-row md:justify-evenly">

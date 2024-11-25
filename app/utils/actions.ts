@@ -222,8 +222,8 @@ export async function EditUserByAdmin(userToEdit: any) {
   }
 }
 
-export async function eliminarUsuarioAction(id:any) {
-  return await FlowCraftAPI.post(`Configuracion/EliminarUsuario?id=${id}`);
+export async function eliminarUsuarioAction(id: any) {
+  return await FlowCraftAPI.post(`Users/EliminarUsuario?id=${id}`);
 }
 
 export function createTimer(ms: number) {
