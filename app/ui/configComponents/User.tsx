@@ -164,7 +164,7 @@ export const UserTab = () => {
     try {
       await eliminarUsuarioAction(userSelected.id);
       setUserSelected({});
-      toast.success('usuario bloqueado con éxito');
+      toast.success('usuario dado de baja con éxito');
       userToTab();
       setOpenBlockUserModal(false);
     } catch (error) {
