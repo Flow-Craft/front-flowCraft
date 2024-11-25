@@ -233,7 +233,7 @@ function Page() {
     <section>
       <section className="flex h-[104px] w-full flex-row items-center justify-between">
         {!editMode ? (
-          <QrGenerator label="generar QR" userData={dataToQr} />
+          <QrGenerator label="Generar QR" userData={dataToQr} />
         ) : (
           <div />
         )}

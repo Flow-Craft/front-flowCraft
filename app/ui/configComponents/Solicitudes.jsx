@@ -114,7 +114,7 @@ export const SolicitudesTab = () => {
         Id: solicitud.id.toString(),
         Accion: 'Aprobada',
       });
-      toast.success('solicitud aprobada');
+      toast.success('Solicitud aprobada');
       SolicutedToTab(typeSelected);
     } catch (error) {
       toast.error(error.message);
