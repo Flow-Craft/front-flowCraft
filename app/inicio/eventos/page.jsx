@@ -467,7 +467,7 @@ function Page() {
         !instalaciones ||
         instalaciones.length === 0 ||
         instalaciones.some(
-          (inst) => inst.value === evento.evento.instalacion.id,
+          (inst) => inst.value === evento.evento.disciplina.id,
         );
 
       return (
