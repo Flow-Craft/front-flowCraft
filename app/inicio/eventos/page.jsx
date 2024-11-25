@@ -315,8 +315,8 @@ function Page() {
           IdCategoria: e.target.IdCategoria.value,
           IdDisciplina: e.target.IdsDisciplinaPartido.value,
           Banner: e.target.Banner.files[0],
-          EquipoLocal: e.target.equipoLocal.value,
-          EquipoVisitante: e.target.equipoVisitante.value,
+          EquipoLocal: e.target.equipoLocal.value || 0 ,
+          EquipoVisitante: e.target.equipoVisitante.value || 0,
           Arbitro: e.target.arbitro.value,
           Planillero: e.target.planillero.value,
         };
