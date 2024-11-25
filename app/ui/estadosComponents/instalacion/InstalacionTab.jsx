@@ -117,7 +117,11 @@ export const InstalacionTab = () => {
         NombreEstado: e.target.nombre.value,
         DescripcionEstado: e.target.descripcion.value,
       };
-      await editarInstalacionEstadoAdmin(categoria);
+      const result = await editarInstalacionEstadoAdmin(categoria);
+      if (result?.error) {
+        setErrors(result.errors);
+        return;
+      }
       toast.success('Instalacion Estado editado con éxito');
       equipoToTab();
       setOpenCreateEquipo(false);

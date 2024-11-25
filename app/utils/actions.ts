@@ -725,6 +725,10 @@ export async function crearEquipoAdmin(equipo: any) {
 }
 
 export async function editarEquipoAdmin(equipo: any) {
+  const result = equipoEstadoSchema.safeParse(equipo);
+  if (!result.success) {
+    return { error: true, errors: result.error.errors };
+  }
   return await FlowCraftAPI.post(
     `Configuracion/ActualizarEquipoEstado`,
     equipo,
@@ -806,6 +810,10 @@ export async function crearLeccionEstadoAdmin(equipo: any) {
 }
 
 export async function editarLeccionEstadoAdmin(equipo: any) {
+  const result = equipoEstadoSchema.safeParse(equipo);
+  if (!result.success) {
+    return { error: true, errors: result.error.errors };
+  }
   return await FlowCraftAPI.post(
     `DisciplinasYLecciones/ActualizarLeccionEstado`,
     equipo,
@@ -835,6 +843,10 @@ export async function crearInstalacionEstadoAdmin(equipo: any) {
 }
 
 export async function editarInstalacionEstadoAdmin(equipo: any) {
+  const result = equipoEstadoSchema.safeParse(equipo);
+  if (!result.success) {
+    return { error: true, errors: result.error.errors };
+  }
   return await FlowCraftAPI.post(
     `Configuracion/ActualizarInstalacionEstado`,
     equipo,
@@ -860,6 +872,10 @@ export async function crearTorneoEstadoAdmin(equipo: any) {
 }
 
 export async function editarTorneoEstadoAdmin(equipo: any) {
+  const result = equipoEstadoSchema.safeParse(equipo);
+  if (!result.success) {
+    return { error: true, errors: result.error.errors };
+  }
   return await FlowCraftAPI.post(`Torneos/ActualizarTorneoEstado`, equipo);
 }
 

@@ -104,7 +104,11 @@ export const EquiposTab = () => {
         NombreEstado: e.target.nombre.value,
         DescripcionEstado: e.target.descripcion.value,
       };
-      await editarEquipoAdmin(categoria);
+      const result = await editarEquipoAdmin(categoria);
+      if (result?.error) {
+        setErrors(result.errors);
+        return;
+      }
       toast.success('Equipo editado con éxito');
       equipoToTab();
       setOpenCreateEquipo(false);
