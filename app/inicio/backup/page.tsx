@@ -1,48 +1,26 @@
 'use client';
 import {
-  Box,
   Flex,
   Text,
   Button,
   Input,
-  Heading,
-  VStack,
-  HStack,
-  Spacer,
-  Card,
-  CardHeader,
-  CardBody,
-  CardFooter,
   useToast,
 } from '@chakra-ui/react';
-import { useRef, useEffect, useState } from 'react';
-import FlowCraftAPI from '../../utils/request';
+import { useRef } from 'react';
 import { AUTORIZATION_KEY } from '@/app/utils/const';
+import { FlowTable } from '@/app/ui/components/FlowTable/FlowTable';
+
+const HEADER_TABLE = [
+  { name: 'Fecha' },
+  { name: 'Versión' },
+  { name: 'Acciones' },
+];
 
 export default function Page() {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const inputRef2 = useRef<HTMLInputElement | null>(null);
   const toast = useToast();
-
-  const [RestaurarFile, setRestaurarFile] = useState(false);
-  const [GenerarFile, setGenerarFile] = useState(false);
-
-  const checkData = async (fileName: string) => {
-    const res = await FlowCraftAPI.get(
-      `Backup/VerificarArchivo?fileName=${fileName}`,
-    );
-    const data = res as { existe: boolean };
-    return data.existe;
-  };
-  useEffect(() => {
-    const filesExist = async () => {
-      const generarExist = await checkData('GENERAR_BACKUP.pdf');
-      const restaurarExist = await checkData('RESTAURAR_BACKUP.pdf');
-      setGenerarFile(generarExist);
-      setRestaurarFile(restaurarExist);
-    };
-    filesExist();
-  }, []);
+  
 
   const token = window.localStorage.getItem(AUTORIZATION_KEY);
   const downloadFile = async (fileName: string) => {
@@ -128,11 +106,6 @@ export default function Page() {
           });
           return;
         }
-        if (file.name == 'GENERAR_BACKUP.pdf') {
-          setGenerarFile(true);
-        } else {
-          setRestaurarFile(true);
-        }
 
         const formData = new FormData();
         formData.append('file', file);
@@ -162,157 +135,76 @@ export default function Page() {
       }
     };
   return (
-    <Box minH="100vh" bg="white">
-      <Flex>
-        <Box as="main" flex="1" p={6}>
-          <Card>
-            <CardHeader>
-              <Heading size="md">Backup del sistema</Heading>
-            </CardHeader>
-            <CardBody>
-              <VStack spacing={4} align="stretch">
-                <Flex justify="space-between" align="center">
-                  <Text>LINK A LA GUÍA PARA GENERAR BACKUP DEL SISTEMA</Text>
-                  {GenerarFile ? (
-                    <>
-                      <div className="flex gap-2 ">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          bg={'green.300'}
-                          textColor={'white'}
-                          _hover={{
-                            bg: 'green.400',
-                          }}
-                          onClick={() => downloadFile('GENERAR_BACKUP.pdf')}
-                        >
-                          DESCARGAR GENERAR.pdf
-                        </Button>
-
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          textColor={'white'}
-                          bg={'blue.300'}
-                          _hover={{
-                            bg: 'blue.400',
-                          }}
-                          onClick={handleButtonClick}
-                        >
-                          ACTUALIZAR
-                        </Button>
-                        <Input
-                          display="none"
-                          type="file"
-                          accept="application/pdf"
-                          ref={inputRef}
-                          onChange={handleFileChange('GENERAR_BACKUP.pdf')}
-                        />
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        textColor={'white'}
-                        bg={'blue.300'}
-                        _hover={{
-                          bg: 'blue.400',
-                        }}
-                        onClick={handleButtonClick}
-                      >
-                        GENERAR BACKUP.PDF
-                      </Button>
-                      <Input
-                        display="none"
-                        type="file"
-                        accept="application/pdf"
-                        ref={inputRef}
-                        onChange={handleFileChange('GENERAR_BACKUP.pdf')}
-                      />
-                    </>
-                  )}
-                </Flex>
-                <Flex justify="space-between" align="center">
-                  <Text>
-                    LINK A LA GUÍA PARA RESTAURAR UN BACKUP EN EL SISTEMA
-                  </Text>
-                  {RestaurarFile ? (
-                    <>
-                      <div className="flex gap-2">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          textColor={'white'}
-                          bg={'green.300'}
-                          _hover={{
-                            bg: 'green.400',
-                          }}
-                          onClick={() => downloadFile('RESTAURAR_BACKUP.pdf')}
-                        >
-                          DESCARGAR RESTAURAR.pdf
-                        </Button>
-
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          textColor={'white'}
-                          bg={'blue.300'}
-                          _hover={{
-                            bg: 'blue.400',
-                          }}
-                          onClick={handleButtonClick2}
-                        >
-                          ACTUALIZAR
-                        </Button>
-                        <Input
-                          display="none"
-                          type="file"
-                          accept="application/pdf"
-                          ref={inputRef2}
-                          onChange={handleFileChange('RESTAURAR_BACKUP.pdf')}
-                        />
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        textColor={'white'}
-                        bg={'blue.300'}
-                        _hover={{
-                          bg: 'blue.400',
-                        }}
-                        onClick={handleButtonClick2}
-                      >
-                        RESTAURAR BACKUP.PDF
-                      </Button>
-                      <Input
-                        display="none"
-                        type="file"
-                        accept="application/pdf"
-                        ref={inputRef2}
-                        onChange={handleFileChange('RESTAURAR_BACKUP.pdf')}
-                      />
-                    </>
-                  )}
-                </Flex>
-                <Flex align="start">
-                  <Text color="tomato" fontSize="xs" as="b">
-                    Nota:
-                  </Text>
-                  <Text color="tomato" fontSize="xs" ml={2}>
-                    Los PDF deben tener el nombre "GENERAR_BACKUP.pdf" y
-                    "RESTAURAR_BACKUP.pdf"
-                  </Text>
-                </Flex>
-              </VStack>
-            </CardBody>
-          </Card>
-        </Box>
-      </Flex>
-    </Box>
+    <>
+      <section>
+        <div className="mt-6 self-start px-9 pb-9 text-3xl font-bold">
+          Backup del sistema
+        </div>
+        <section>
+          <Flex justify="space-between" align="center">
+            <Text>LINK A LA GUÍA PARA GENERAR BACKUP DEL SISTEMA</Text>
+            <div className="flex gap-2 ">
+              <Button
+                variant="outline"
+                size="sm"
+                textColor={'white'}
+                bg={'blue.300'}
+                _hover={{
+                  bg: 'blue.400',
+                }}
+                onClick={handleButtonClick}
+              >
+                ACTUALIZAR
+              </Button>
+              <Input
+                display="none"
+                type="file"
+                accept="application/pdf"
+                ref={inputRef}
+                onChange={handleFileChange('GENERAR_BACKUP.pdf')}
+              />
+            </div>
+          </Flex>
+          <Flex justify="space-between" align="center">
+            <Text>LINK A LA GUÍA PARA RESTAURAR UN BACKUP EN EL SISTEMA</Text>
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                textColor={'white'}
+                bg={'blue.300'}
+                _hover={{
+                  bg: 'blue.400',
+                }}
+                onClick={handleButtonClick2}
+              >
+                ACTUALIZAR
+              </Button>
+              <Input
+                display="none"
+                type="file"
+                accept="application/pdf"
+                ref={inputRef2}
+                onChange={handleFileChange('RESTAURAR_BACKUP.pdf')}
+              />
+            </div>
+          </Flex>
+        </section>
+        <section>
+        <section>
+        <div className="mt-6 self-start px-9 pb-9 text-2xl font-bold">
+          Guía restauración del sistema
+        </div>
+        <FlowTable Header={HEADER_TABLE} dataToShow={[]} />
+        </section>
+        <section>
+        <div className="mt-6 self-start px-9 pb-9 text-2xl font-bold">
+         Guía generar backup del sistema
+        </div>
+        <FlowTable Header={HEADER_TABLE} dataToShow={[]} />
+        </section>
+        </section>
+      </section>
+    </>
   );
 }

@@ -210,9 +210,7 @@ export const EventosTab = () => {
       <FlowModal
         title={`Eliminar Estado Evento ${equipoToDelte?.nombreEstado}`}
         modalBody={
-          <div>
-            ¿Esta seguro que desea eliminar esta evento Estado?
-          </div>
+          <div>¿Esta seguro que desea eliminar esta evento Estado?</div>
         }
         primaryTextButton="Si"
         isOpen={openDeleteEquipo}

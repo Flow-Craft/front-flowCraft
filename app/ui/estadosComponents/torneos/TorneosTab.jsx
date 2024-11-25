@@ -116,7 +116,11 @@ export const TorneosTab = () => {
         NombreEstado: e.target.nombre.value,
         DescripcionEstado: e.target.descripcion.value,
       };
-      await editarTorneoEstadoAdmin(categoria);
+      const result =  await editarTorneoEstadoAdmin(categoria);
+      if (result?.error) {
+        setErrors(result.errors);
+        return;
+      }
       toast.success('Torneo Estado editado con éxito');
       equipoToTab();
       setOpenCreateEquipo(false);
