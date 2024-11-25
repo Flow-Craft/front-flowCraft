@@ -25,7 +25,7 @@ import {
   LOCAL_STORAGE_PERMISOS_KEY,
 } from '@/app/utils/const';
 
-const PERFIL_BOTON_ASIGNADO = ['Admin', 'Arbitro'];
+const PERFIL_BOTON_ASIGNADO = ['Admin', 'Arbitro', 'Planillero'];
 
 function Page() {
   const [fechaPartidoIngresada, setFechaPartidoIngresada] = useState(null);
@@ -77,7 +77,7 @@ function Page() {
       totalEquipoVisitante: partido?.resultadoVisitante || 0,
       instalacionPartido: partido.instalacion,
     }));
-    console.log('partidosAVer', partidosAVer);
+
     const nuevosPartidosAVer = partidosAVer.filter((objeto) => {
       // Filtro de fecha
       const coincideFecha =

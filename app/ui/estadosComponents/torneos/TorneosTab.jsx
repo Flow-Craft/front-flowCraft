@@ -116,7 +116,7 @@ export const TorneosTab = () => {
         NombreEstado: e.target.nombre.value,
         DescripcionEstado: e.target.descripcion.value,
       };
-      const result =  await editarTorneoEstadoAdmin(categoria);
+      const result = await editarTorneoEstadoAdmin(categoria);
       if (result?.error) {
         setErrors(result.errors);
         return;

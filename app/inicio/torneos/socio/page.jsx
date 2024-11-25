@@ -120,19 +120,35 @@ export default function Page() {
           <span className="ml-6 text-2xl font-bold">Mis Torneos</span>
           <section className="ml-6 flex max-w-[80vw] flex-row gap-2 overflow-x-auto pt-6">
             {torneosUsuario.length > 0 ? (
-              torneosUsuario.map((torneo) => (
-                <>
-                  <button
-                    className="cursor-pointer"
-                    onClick={() => {
-                      handleDesincribirseATorneo(torneo);
-                    }}
-                    disabled={torneo.lleno}
-                  >
-                    <CardTorneo key={torneo.id} torneo={torneo} disabled />
-                  </button>
-                </>
-              ))
+              torneosUsuario
+                .filter(
+                  (torneo) =>
+                    torneo.torneoEstado !== 'Finalizado' ||
+                    torneo.torneoEstado !== 'Cancelado',
+                )
+                .map((torneo) => (
+                  <>
+                    <button
+                      className="cursor-pointer"
+                      onClick={() => {
+                        if (
+                          torneo.torneoEstado === 'Abierto' ||
+                          torneo.torneoEstado === 'Completado'
+                        ) {
+                          handleDesincribirseATorneo(torneo);
+                          return;
+                        } else {
+                          toast.error(
+                            'el torneo ya comenzo, no puede desincribirse',
+                          );
+                        }
+                      }}
+                      disabled={torneo.lleno}
+                    >
+                      <CardTorneo key={torneo.id} torneo={torneo} disabled />
+                    </button>
+                  </>
+                ))
             ) : (
               <span className="ml-6 text-xl font-semibold">
                 Nada que mostrar
