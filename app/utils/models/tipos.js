@@ -18,7 +18,6 @@ export const tipoAccionPartidoSchema = z.object({
     .min(1, { message: 'La descripción no puede estar vacía' }),
   ModificaTarjetasAdvertencia: z.boolean(),
   ModificaTarjetasExpulsion: z.boolean(),
-  secuencial: z.boolean(),
   IdDisciplina: z
     .string()
     .min(1, { message: 'El ID de disciplina no puede estar vacío' }),

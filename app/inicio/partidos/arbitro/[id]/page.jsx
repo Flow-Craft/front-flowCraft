@@ -607,16 +607,6 @@ const PartidoScreen = () => {
                     >
                       +
                     </Button>
-                    {accion.secuencial === false && (
-                      <Button
-                        onClick={() => {
-                          setModalBajaAccion(true);
-                          setAccionSeleccionada({ accion, esLocal: true });
-                        }}
-                      >
-                        /
-                      </Button>
-                    )}
                     <Button
                       onClick={() => {
                         setModalBajaAccion(true);
@@ -636,16 +626,6 @@ const PartidoScreen = () => {
                     >
                       -
                     </Button>
-                    {accion.secuencial === false && (
-                      <Button
-                        onClick={() => {
-                          setModalBajaAccion(true);
-                          setAccionSeleccionada({ accion, esLocal: false });
-                        }}
-                      >
-                        /
-                      </Button>
-                    )}
                     <Button
                       onClick={() => {
                         setModalAltaAccion(true);

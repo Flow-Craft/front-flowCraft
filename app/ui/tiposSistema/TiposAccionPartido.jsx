@@ -24,7 +24,6 @@ const HEADER_TABLE = [
   { name: 'Modifica Advertencia' },
   { name: 'Modifica expulsion' },
   { name: 'Se visualizara en' },
-  { name: 'secuencial' },
   { name: 'Acciones' },
 ];
 
@@ -52,7 +51,6 @@ export const TiposAccionPartido = () => {
         Descripcion: e.target.descripcion.value,
         ModificaTarjetasAdvertencia: e.target.tarjAdvertencia.checked,
         ModificaTarjetasExpulsion: e.target.tarjExpulsion.checked,
-        secuencial: e.target.secuencial.checked,
         IdDisciplina: e.target.disciplina?.value?.toString(),
         EsPartido: e.target.esPartido?.value?.toString(),
       };
@@ -89,7 +87,6 @@ export const TiposAccionPartido = () => {
         Descripcion: e.target.descripcion.value,
         ModificaTarjetasAdvertencia: e.target.tarjAdvertencia.checked,
         ModificaTarjetasExpulsion: e.target.tarjExpulsion.checked,
-        secuencial: e.target.secuencial.checked,
         IdDisciplina: e.target.disciplina?.value?.toString(),
         EsPartido: e.target.esPartido?.value?.toString(),
       };
@@ -138,9 +135,6 @@ export const TiposAccionPartido = () => {
               <CheckIcon className={`w-[50px] text-slate-500`} />
             ),
             esPartido: `${opcionesDePartido[dis.esPartido].label}`,
-            secuencial: dis.secuencial && (
-              <CheckIcon className={`w-[50px] text-slate-500`} />
-            ),
             acciones: ActionTab(result.find((disc) => disc.id === dis.id)),
           };
         });
@@ -257,13 +251,6 @@ export const TiposAccionPartido = () => {
               defaultChecked={
                 tipoAccionPartidoToDelte?.modificaTarjetasExpulsion
               }
-              stylesInput="peer block rounded-md h-[37px] border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
-            />
-            <InputWithLabel
-              label="Secuencial"
-              name="secuencial"
-              defaultChecked={tipoAccionPartidoToDelte?.secuencial}
-              type="checkbox"
               stylesInput="peer block rounded-md h-[37px] border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
             />
             <label
