@@ -79,7 +79,7 @@ function Page() {
   const disciplinasRef = useRef(null);
   const limpiarFiltros = () => {
     if (nombreRef.current) nombreRef.current.value = '';
-    if (tipoRef.current) tipoRef.current.value = '';
+    if (tipoRef.current) tipoRef.current.clearValue();
     if (fechaRef.current) fechaRef.current.value = '';
     if (instalacionRef.current) instalacionRef.current.clearValue();
     if (activoRef.current) activoRef.current.clearValue();
