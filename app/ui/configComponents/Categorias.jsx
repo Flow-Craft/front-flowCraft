@@ -35,7 +35,7 @@ export const CategoriasTab = () => {
   const deleteCategoria = async () => {
     try {
       await eliminarCategoriaAdmin(categoriaToDelte.id);
-      toast.success('Perfil eliminado con éxito');
+      toast.success('Categoria eliminada con éxito');
       categoriasToTab();
     } catch (error) {
       toast.error(error.message);
@@ -223,7 +223,6 @@ export const CategoriasTab = () => {
         modalBody={
           <div>
             ¿Está seguro que desea eliminar esta categoría?{' '}
-            {categoriaToDelte?.descripcion}
           </div>
         }
         primaryTextButton="Si"

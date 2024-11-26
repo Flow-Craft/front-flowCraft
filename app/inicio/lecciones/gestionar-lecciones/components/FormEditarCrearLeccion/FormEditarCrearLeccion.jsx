@@ -31,6 +31,7 @@ export const FormEditarCrearLeccion = ({
           onChange={(e) => {
             onChange((current) => ({ ...current, Nombre: e.target.value }));
           }}
+          required
         />
         <InputWithLabel
           label="Cantidad Máxima"
@@ -41,6 +42,7 @@ export const FormEditarCrearLeccion = ({
           onChange={(e) => {
             onChange((current) => ({ ...current, CantMaxima: e.target.value }));
           }}
+          required
         />
         <InputWithLabel
           label="Lugar"
@@ -50,6 +52,7 @@ export const FormEditarCrearLeccion = ({
           onChange={(e) => {
             onChange((current) => ({ ...current, Lugar: e.target.value }));
           }}
+          required
         />
         <InputWithLabel
           label="Hora Inicio"
@@ -59,6 +62,7 @@ export const FormEditarCrearLeccion = ({
           onChange={(e) => {
             onChange((current) => ({ ...current, HoraInicio: e.target.value }));
           }}
+          required
         />
 
         <InputWithLabel
@@ -69,6 +73,7 @@ export const FormEditarCrearLeccion = ({
           onChange={(e) => {
             onChange((current) => ({ ...current, HoraFin: e.target.value }));
           }}
+          required
         />
       </div>
       <div className="w-full md:w-[40%]">
@@ -80,6 +85,7 @@ export const FormEditarCrearLeccion = ({
           onChange={(seleccion) => {
             onChange((current) => ({ ...current, Categoria: seleccion }));
           }}
+          required
         />
         <SelectWithLabel
           name="dias"
@@ -90,6 +96,7 @@ export const FormEditarCrearLeccion = ({
           onChange={(seleccion) => {
             onChange((current) => ({ ...current, DiasDeLaSemana: seleccion }));
           }}
+          required
         />
         <SelectWithLabel
           name="disciplinas"
@@ -99,6 +106,7 @@ export const FormEditarCrearLeccion = ({
           onChange={(seleccion) => {
             onChange((current) => ({ ...current, Profesor: seleccion }));
           }}
+          required
         />
         <SelectWithLabel
           name="profesores"
@@ -108,12 +116,14 @@ export const FormEditarCrearLeccion = ({
           onChange={(seleccion) => {
             onChange((current) => ({ ...current, Disciplina: seleccion }));
           }}
+          required
         />
         <label
           className="mb-3 mt-5 block text-lg font-medium text-gray-900"
           htmlFor={'descripcion'}
         >
           Descripción
+          <label className="text-red-600"> *</label>
           <textarea
             name="Descripcion"
             rows="7"
