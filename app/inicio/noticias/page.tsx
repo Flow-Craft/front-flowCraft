@@ -124,7 +124,7 @@ export default function Page() {
   const deleteNew = async () => {
     try {
       await deleteNewAction(newToDelete);
-      toast.success('éxito');
+      toast.success('Noticia eliminada con éxito');
       setSecond(false);
       setNewToDelete(null);
       getNews();

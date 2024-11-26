@@ -23,7 +23,7 @@ export const FormModal = ({ errors, newToEdit = null }) => {
         type="date"
         label="Fecha Inicio"
         wrong={!!errors.find((e) => e.path[0] === 'fechaInicio')}
-        min={!newToEdit?.id ? new Date().toISOString().split('T')[0] : undefined}
+        min={new Date().toISOString().split('T')[0]}
         defaultValue={newToEdit?.fechaInicio?.split('T')[0]}
         required
       />
@@ -31,7 +31,7 @@ export const FormModal = ({ errors, newToEdit = null }) => {
         name={'fechaFin'}
         type="date"
         label="Fecha Fin"
-        min={!newToEdit?.id ? new Date().toISOString().split('T')[0] : undefined}
+        min={new Date().toISOString().split('T')[0]}
         wrong={!!errors.find((e) => e.path[0] === 'fechaFin')}
         defaultValue={newToEdit?.fechaFin?.split('T')[0]}
         required

@@ -1,8 +1,11 @@
 'use client';
-import { Flex, Text, Button, Input, useToast } from '@chakra-ui/react';
-import { useRef } from 'react';
+import { Flex, Text, Button, Input, useToast, Tooltip } from '@chakra-ui/react';
+import { useEffect, useRef, useState } from 'react';
 import { AUTORIZATION_KEY } from '@/app/utils/const';
 import { FlowTable } from '@/app/ui/components/FlowTable/FlowTable';
+import { obtenerBackups, subirBackups } from '@/app/utils/actions';
+import { ArrowDownTrayIcon } from '@heroicons/react/24/outline';
+import { formatDate } from '@/app/utils/functions';
 
 const HEADER_TABLE = [
   { name: 'Fecha' },
@@ -13,55 +16,29 @@ const HEADER_TABLE = [
 export default function Page() {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const inputRef2 = useRef<HTMLInputElement | null>(null);
+  const [backups, setBackups] = useState([]);
+  const [recuperacion, setRecuperacion] = useState([]);
   const toast = useToast();
 
   const token = window.localStorage.getItem(AUTORIZATION_KEY);
-  const downloadFile = async (fileName: string) => {
-    try {
-      const res = await fetch(
-        `http://localhost:5148/api/backup/DescargarBackup?fileName=${fileName}`,
-        {
-          method: 'GET',
 
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
+  const openPdfInNewTab = (base64Pdf: any) => {
+    // Convertir el base64 a un Blob
+    const byteCharacters = atob(base64Pdf); // Decodifica el string base64
+    const byteNumbers = Array.from(byteCharacters, (char) =>
+      char.charCodeAt(0),
+    ); // Convierte cada carácter a su código ASCII
+    const byteArray = new Uint8Array(byteNumbers);
+    const blob = new Blob([byteArray], { type: 'application/pdf' });
 
-      if (!res) {
-        throw new Error('La respuesta es null o undefined.');
-      }
+    // Crear un URL temporal para el Blob
+    const url = URL.createObjectURL(blob);
 
-      const blob = await res.blob();
+    // Abrir el PDF en una nueva pestaña
+    window.open(url, '_blank');
 
-      // Crear un enlace para descargar el archivo
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', fileName); // Nombre del archivo para la descarga
-      document.body.appendChild(link);
-      link.click();
-      link.parentNode?.removeChild(link);
-      toast({
-        title: 'Éxito',
-        description: `El archivo se ha descargado correctamente.`,
-        status: 'success',
-        duration: 3000,
-        isClosable: true,
-        position: 'top',
-      });
-    } catch (error) {
-      console.error('Error durante la descarga del archivo:', error);
-      toast({
-        title: 'Error',
-        description: 'No se pudo descargar el archivo.',
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-        position: 'top',
-      });
-    }
+    // Liberar el URL temporal después
+    URL.revokeObjectURL(url);
   };
 
   const handleButtonClick = () => {
@@ -71,12 +48,53 @@ export default function Page() {
     inputRef2.current?.click();
   };
 
+  const getBackups = async () => {
+    const res: any = await obtenerBackups();
+    const backups = res.filter((back: any) => back.tipo === 'Backup');
+    const backs = backups.map((back: any) => {
+      return {
+        id: back.id,
+        fechaCreacion: formatDate(back.fechaCreacion),
+        version: back.version,
+        acciones: ActionTab(backups.find((disc: any) => disc.id === back.id)),
+      };
+    });
+    setBackups(backs);
+    const recu = res.filter((back: any) => back.tipo === 'Recuperacion');
+    const recus = recu.map((back: any) => {
+      return {
+        id: back.id,
+        fechaCreacion: formatDate(back.fechaCreacion),
+        version: back.version,
+        acciones: ActionTab(backups.find((disc: any) => disc.id === back.id)),
+      };
+    });
+    setRecuperacion(recus);
+    console.log('res', res);
+  };
+
+  const ActionTab = (backup: any) => {
+    return (
+      <div className="flex flex-row gap-4">
+        <Tooltip label="Descargar">
+          <ArrowDownTrayIcon
+            onClick={() => {
+              openPdfInNewTab(backup.pdf);
+              console.log('backup', backup);
+            }}
+            className="w-[50px] cursor-pointer text-slate-500"
+          />
+        </Tooltip>
+      </div>
+    );
+  };
+
   const handleFileChange =
     (expectedFileName: string) =>
     async (event: React.ChangeEvent<HTMLInputElement>) => {
-      const file = event.target.files?.[0];
-      if (file) {
-        if (file.type !== 'application/pdf') {
+      const fileToSend = event.target.files?.[0];
+      if (fileToSend) {
+        if (fileToSend.type !== 'application/pdf') {
           toast({
             title: 'Error',
             description: 'El archivo debe ser un PDF.',
@@ -88,7 +106,9 @@ export default function Page() {
           return;
         }
 
-        if (file.name !== expectedFileName) {
+        console.log('fileToSend', fileToSend.size);
+
+        if (fileToSend.name !== expectedFileName) {
           toast({
             title: 'Error',
             description: `El archivo debe llamarse "${expectedFileName}".`,
@@ -100,12 +120,24 @@ export default function Page() {
           return;
         }
 
+        if (fileToSend.size > 1 * 1024 * 1024) {
+          toast({
+            title: 'Error',
+            description: `El archivo debe pesar menos de 1MB.`,
+            status: 'error',
+            duration: 3000,
+            isClosable: true,
+            position: 'top',
+          });
+          return;
+        }
+
         const formData = new FormData();
-        formData.append('file', file);
+        formData.append('file', fileToSend);
 
         try {
-          const res = await fetch(
-            'http://localhost:5148/api/backup/subirbackup',
+          await fetch(
+            `http://localhost:5148/api/Backup/SubirBackup?tipo=${expectedFileName === 'GENERAR_BACKUP.pdf' ? 'Backup' : 'Recuperacion'}`,
             {
               method: 'POST',
               body: formData,
@@ -114,6 +146,7 @@ export default function Page() {
               },
             },
           );
+          getBackups();
           toast({
             title: 'Éxito',
             description: `El archivo "${expectedFileName}" se ha subido correctamente.`,
@@ -127,6 +160,10 @@ export default function Page() {
         }
       }
     };
+
+  useEffect(() => {
+    getBackups();
+  }, []);
   return (
     <>
       <section>
@@ -188,13 +225,13 @@ export default function Page() {
             <div className="mt-6 self-start px-9 pb-9 text-2xl font-bold">
               Guía restauración del sistema
             </div>
-            <FlowTable Header={HEADER_TABLE} dataToShow={[]} />
+            <FlowTable Header={HEADER_TABLE} dataToShow={backups} />
           </section>
           <section>
             <div className="mt-6 self-start px-9 pb-9 text-2xl font-bold">
               Guía generar backup del sistema
             </div>
-            <FlowTable Header={HEADER_TABLE} dataToShow={[]} />
+            <FlowTable Header={HEADER_TABLE} dataToShow={recuperacion} />
           </section>
         </section>
       </section>

@@ -194,7 +194,6 @@ export async function registrarUsuarioAdmin(userToCreate: any) {
 export async function EditUserByAdmin(userToEdit: any) {
   try {
     const result = EditUserByAdminSchemaZod.safeParse(userToEdit);
-    console.log('result', result);
     if (!result.success) {
       return { error: true, errors: result.error.errors };
     }
@@ -589,33 +588,33 @@ export async function createNew(createdNew: any) {
 }
 
 export async function editNew(editedNew: any) {
-    const finalNew = JSON.parse(JSON.stringify(editedNew));
-    if (editedNew.foto.name) {
-      //convertir File to base 64
-      let file64 = await handleFileConversion(
+  const finalNew = JSON.parse(JSON.stringify(editedNew));
+  if (editedNew.foto.name) {
+    //convertir File to base 64
+    let file64 = await handleFileConversion(
+      // @ts-ignore
+      new File([editedNew.foto], editedNew.foto.name, {
         // @ts-ignore
-        new File([editedNew.foto], editedNew.foto.name, {
-          // @ts-ignore
-          type: editedNew.foto.type,
-        }),
-      );
-      finalNew.Imagen = file64;
-    } else {
-      finalNew.Imagen = editedNew.foto;
-    }
-    finalNew.Id = editedNew.id;
-    finalNew.Titulo = editedNew.titulo;
-    finalNew.Descripcion = editedNew.descripcion;
-    finalNew.FechaInicio = editedNew.fechaInicio;
-    finalNew.FechaFin = editedNew.fechaFin;
-    delete finalNew.titulo;
-    delete finalNew.foto;
-    delete finalNew.descripcion;
-    delete finalNew.fechaInicio;
-    delete finalNew.fechaFin;
-    delete finalNew.id;
-    delete finalNew.imagen;
-    return await FlowCraftAPI.post(`Noticias/ActualizarNoticia`, finalNew);
+        type: editedNew.foto.type,
+      }),
+    );
+    finalNew.Imagen = file64;
+  } else {
+    finalNew.Imagen = editedNew.foto;
+  }
+  finalNew.Id = editedNew.id;
+  finalNew.Titulo = editedNew.titulo;
+  finalNew.Descripcion = editedNew.descripcion;
+  finalNew.FechaInicio = editedNew.fechaInicio;
+  finalNew.FechaFin = editedNew.fechaFin;
+  delete finalNew.titulo;
+  delete finalNew.foto;
+  delete finalNew.descripcion;
+  delete finalNew.fechaInicio;
+  delete finalNew.fechaFin;
+  delete finalNew.id;
+  delete finalNew.imagen;
+  return await FlowCraftAPI.post(`Noticias/ActualizarNoticia`, finalNew);
 }
 
 export async function deleteNewAction(id: any) {
@@ -1425,4 +1424,14 @@ export async function getReservasVigentesById(id: any) {
 
 export async function editarReservaAdmin(body: any) {
   return await FlowCraftAPI.post(`Reservas/ActualizarReserva`, body);
+}
+
+// BACKUP
+
+export async function subirBackups(tipo: any, body: any) {
+  return await FlowCraftAPI.post(`Backup/SubirBackup?tipo=${tipo}`, body);
+}
+
+export async function obtenerBackups() {
+  return await FlowCraftAPI.get(`Backup/ObtenerBackups`);
 }
