@@ -589,7 +589,6 @@ export async function createNew(createdNew: any) {
 }
 
 export async function editNew(editedNew: any) {
-  try {
     const finalNew = JSON.parse(JSON.stringify(editedNew));
     if (editedNew.foto.name) {
       //convertir File to base 64
@@ -617,9 +616,6 @@ export async function editNew(editedNew: any) {
     delete finalNew.id;
     delete finalNew.imagen;
     return await FlowCraftAPI.post(`Noticias/ActualizarNoticia`, finalNew);
-  } catch (error: any) {
-    toast.error(error.message);
-  }
 }
 
 export async function deleteNewAction(id: any) {
