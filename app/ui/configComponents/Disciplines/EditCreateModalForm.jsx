@@ -76,6 +76,7 @@ const EditCreateDisciplineModalForm = ({
         name={'descripcion'}
         type="text"
         defaultValue={initialValues?.descripcion}
+        required
       />
       <div className="mt-9 flex w-full content-between justify-between">
         <div aria-live="polite" aria-atomic="true" className="mr-4">

@@ -49,6 +49,7 @@ export const DisciplinasTab = () => {
       'periodosMax',
       'tarjetasAdvertencia',
       'tarjetasExpulsion',
+      'descripcion'
     ];
 
     // Validar que todos los campos requeridos existen y no están vacíos o llenos de espacios
@@ -128,7 +129,6 @@ export const DisciplinasTab = () => {
 
   const handleFormDiscipline = async () => {
     try {
-      console.log('disciplinas', disciplinas);
       if (
         disciplinas.find(
           (dis: any) =>
