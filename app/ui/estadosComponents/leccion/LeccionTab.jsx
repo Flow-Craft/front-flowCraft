@@ -208,7 +208,6 @@ export const LeccionTab = () => {
         modalBody={
           <div>
             ¿Esta seguro que desea eliminar esta Leccion Estado?{' '}
-            {equipoToDelte?.descripcionEstado}
           </div>
         }
         primaryTextButton="Si"

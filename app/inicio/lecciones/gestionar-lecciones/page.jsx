@@ -114,7 +114,7 @@ function Page() {
         IdCategoria: nuevaLeccion.Categoria.value,
         IdProfesor: nuevaLeccion.Profesor.value,
       });
-      toast.success('Lección creada correctamente');
+      toast.success('Lección iniciada con exito');
       setNuevaLeccion({});
       setOpenModalCrearEditarLecciones(false);
       getLecciones();
