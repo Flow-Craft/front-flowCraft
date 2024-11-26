@@ -211,31 +211,16 @@ const PartidoScreen = () => {
 
   const altaAccionPartido = async () => {
     try {
-      let accionAMandar;
-      if (partidoData.disciplina.nombre.toLowerCase().includes('futbol')) {
-        accionAMandar = {
-          IdPartido: partidoId,
-          IdTipoAccion: accionSeleccionada.accion.id,
-          IdJugador: usuarioSeleccionado.value,
-          EquipoLocal: accionSeleccionada.esLocal,
-          IdJugadorEnBanca: 0,
-          Minuto: calcularHoraAccion(),
-        };
-        if (accionSeleccionada?.accion?.nombreTipoAccion?.includes('Cambio')) {
-          accionAMandar['IdJugadorEnBanca'] = usuarioParaCambio.value;
-        }
-      } else {
-        accionAMandar = {
-          IdPartido: partidoId,
-          IdTipoAccion: accionSeleccionada.accion.id,
-          IdJugador: usuarioSeleccionado.value,
-          EquipoLocal: accionSeleccionada.esLocal,
-          IdJugadorEnBanca: 0,
-          Minuto: calcularHoraAccion(),
-        };
-        if (accionSeleccionada?.accion?.nombreTipoAccion?.includes('Cambio')) {
-          accionAMandar['IdJugadorEnBanca'] = usuarioParaCambio.value;
-        }
+      let accionAMandar=  {
+        IdPartido: partidoId,
+        IdTipoAccion: accionSeleccionada.accion.id,
+        IdJugador: usuarioSeleccionado.value,
+        EquipoLocal: accionSeleccionada.esLocal,
+        IdJugadorEnBanca: 0,
+        Minuto: calcularHoraAccion(),
+      };
+      if (accionSeleccionada?.accion?.nombreTipoAccion?.includes('Cambio')) {
+        accionAMandar['IdJugadorEnBanca'] = usuarioParaCambio.value;
       }
       await cargarAccionPartidoAdmin(accionAMandar);
       toast.success('accion cargada exitosamente');
