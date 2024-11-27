@@ -16,7 +16,7 @@ import {
 } from './models/user';
 import { editCreateNewSchema } from './models/news';
 import { categoriaSchema, eventoSchema } from './models/eventos';
-import { eventoPartidoSchema } from './models/eventoPartido';
+import { eventoPartidoEditarSchema, eventoPartidoEditarSchemaImageString, eventoPartidoSchema, eventoPartidoSchemaImageString } from './models/eventoPartido';
 import { equipoEstadoSchema } from './models/estados';
 import { tipoAcrearSchema, tipoAccionPartidoSchema } from './models/tipos';
 import { crearInstalacionSchema } from './models/instalaciones';
@@ -931,7 +931,11 @@ export async function crearEventosPartidoAdmin(evento: any) {
 
 export async function editarEventoAdmin(evento: any) {
   const eventToSend = JSON.parse(JSON.stringify(evento));
-  if (evento?.Banner?.name) {
+  if (evento?.banner?.name) {
+    const result = eventoPartidoEditarSchema.safeParse(evento);
+    if (!result.success) {
+      return { error: true, errors: result.error.errors };
+    }
     const fileType = evento.Banner.type;
     //convertir File to base 64
     let file64 = await handleFileConversion(
@@ -941,6 +945,11 @@ export async function editarEventoAdmin(evento: any) {
     );
     eventToSend.Banner = file64;
     eventToSend.type = fileType;
+  }else{
+    const result = eventoPartidoEditarSchemaImageString.safeParse(evento);
+    if (!result.success) {
+      return { error: true, errors: result.error.errors };
+    }
   }
   eventToSend.FechaInicio = eventToSend.FechaInicio + ':00';
   eventToSend.FechaFinEvento = eventToSend.FechaFinEvento + ':00';

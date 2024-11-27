@@ -68,6 +68,8 @@ function Page() {
   const [instalacionesSeleccionadas, setInstalacionesSeleccionadas] = useState(
     [],
   );
+  const [defaultValueLocal, setDefaultValueLocal] = useState({});
+  const [defaultValueVisitante, setDefaultValueVisitante] = useState({});
   const { getPermisosByNombre } = usePermisos();
   const permisos = getPermisosByNombre('Eventos');
   const nombreRef = useRef(null);
@@ -262,11 +264,12 @@ function Page() {
           IdCategoria: e.target.IdCategoria.value,
           IdDisciplina: e.target.IdsDisciplinaPartido.value,
           Banner: e.target.Banner.files[0],
-          EquipoLocal: e.target.equipoLocal.value,
-          EquipoVisitante: e.target.equipoVisitante.value,
+          EquipoLocal: defaultValueLocal.value,
+          EquipoVisitante: defaultValueVisitante.value,
           Arbitro: e.target.arbitro.value,
           Planillero: e.target.planillero.value,
         };
+        console.log('eventoACrear', eventoACrear)
         const result = await crearEventosPartidoAdmin(eventoACrear);
         if (result?.error) {
           setErrors(result?.errors);
@@ -314,13 +317,17 @@ function Page() {
           IdInstalacion: e.target.IdInstalacion.value,
           IdCategoria: e.target.IdCategoria.value,
           IdDisciplina: e.target.IdsDisciplinaPartido.value,
-          Banner: e.target.Banner.files[0],
-          EquipoLocal: e.target.equipoLocal.value || 0,
-          EquipoVisitante: e.target.equipoVisitante.value || 0,
+          Banner: e.target.Banner.files[0]|| eventoSeleccionado.banner,
+          EquipoLocal: defaultValueLocal.value|| 0,
+          EquipoVisitante: defaultValueVisitante.value || 0,
           Arbitro: e.target.arbitro.value,
           Planillero: e.target.planillero.value,
         };
-        await editarEventoAdmin(eventoACrear);
+        const result = await editarEventoAdmin(eventoACrear);
+        if (result?.error) {
+          setErrors(result?.errors);
+          return;
+        }
         toast.success('Evento editado con éxito');
       } else {
         const eventoACrear = {
@@ -335,7 +342,7 @@ function Page() {
           IdInstalacion: e.target.IdInstalacion.value,
           IdCategoria: e.target.IdCategoria.value,
           IdDisciplina: disciplinasSeleccionadas.value,
-          Banner: e.target.Banner.files[0] || eventoSeleccionado.Banner,
+          Banner: e.target.Banner.files[0] || eventoSeleccionado.banner,
         };
         const result = await editarEventoAdmin(eventoACrear);
         if (result?.error) {
@@ -665,6 +672,10 @@ function Page() {
             disciplinas={disciplinas}
             tipo={tipo}
             setDisciplinasSeleccionadas={setDisciplinasSeleccionadas}
+            defaultValueLocal={defaultValueLocal}
+            defaultValueVisitante={defaultValueVisitante}
+            setDefaultValueLocal={setDefaultValueLocal}
+            setDefaultValueVisitante={setDefaultValueVisitante}
           />
         }
         primaryTextButton={eventoSeleccionado?.id ? 'Editar' : 'Crear'}

@@ -19,8 +19,11 @@ export const CrearEditarModalEventos = ({
   disciplinas,
   tipo,
   setDisciplinasSeleccionadas,
+  defaultValueLocal,
+  defaultValueVisitante,
+  setDefaultValueLocal,
+  setDefaultValueVisitante
 }) => {
-  console.log('errors', errors);
   const [minDate, setMinDate] = useState('');
   const [showPartido, setShowPartido] = useState(false);
   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState({});
@@ -32,12 +35,11 @@ export const CrearEditarModalEventos = ({
   const [planilleros, setPlanilleros] = useState([]);
   const [arbitros, setArbitros] = useState([]);
   const [disableEventoPartido, setDisableEventoPartido] = useState(false);
-  const [defaultValueLocal, setDefaultValueLocal] = useState({});
-  const [defaultValueVisitante, setDefaultValueVisitante] = useState({});
   const [arbitroSeleccionado, setArbitroSeleccionado] = useState({});
   const [planilleroSeleccionado, setPlanilleroSeleccionado] = useState({});
   const [isLoading, setisLoading] = useState(false);
   const [arbitroDefault, setArbitroDefault] = useState({});
+  const [disciplinaDelPartido, setDisciplinaDelPartido] = useState([])
   const handleSelectTipo = (e) => {
     if (e.label === 'Partido' && !categoriaSeleccionada?.value) {
       toast.error(
@@ -62,11 +64,11 @@ export const CrearEditarModalEventos = ({
     }));
   };
 
-  const getEquiposByCategoriaDisciplina = async (e) => {
-    if (!evento.id) {
+  const getEquiposByCategoriaDisciplinaId = async (cat,dis) => {
+    if (cat?.value && dis?.value) {
       const result = await getEquipoByDisciplinaYCategoria(
-        e.value,
-        categoriaSeleccionada.value,
+        dis.value,
+        cat.value,
       );
       setEquipoLocal(result);
       setEquipoVisitante(result);
@@ -175,6 +177,18 @@ export const CrearEditarModalEventos = ({
   useEffect(() => {
     getPlanillerosArbitros();
   }, []);
+
+  useEffect(()=>{
+    setDefaultValueLocal({});
+    setDefaultValueVisitante({});
+    getEquiposByCategoriaDisciplinaId(categoriaSeleccionada,disciplinaDelPartido)
+  },[categoriaSeleccionada,disciplinaDelPartido])
+
+  useEffect(()=>{
+    setDisciplinaDelPartido(disciplinas.find(
+      (option) => option.value === evento?.disciplina?.id,
+    ))
+  },[disciplinas,evento])
 
   return (
     <div className="flex w-full flex-col items-center justify-center">
@@ -308,13 +322,11 @@ export const CrearEditarModalEventos = ({
               <SelectWithLabel
                 name="IdsDisciplinaPartido"
                 options={disciplinas}
-                defaultValue={disciplinas.find(
-                  (option) => option.value === evento?.disciplina?.id,
-                )}
+                defaultValue={disciplinaDelPartido}
                 label="Disciplina del partido"
                 required
                 onChange={(e) => {
-                  getEquiposByCategoriaDisciplina(e);
+                  setDisciplinaDelPartido(e);
                 }}
                 wrong={
                   !!errors.find((e) => e.path[0] === 'IdsDisciplinaPartido')
@@ -323,9 +335,7 @@ export const CrearEditarModalEventos = ({
               <SelectWithLabel
                 name="equipoLocal"
                 options={equipoLocalOpciones}
-                value={equipoLocalOpciones.find(
-                  (option) => option.value === defaultValueLocal.value,
-                )}
+                value={defaultValueLocal}
                 onChange={(e) => {
                   handleChangeEquipoLocal(e);
                 }}
@@ -336,9 +346,7 @@ export const CrearEditarModalEventos = ({
               <SelectWithLabel
                 name="equipoVisitante"
                 options={equipoVisitanteOpciones}
-                value={equipoVisitanteOpciones.find(
-                  (option) => option.value === defaultValueVisitante.value,
-                )}
+                value={defaultValueVisitante}
                 onChange={(e) => {
                   handleChangeEquipoVisitante(e);
                 }}
