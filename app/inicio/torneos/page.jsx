@@ -11,7 +11,6 @@ export default function Page() {
   const [modalEliminarEvento, setModalEliminarEvento] = useState(false);
   const [torneosAbiertos, setTorneosAbiertos] = useState([]);
   const [torneosCompletos, setTorneosCompletos] = useState([]);
-  console.log('torneosCompletos', torneosCompletos);
   const [torneosEnCurso, setTorneosEnCurso] = useState([]);
   const [torneosFinalizados, setTorneosFinalizados] = useState([]);
   const [torneoSeleccionado, setTorneoSeleccionado] = useState({});
@@ -20,6 +19,7 @@ export default function Page() {
   const getTorneos = async () => {
     try {
       const result = await getTorneosAdmin();
+      console.log('result', result)
       setTorneosAbiertos(
         result.filter((torneo) => torneo.torneoEstado === 'Abierto'),
       );

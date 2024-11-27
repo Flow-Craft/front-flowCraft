@@ -1082,6 +1082,12 @@ export async function getPlanilleroYArbritroByPartidoId(idPartido: any) {
   );
 }
 
+export async function getAsingacionPartido(idPartido: any,planillero=true,arbitro=true) {
+  return await FlowCraftAPI.get(
+    `Partidos/AsignacionPartido?Planillero=${planillero}&Arbitro=${arbitro}&PartidoId=${idPartido}`,
+  );
+}
+
 export async function getAccionesPorUsuarioYPartido({
   IdPartido,
   NroJugador,
