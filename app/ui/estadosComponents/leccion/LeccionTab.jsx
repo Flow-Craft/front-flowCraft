@@ -80,11 +80,15 @@ export const LeccionTab = () => {
     try {
       e.target.nombreEstado;
       setErrors([]);
-      let equipo = {
+      let equipos = {
         NombreEstado: e.target.nombre.value,
         DescripcionEstado: e.target.descripcion.value,
       };
-      const result = await crearLeccionEstadoAdmin(equipo, setErrors);
+      if(equipo.find((eq)=>eq.nombreEstado ===equipos.NombreEstado && !eq.fechaBaja )){
+        toast.error("ya existe un estado con este nombre");
+        return
+      }
+      const result = await crearLeccionEstadoAdmin(equipos, setErrors);
       if (result?.error) {
         setErrors(result.errors);
         return;
@@ -104,6 +108,10 @@ export const LeccionTab = () => {
         NombreEstado: e.target.nombre.value,
         DescripcionEstado: e.target.descripcion.value,
       };
+      if(equipo.find((eq)=>eq.nombreEstado === categoria.NombreEstado && !eq.fechaBaja && eq.id !== categoria.Id )){
+        toast.error("ya existe un estado con este nombre");
+        return
+      }
       const result = await editarLeccionEstadoAdmin(categoria);
       if (result?.error) {
         setErrors(result.errors);

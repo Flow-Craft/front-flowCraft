@@ -87,11 +87,15 @@ export const UsuariosTab = () => {
   const handleFormEquipo = async (e) => {
     try {
       setErrors([]);
-      let equipo = {
+      let equipos = {
         NombreEstado: e.target.nombre.value,
         DescripcionEstado: e.target.descripcion.value,
       };
-      const result = await crearUsuarioEstadoAdmin(equipo, setErrors);
+      if(equipo.find((eq)=>eq.nombreEstado ===equipos.NombreEstado && !eq.fechaBaja )){
+        toast.error("ya existe un estado con este nombre");
+        return
+      }
+      const result = await crearUsuarioEstadoAdmin(equipos, setErrors);
       if (result?.error) {
         setErrors(result.errors);
         return;
@@ -112,6 +116,10 @@ export const UsuariosTab = () => {
         NombreEstado: e.target.nombre.value,
         DescripcionEstado: e.target.descripcion.value,
       };
+      if(equipo.find((eq)=>eq.nombreEstado === categoria.NombreEstado && !eq.fechaBaja && eq.id !== categoria.Id )){
+        toast.error("ya existe un estado con este nombre");
+        return
+      }
       const result = await editarUsuarioEstadoAdmin(categoria);
       if (result?.error) {
         setErrors(result.errors);

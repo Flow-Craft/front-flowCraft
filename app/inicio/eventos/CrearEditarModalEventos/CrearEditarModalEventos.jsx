@@ -65,11 +65,15 @@ export const CrearEditarModalEventos = ({
   };
 
   const getEquiposByCategoriaDisciplinaId = async (cat,dis) => {
+    console.log("entre")
+    console.log('cat', cat)
+    console.log('dis', dis)
     if (cat?.value && dis?.value) {
       const result = await getEquipoByDisciplinaYCategoria(
         dis.value,
         cat.value,
       );
+      console.log("ohla")
       setEquipoLocal(result);
       setEquipoVisitante(result);
       setEquipoLocalOpciones(mappearEquipos(result));
@@ -175,6 +179,14 @@ export const CrearEditarModalEventos = ({
   }, [evento]);
 
   useEffect(() => {
+    if (evento?.categoria?.id && categoria) {
+      setCategoriaSeleccionada(categoria.find(
+        (option) => option.value === evento?.categoria?.id,
+      ))
+    }
+  }, [evento,categoria]);
+
+  useEffect(() => {
     getPlanillerosArbitros();
   }, []);
 
@@ -273,9 +285,7 @@ export const CrearEditarModalEventos = ({
           <SelectWithLabel
             name="IdCategoria"
             options={categoria}
-            defaultValue={categoria.find(
-              (option) => option.value === evento?.categoria?.id,
-            )}
+            value={categoriaSeleccionada}
             label="Categoría"
             required
             wrong={!!errors.find((e) => e.path[0] === 'IdCategoria')}

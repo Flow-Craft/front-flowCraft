@@ -244,6 +244,7 @@ function Page() {
               name="instalacion"
               options={instalaciones}
               value={instalacionOpcionSeleccionada}
+              isDisabled
               onChange={(e) => {
                 handleReservas(e);
               }}
