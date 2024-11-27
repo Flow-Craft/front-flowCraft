@@ -11,6 +11,7 @@ import {
   getPartidoAdmin,
   getPartidoByIdAdmin,
   getPartidosAsignadosAdmin,
+  getPlanilleroYArbritroByPartidoId,
   IniciarPartidoAdmin,
   suspenderPartidoAdmin,
 } from '@/app/utils/actions';
@@ -48,11 +49,18 @@ function Page() {
     useState(false);
   const [perfilUsuario, setPerfilUsuario] = useState('');
   const [permisosUsuarios, setPermisosUsuarios] = useState([]);
+  const [disabled, setDisabled] = useState(false);
   const router = useRouter();
 
-  const handleGetMatchDetails = (partido) => {
+  const handleGetMatchDetails = async(partido) => {
     const partidoSeleccionado = partidos.find((part) => partido.id === part.id);
     setEventosSeleccionado(partidoSeleccionado);
+    const result = await getPlanilleroYArbritroByPartidoId(partido.id)
+    if(result.length !==2){
+      setDisabled(true)
+    }else{
+      setDisabled(estaHabilitadoElEvento(partidoSeleccionado))
+    }
     setDetallesDelPartido(true);
   };
   const getInstalaciones = async () => {
@@ -420,13 +428,14 @@ function Page() {
           </>
         }
         primaryTextButton={handlePartidosNombre()}
-        disabled={estaHabilitadoElEvento(eventosSeleccionado)}
+        disabled={disabled}
         isOpen={detallesDelPartido}
         scrollBehavior="outside"
         onAcceptModal={handlePartidos}
         onCancelModal={() => {
           setDetallesDelPartido(false);
           setEventosSeleccionado({});
+          setDisabled(false);
         }}
       />
       <FlowModal
