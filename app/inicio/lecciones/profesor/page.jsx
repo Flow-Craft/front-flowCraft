@@ -5,6 +5,7 @@ import { SelectWithLabel } from '@/app/ui/components/SelectWithLabel/SelectWithL
 import {
   getInscripcionesALecciones,
   getleccionesAsignadas,
+  getUsersAdmin,
   iniciarLeccionAdmin,
 } from '@/app/utils/actions';
 import withAuthorization from '@/app/utils/autorization';
@@ -64,17 +65,22 @@ function Page() {
     setLeccionesAMostrar(leccionesToShow);
   };
   const handleStartLesson = async (id) => {
-    const result = await getInscripcionesALecciones(id);
-    setAlumnos(
-      result &&
-        result
-          .filter((alumno) => alumno.fechaBaja === null)
-          .map((alumno) => ({
-            value: alumno.usuario.id,
-            label: `${alumno.usuario.dni} - ${alumno.usuario.apellido} ${alumno.usuario.nombre}`,
-          })),
-    );
-    setModalInicioDeClase(true);
+    try {
+      const result = await getInscripcionesALecciones(id);
+      const alumnos = result &&
+      result
+        .filter((alumno) => alumno.fechaBaja === null)
+        .map((alumno) => (alumno.usuarioId))
+      const {usuarios} = await getUsersAdmin();  
+      const usuariosParaLaClase = usuarios.filter(usuario => alumnos.includes(usuario.id)).map((alumno)=>({
+          value: alumno.id,
+          label: `${alumno.dni} - ${alumno.apellido} ${alumno.nombre}`,
+      }))
+      setAlumnos(usuariosParaLaClase)
+      setModalInicioDeClase(true);
+    } catch (error) {
+      toast.error(error.message)
+    }
   };
 
   const iniciarLeccion = async () => {
