@@ -299,7 +299,11 @@ function Page() {
       setEditCreateEvento(false);
       getEventos();
     } catch (error) {
-      toast.error(error.message);
+      const errorMessage = error.message.split(',Exception')[0];
+      toast.error(errorMessage || 'Error al crear torneo', {
+        autoClose: 5000,
+        toastId: 'unique-error-id',
+      });
     }
   };
 
@@ -355,8 +359,11 @@ function Page() {
       setEditCreateEvento(false);
       getEventos();
     } catch (error) {
-      console.error(error);
-      toast.error('error al editar evento');
+      const errorMessage = error.message.split(',Exception')[0];
+      toast.error(errorMessage || 'Error al crear torneo', {
+        autoClose: 5000,
+        toastId: 'unique-error-id',
+      });
     }
   };
 

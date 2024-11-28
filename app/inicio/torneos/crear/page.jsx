@@ -72,7 +72,6 @@ function Page() {
       toast.success('torneo creado correctamente');
       router.back();
     } catch (error) {
-      console.log('error', error.error);
       const errorMessage = error.message.split(',Exception')[0];
       toast.error(errorMessage || 'Error al crear torneo', {
         autoClose: 5000,
