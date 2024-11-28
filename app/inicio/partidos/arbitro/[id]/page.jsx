@@ -282,7 +282,7 @@ const PartidoScreen = () => {
     ]?.equipo?.equipoUsuarios?.find(
       (usuario) => usuario.numCamiseta == numeroCambio,
     );
-    return `${dataJugadorCambio?.usuario?.apellido} ${dataJugadorCambio?.usuario?.nombre} <--> ${dataJugador?.usuario?.apellido} ${dataJugador?.usuario?.nombre}`;
+    return `Entra: ${dataJugadorCambio?.usuario?.apellido} ${dataJugadorCambio?.usuario?.nombre} <--> Sale: ${dataJugador?.usuario?.apellido} ${dataJugador?.usuario?.nombre}`;
   };
 
   const getAcciones = () => {
