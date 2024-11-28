@@ -528,7 +528,10 @@ function Page() {
         primaryTextButton={'Iniciar Partido'}
         isOpen={modalPrepararPartido}
         onAcceptModal={iniciarPartido}
-        disabled={equipoLocalSeleccionado.length === 0 || equipoVisitanteSeleccionado.length === 0}
+        disabled={
+          equipoLocalSeleccionado.length === 0 ||
+          equipoVisitanteSeleccionado.length === 0
+        }
         scrollBehavior="outside"
         type="submit"
         onCancelModal={() => {

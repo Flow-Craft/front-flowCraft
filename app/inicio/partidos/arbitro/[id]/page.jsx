@@ -68,7 +68,6 @@ const PartidoScreen = () => {
   const [modalSuspenderPartido, setModalSuspenderPartido] = useState(false);
   const [accionesLocal, setAccionesLocal] = useState([]);
   const [accionesVisitantes, setAccionesVisitantes] = useState([]);
-  console.log('accionesVisitantes', accionesVisitantes);
   const [timeDifference, setTimeDifference] = useState(0);
   const router = useRouter();
 
@@ -270,6 +269,20 @@ const PartidoScreen = () => {
       (usuario) => usuario.numCamiseta === numeroJugador,
     );
     return `Num: ${dataJugador?.numCamiseta} / ${dataJugador?.puesto} / ${dataJugador?.usuario?.apellido} ${dataJugador?.usuario?.nombre}`;
+  };
+
+  const getDataJugadorAccionCambioVisitante = (numeroJugador, numeroCambio) => {
+    const dataJugador = partidoData?.[
+      'visitante'
+    ]?.equipo?.equipoUsuarios?.find(
+      (usuario) => usuario.numCamiseta == numeroJugador,
+    );
+    const dataJugadorCambio = partidoData?.[
+      'visitante'
+    ]?.equipo?.equipoUsuarios?.find(
+      (usuario) => usuario.numCamiseta == numeroCambio,
+    );
+    return `${dataJugadorCambio?.usuario?.apellido} ${dataJugadorCambio?.usuario?.nombre} <--> ${dataJugador?.usuario?.apellido} ${dataJugador?.usuario?.nombre}`;
   };
 
   const getAcciones = () => {
@@ -755,9 +768,8 @@ const PartidoScreen = () => {
                         return (
                           <p key={accion.id}>
                             {accion.minuto} -{' '}
-                            {getDataJugador(
+                            {getDataJugadorAccionCambioVisitante(
                               accion.nroJugador,
-                              true,
                               accion.nroJugadorCambio,
                             )}
                           </p>
