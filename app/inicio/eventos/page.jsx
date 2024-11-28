@@ -300,7 +300,7 @@ function Page() {
       getEventos();
     } catch (error) {
       const errorMessage = error.message.split(',Exception')[0];
-      toast.error(errorMessage || 'Error al crear torneo', {
+      toast.error(errorMessage || 'Error al crear evento', {
         autoClose: 5000,
         toastId: 'unique-error-id',
       });
@@ -360,7 +360,7 @@ function Page() {
       getEventos();
     } catch (error) {
       const errorMessage = error.message.split(',Exception')[0];
-      toast.error(errorMessage || 'Error al crear torneo', {
+      toast.error(errorMessage || 'Error al editar evento', {
         autoClose: 5000,
         toastId: 'unique-error-id',
       });
