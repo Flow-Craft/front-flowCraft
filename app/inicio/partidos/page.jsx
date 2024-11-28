@@ -346,7 +346,6 @@ function Page() {
   useEffect(() => {
     handleSearchMatches();
   }, [fechaPartidoIngresada, instalacionSeleccionada]);
-
   return (
     <section>
       <Toaster />
@@ -474,7 +473,7 @@ function Page() {
             <section className="flex w-full flex-row justify-between gap-10">
               <div className="flex-1">
                 <span className="text-xl font-bold">Disciplina: </span>
-                <span>{eventosSeleccionado?.disciplinas?.[0]?.nombre}</span>
+                <span>{eventosSeleccionado?.disciplina?.nombre}</span>
               </div>
               <div className="flex-1">
                 <span className="text-xl font-bold">Categoria: </span>
@@ -529,6 +528,7 @@ function Page() {
         primaryTextButton={'Iniciar Partido'}
         isOpen={modalPrepararPartido}
         onAcceptModal={iniciarPartido}
+        disabled={equipoLocalSeleccionado.length === 0 || equipoVisitanteSeleccionado.length === 0}
         scrollBehavior="outside"
         type="submit"
         onCancelModal={() => {
