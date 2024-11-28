@@ -84,9 +84,13 @@ export const EquiposTab = () => {
         NombreEstado: e.target.nombre.value,
         DescripcionEstado: e.target.descripcion.value,
       };
-      if(equipo.find((eq)=>eq.nombreEstado ===equipos.NombreEstado && !eq.fechaBaja )){
-        toast.error("ya existe un estado con este nombre");
-        return
+      if (
+        equipo.find(
+          (eq) => eq.nombreEstado === equipos.NombreEstado && !eq.fechaBaja,
+        )
+      ) {
+        toast.error('ya existe un estado con este nombre');
+        return;
       }
       const result = await crearEquipoAdmin(equipos, setErrors);
       if (result?.error) {
@@ -108,9 +112,16 @@ export const EquiposTab = () => {
         NombreEstado: e.target.nombre.value,
         DescripcionEstado: e.target.descripcion.value,
       };
-      if(equipo.find((eq)=>eq.nombreEstado === categoria.NombreEstado && !eq.fechaBaja && eq.id !== categoria.Id )){
-        toast.error("ya existe un estado con este nombre");
-        return
+      if (
+        equipo.find(
+          (eq) =>
+            eq.nombreEstado === categoria.NombreEstado &&
+            !eq.fechaBaja &&
+            eq.id !== categoria.Id,
+        )
+      ) {
+        toast.error('ya existe un estado con este nombre');
+        return;
       }
       const result = await editarEquipoAdmin(categoria);
       if (result?.error) {

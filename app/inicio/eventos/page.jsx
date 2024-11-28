@@ -269,7 +269,7 @@ function Page() {
           Arbitro: e.target.arbitro.value,
           Planillero: e.target.planillero.value,
         };
-        console.log('eventoACrear', eventoACrear)
+        console.log('eventoACrear', eventoACrear);
         const result = await crearEventosPartidoAdmin(eventoACrear);
         if (result?.error) {
           setErrors(result?.errors);
@@ -317,8 +317,8 @@ function Page() {
           IdInstalacion: e.target.IdInstalacion.value,
           IdCategoria: e.target.IdCategoria.value,
           IdDisciplina: e.target.IdsDisciplinaPartido.value,
-          Banner: e.target.Banner.files[0]|| eventoSeleccionado.banner,
-          EquipoLocal: defaultValueLocal.value|| 0,
+          Banner: e.target.Banner.files[0] || eventoSeleccionado.banner,
+          EquipoLocal: defaultValueLocal.value || 0,
           EquipoVisitante: defaultValueVisitante.value || 0,
           Arbitro: e.target.arbitro.value,
           Planillero: e.target.planillero.value,
@@ -356,7 +356,7 @@ function Page() {
       getEventos();
     } catch (error) {
       console.error(error);
-      toast.error("error al editar evento")
+      toast.error('error al editar evento');
     }
   };
 

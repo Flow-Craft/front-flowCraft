@@ -22,7 +22,7 @@ export const CrearEditarModalEventos = ({
   defaultValueLocal,
   defaultValueVisitante,
   setDefaultValueLocal,
-  setDefaultValueVisitante
+  setDefaultValueVisitante,
 }) => {
   const [minDate, setMinDate] = useState('');
   const [showPartido, setShowPartido] = useState(false);
@@ -39,7 +39,7 @@ export const CrearEditarModalEventos = ({
   const [planilleroSeleccionado, setPlanilleroSeleccionado] = useState({});
   const [isLoading, setisLoading] = useState(false);
   const [arbitroDefault, setArbitroDefault] = useState({});
-  const [disciplinaDelPartido, setDisciplinaDelPartido] = useState([])
+  const [disciplinaDelPartido, setDisciplinaDelPartido] = useState([]);
   const handleSelectTipo = (e) => {
     if (e.label === 'Partido' && !categoriaSeleccionada?.value) {
       toast.error(
@@ -64,16 +64,16 @@ export const CrearEditarModalEventos = ({
     }));
   };
 
-  const getEquiposByCategoriaDisciplinaId = async (cat,dis) => {
-    console.log("entre")
-    console.log('cat', cat)
-    console.log('dis', dis)
+  const getEquiposByCategoriaDisciplinaId = async (cat, dis) => {
+    console.log('entre');
+    console.log('cat', cat);
+    console.log('dis', dis);
     if (cat?.value && dis?.value) {
       const result = await getEquipoByDisciplinaYCategoria(
         dis.value,
         cat.value,
       );
-      console.log("ohla")
+      console.log('ohla');
       setEquipoLocal(result);
       setEquipoVisitante(result);
       setEquipoLocalOpciones(mappearEquipos(result));
@@ -114,13 +114,11 @@ export const CrearEditarModalEventos = ({
 
   useEffect(() => {
     // Obtener la fecha actual
-    const today = new Date();
-    // Establecer la hora a las 00:01
-    today.setHours(0, 1, 0, 0); // Hora: 00, Minutos: 01, Segundos: 00, Milisegundos: 00
-
-    // Formatear la fecha en el formato 'YYYY-MM-DDTHH:MM'
-    const formattedDate = today.toISOString().slice(0, 16);
-    setMinDate(formattedDate);
+    const now = new Date();
+    const offset = -3; // UTC-3
+    now.setHours(now.getHours() + offset);
+    const formattedNow = now.toISOString().slice(0, 16);
+    setMinDate(formattedNow);
   }, []);
 
   const getDataDelPartido = async (id) => {
@@ -180,27 +178,30 @@ export const CrearEditarModalEventos = ({
 
   useEffect(() => {
     if (evento?.categoria?.id && categoria) {
-      setCategoriaSeleccionada(categoria.find(
-        (option) => option.value === evento?.categoria?.id,
-      ))
+      setCategoriaSeleccionada(
+        categoria.find((option) => option.value === evento?.categoria?.id),
+      );
     }
-  }, [evento,categoria]);
+  }, [evento, categoria]);
 
   useEffect(() => {
     getPlanillerosArbitros();
   }, []);
 
-  useEffect(()=>{
+  useEffect(() => {
     setDefaultValueLocal({});
     setDefaultValueVisitante({});
-    getEquiposByCategoriaDisciplinaId(categoriaSeleccionada,disciplinaDelPartido)
-  },[categoriaSeleccionada,disciplinaDelPartido])
+    getEquiposByCategoriaDisciplinaId(
+      categoriaSeleccionada,
+      disciplinaDelPartido,
+    );
+  }, [categoriaSeleccionada, disciplinaDelPartido]);
 
-  useEffect(()=>{
-    setDisciplinaDelPartido(disciplinas.find(
-      (option) => option.value === evento?.disciplina?.id,
-    ))
-  },[disciplinas,evento])
+  useEffect(() => {
+    setDisciplinaDelPartido(
+      disciplinas.find((option) => option.value === evento?.disciplina?.id),
+    );
+  }, [disciplinas, evento]);
 
   return (
     <div className="flex w-full flex-col items-center justify-center">

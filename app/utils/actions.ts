@@ -16,7 +16,12 @@ import {
 } from './models/user';
 import { editCreateNewSchema } from './models/news';
 import { categoriaSchema, eventoSchema } from './models/eventos';
-import { eventoPartidoEditarSchema, eventoPartidoEditarSchemaImageString, eventoPartidoSchema, eventoPartidoSchemaImageString } from './models/eventoPartido';
+import {
+  eventoPartidoEditarSchema,
+  eventoPartidoEditarSchemaImageString,
+  eventoPartidoSchema,
+  eventoPartidoSchemaImageString,
+} from './models/eventoPartido';
 import { equipoEstadoSchema } from './models/estados';
 import { tipoAcrearSchema, tipoAccionPartidoSchema } from './models/tipos';
 import { crearInstalacionSchema } from './models/instalaciones';
@@ -945,7 +950,7 @@ export async function editarEventoAdmin(evento: any) {
     );
     eventToSend.Banner = file64;
     eventToSend.type = fileType;
-  }else{
+  } else {
     const result = eventoPartidoEditarSchemaImageString.safeParse(evento);
     if (!result.success) {
       return { error: true, errors: result.error.errors };
@@ -1091,7 +1096,11 @@ export async function getPlanilleroYArbritroByPartidoId(idPartido: any) {
   );
 }
 
-export async function getAsingacionPartido(idPartido: any,planillero=true,arbitro=true) {
+export async function getAsingacionPartido(
+  idPartido: any,
+  planillero = true,
+  arbitro = true,
+) {
   return await FlowCraftAPI.get(
     `Partidos/AsignacionPartido?Planillero=${planillero}&Arbitro=${arbitro}&PartidoId=${idPartido}`,
   );

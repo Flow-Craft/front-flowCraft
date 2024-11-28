@@ -52,14 +52,14 @@ function Page() {
   const [disabled, setDisabled] = useState(false);
   const router = useRouter();
 
-  const handleGetMatchDetails = async(partido) => {
+  const handleGetMatchDetails = async (partido) => {
     const partidoSeleccionado = partidos.find((part) => partido.id === part.id);
     setEventosSeleccionado(partidoSeleccionado);
-    const result = await getPlanilleroYArbritroByPartidoId(partido.id)
-    if(result.length !==2){
-      setDisabled(true)
-    }else{
-      setDisabled(estaHabilitadoElEvento(partidoSeleccionado))
+    const result = await getPlanilleroYArbritroByPartidoId(partido.id);
+    if (result.length !== 2) {
+      setDisabled(true);
+    } else {
+      setDisabled(estaHabilitadoElEvento(partidoSeleccionado));
     }
     setDetallesDelPartido(true);
   };

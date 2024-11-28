@@ -19,7 +19,7 @@ export default function Page() {
   const getTorneos = async () => {
     try {
       const result = await getTorneosAdmin();
-      console.log('result', result)
+      console.log('result', result);
       setTorneosAbiertos(
         result.filter((torneo) => torneo.torneoEstado === 'Abierto'),
       );

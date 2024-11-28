@@ -10,6 +10,7 @@ import toast, { Toaster } from 'react-hot-toast';
 
 const EventoPage = () => {
   const [evento, setEvento] = useState({});
+  console.log('evento', evento);
   const [inscripto, setInscripto] = useState(false);
   const params = useParams();
   const router = useRouter();
@@ -123,34 +124,50 @@ const EventoPage = () => {
         </ul>
 
         {/* Botón para inscribirse */}
-        <div className="mt-6">
-          {!inscripto ? (
-            <button
-              disabled={evento?.eventoLleno}
-              className={`rounded px-4 py-2 ${
-                evento?.eventoLleno
-                  ? 'cursor-not-allowed bg-gray-400'
-                  : 'bg-green-500 text-white hover:bg-green-600'
-              }`}
-              onClick={(e) => {
-                e.preventDefault();
-                inscribirseAEvento();
-              }}
-            >
-              {evento?.eventoLleno ? 'Evento Lleno' : 'Inscribirse'}
-            </button>
-          ) : (
-            <button
-              className={`rounded bg-red-500 px-4 py-2 hover:bg-red-700`}
-              onClick={(e) => {
-                e.preventDefault();
-                desinscribirseAEvento();
-              }}
-            >
-              Desinscribirse
-            </button>
-          )}
-        </div>
+        {evento?.fechaFinEvento &&
+        new Date(evento?.fechaFinEvento) < new Date() ? (
+          <>
+            <div className="mt-6">
+              <button
+                disabled={evento?.eventoLleno}
+                className={'cursor-not-allowed rounded bg-gray-400 px-4 py-2'}
+              >
+                {'Evento finalizado'}
+              </button>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="mt-6">
+              {!inscripto ? (
+                <button
+                  disabled={evento?.eventoLleno}
+                  className={`rounded px-4 py-2 ${
+                    evento?.eventoLleno
+                      ? 'cursor-not-allowed bg-gray-400'
+                      : 'bg-green-500 text-white hover:bg-green-600'
+                  }`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    inscribirseAEvento();
+                  }}
+                >
+                  {evento?.eventoLleno ? 'Evento Lleno' : 'Inscribirse'}
+                </button>
+              ) : (
+                <button
+                  className={`rounded bg-red-500 px-4 py-2 hover:bg-red-700`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    desinscribirseAEvento();
+                  }}
+                >
+                  Desinscribirse
+                </button>
+              )}
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

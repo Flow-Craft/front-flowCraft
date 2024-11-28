@@ -72,7 +72,12 @@ function Page() {
       toast.success('torneo creado correctamente');
       router.back();
     } catch (error) {
-      toast.error('Error al crear el torneo');
+      console.log('error', error.error);
+      const errorMessage = error.message.split(',Exception')[0];
+      toast.error(errorMessage || 'Error al crear torneo', {
+        autoClose: 5000,
+        toastId: 'unique-error-id',
+      });
     }
   };
 
@@ -114,6 +119,16 @@ function Page() {
   useEffect(() => {
     getAllFilters();
   }, []);
+
+  const [minDateTime, setMinDateTime] = useState('');
+
+  useEffect(() => {
+    const now = new Date();
+    const offset = -3; // UTC-3
+    now.setHours(now.getHours() + offset);
+    const formattedNow = now.toISOString().slice(0, 16);
+    setMinDateTime(formattedNow);
+  }, []); // Solo se ejecuta una vez al montar el componente
 
   return (
     <section>
@@ -172,7 +187,7 @@ function Page() {
           <InputWithLabel
             label="Fecha y hora de inicio"
             name="FechaInicio"
-            min={new Date().toISOString().split('T')[0]}
+            min={minDateTime}
             type="datetime-local"
             required
           />

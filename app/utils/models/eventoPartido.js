@@ -38,7 +38,7 @@ export const eventoPartidoSchema = z
     },
   );
 
-  export const eventoPartidoSchemaImageString = z
+export const eventoPartidoSchemaImageString = z
   .object({
     Titulo: z.string().min(1, 'El título es obligatorio.'),
     FechaInicio: z.string().min(1, 'La fecha inicio es obligatoria.'),
@@ -64,8 +64,7 @@ export const eventoPartidoSchema = z
     },
   );
 
-
-  export const eventoPartidoEditarSchema = z
+export const eventoPartidoEditarSchema = z
   .object({
     Titulo: z.string().min(1, 'El título es obligatorio.'),
     FechaInicio: z.string().min(1, 'La fecha inicio es obligatoria.'),
@@ -102,7 +101,7 @@ export const eventoPartidoSchema = z
     },
   );
 
-  export const eventoPartidoEditarSchemaImageString = z
+export const eventoPartidoEditarSchemaImageString = z
   .object({
     Titulo: z.string().min(1, 'El título es obligatorio.'),
     FechaInicio: z.string().min(1, 'La fecha inicio es obligatoria.'),

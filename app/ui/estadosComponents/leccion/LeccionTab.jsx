@@ -84,9 +84,13 @@ export const LeccionTab = () => {
         NombreEstado: e.target.nombre.value,
         DescripcionEstado: e.target.descripcion.value,
       };
-      if(equipo.find((eq)=>eq.nombreEstado ===equipos.NombreEstado && !eq.fechaBaja )){
-        toast.error("ya existe un estado con este nombre");
-        return
+      if (
+        equipo.find(
+          (eq) => eq.nombreEstado === equipos.NombreEstado && !eq.fechaBaja,
+        )
+      ) {
+        toast.error('ya existe un estado con este nombre');
+        return;
       }
       const result = await crearLeccionEstadoAdmin(equipos, setErrors);
       if (result?.error) {
@@ -108,9 +112,16 @@ export const LeccionTab = () => {
         NombreEstado: e.target.nombre.value,
         DescripcionEstado: e.target.descripcion.value,
       };
-      if(equipo.find((eq)=>eq.nombreEstado === categoria.NombreEstado && !eq.fechaBaja && eq.id !== categoria.Id )){
-        toast.error("ya existe un estado con este nombre");
-        return
+      if (
+        equipo.find(
+          (eq) =>
+            eq.nombreEstado === categoria.NombreEstado &&
+            !eq.fechaBaja &&
+            eq.id !== categoria.Id,
+        )
+      ) {
+        toast.error('ya existe un estado con este nombre');
+        return;
       }
       const result = await editarLeccionEstadoAdmin(categoria);
       if (result?.error) {
@@ -214,9 +225,7 @@ export const LeccionTab = () => {
       <FlowModal
         title={`Eliminar Leccion Estado ${equipoToDelte?.nombreEstado}`}
         modalBody={
-          <div>
-            ¿Esta seguro que desea eliminar esta Leccion Estado?{' '}
-          </div>
+          <div>¿Esta seguro que desea eliminar esta Leccion Estado? </div>
         }
         primaryTextButton="Si"
         isOpen={openDeleteEquipo}

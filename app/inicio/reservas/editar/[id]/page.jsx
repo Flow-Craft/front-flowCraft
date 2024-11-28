@@ -91,10 +91,10 @@ function Page() {
     const usuarioSeleccionad = userOptions.find(
       (user) => user.value === reserva.usuario.id,
     );
-    
-    console.log('userOptions', userOptions)
-    console.log('reserva', reserva)
-    console.log('usuarioSeleccionad', usuarioSeleccionad)
+
+    console.log('userOptions', userOptions);
+    console.log('reserva', reserva);
+    console.log('usuarioSeleccionad', usuarioSeleccionad);
     setUsuarioSeleccionado(usuarioSeleccionad);
     setInstalacionSeleccionada(reserva.instalacion);
     setInstalacionOpcionSeleccionada(instalacionSeleccionada);

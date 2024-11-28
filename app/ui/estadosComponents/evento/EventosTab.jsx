@@ -88,9 +88,13 @@ export const EventosTab = () => {
         NombreEstado: e.target.nombre.value,
         DescripcionEstado: e.target.descripcion.value,
       };
-      if(equipo.find((eq)=>eq.nombreEstado ===equipos.NombreEstado && !eq.fechaBaja )){
-        toast.error("ya existe un estado con este nombre");
-        return
+      if (
+        equipo.find(
+          (eq) => eq.nombreEstado === equipos.NombreEstado && !eq.fechaBaja,
+        )
+      ) {
+        toast.error('ya existe un estado con este nombre');
+        return;
       }
       const result = await crearEventoAdmin(equipos, setErrors);
       if (result?.error) {
@@ -112,9 +116,16 @@ export const EventosTab = () => {
         NombreEstado: e.target.nombre.value,
         DescripcionEstado: e.target.descripcion.value,
       };
-      if(equipo.find((eq)=>eq.nombreEstado === categoria.NombreEstado && !eq.fechaBaja && eq.id !== categoria.Id )){
-        toast.error("ya existe un estado con este nombre");
-        return
+      if (
+        equipo.find(
+          (eq) =>
+            eq.nombreEstado === categoria.NombreEstado &&
+            !eq.fechaBaja &&
+            eq.id !== categoria.Id,
+        )
+      ) {
+        toast.error('ya existe un estado con este nombre');
+        return;
       }
       const result = await editarEventoEstadoAdmin(categoria);
       if (result?.error) {

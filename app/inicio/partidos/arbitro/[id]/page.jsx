@@ -211,7 +211,7 @@ const PartidoScreen = () => {
 
   const altaAccionPartido = async () => {
     try {
-      let accionAMandar=  {
+      let accionAMandar = {
         IdPartido: partidoId,
         IdTipoAccion: accionSeleccionada.accion.id,
         IdJugador: usuarioSeleccionado.value,

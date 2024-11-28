@@ -49,7 +49,7 @@ export const DisciplinasTab = () => {
       'periodosMax',
       'tarjetasAdvertencia',
       'tarjetasExpulsion',
-      'descripcion'
+      'descripcion',
     ];
 
     // Validar que todos los campos requeridos existen y no están vacíos o llenos de espacios

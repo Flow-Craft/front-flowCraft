@@ -220,11 +220,7 @@ export const CategoriasTab = () => {
       <Toaster />
       <FlowModal
         title={`Eliminar categoría ${categoriaToDelte?.nombre}`}
-        modalBody={
-          <div>
-            ¿Está seguro que desea eliminar esta categoría?{' '}
-          </div>
-        }
+        modalBody={<div>¿Está seguro que desea eliminar esta categoría? </div>}
         primaryTextButton="Si"
         isOpen={openDeleteCategoria}
         scrollBehavior="outside"
