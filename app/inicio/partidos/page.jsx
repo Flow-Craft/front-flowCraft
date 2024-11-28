@@ -26,7 +26,7 @@ import {
   LOCAL_STORAGE_PERMISOS_KEY,
 } from '@/app/utils/const';
 
-const PERFIL_BOTON_ASIGNADO = ['Admin', 'Arbitro', 'Planillero'];
+const PERFIL_BOTON_ASIGNADO = ['Admin', 'Arbitro'];
 
 function Page() {
   const [fechaPartidoIngresada, setFechaPartidoIngresada] = useState(null);
