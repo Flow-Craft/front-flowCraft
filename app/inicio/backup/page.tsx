@@ -66,7 +66,7 @@ export default function Page() {
         id: back.id,
         fechaCreacion: formatDate(back.fechaCreacion),
         version: back.version,
-        acciones: ActionTab(backups.find((disc: any) => disc.id === back.id)),
+        acciones: ActionTab(recu.find((disc: any) => disc.id === back.id)),
       };
     });
     setRecuperacion(recus);
@@ -79,6 +79,8 @@ export default function Page() {
         <Tooltip label="Descargar">
           <ArrowDownTrayIcon
             onClick={() => {
+              
+              console.log('backup', backup)
               openPdfInNewTab(backup.pdf);
               console.log('backup', backup);
             }}
@@ -225,13 +227,14 @@ export default function Page() {
             <div className="mt-6 self-start px-9 pb-9 text-2xl font-bold">
               Guía restauración del sistema
             </div>
-            <FlowTable Header={HEADER_TABLE} dataToShow={backups} />
+            <FlowTable Header={HEADER_TABLE} dataToShow={recuperacion} />
+            
           </section>
           <section>
             <div className="mt-6 self-start px-9 pb-9 text-2xl font-bold">
               Guía generar backup del sistema
             </div>
-            <FlowTable Header={HEADER_TABLE} dataToShow={recuperacion} />
+            <FlowTable Header={HEADER_TABLE} dataToShow={backups} />
           </section>
         </section>
       </section>
