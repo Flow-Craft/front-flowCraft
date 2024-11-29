@@ -105,6 +105,7 @@ export default function Page() {
             isClosable: true,
             position: 'top',
           });
+          event.target.value = ''; 
           return;
         }
 
@@ -119,6 +120,7 @@ export default function Page() {
             isClosable: true,
             position: 'top',
           });
+          event.target.value = ''; 
           return;
         }
 
@@ -131,6 +133,7 @@ export default function Page() {
             isClosable: true,
             position: 'top',
           });
+          event.target.value = ''; 
           return;
         }
 
@@ -157,6 +160,7 @@ export default function Page() {
             isClosable: true,
             position: 'top',
           });
+          event.target.value = ''; 
         } catch (error) {
           console.error('Error al subir el archivo:', error);
         }
