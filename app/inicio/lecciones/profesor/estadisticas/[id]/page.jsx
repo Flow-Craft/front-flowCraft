@@ -70,7 +70,6 @@ const page = () => {
     await bajaEstaditicaPartidoAccionUsuario({
       IdTipoAccion: accionId,
       MarcaEstadistica: '-',
-      Secuencial: true,
       IdAsistencia: jugadorSeleccionado.id,
       Resta: true,
     });

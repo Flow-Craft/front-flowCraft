@@ -76,7 +76,7 @@ export default function Page() {
       setTorneoSeleccionado({});
       getTorneos();
     } catch (error) {
-      toast.error(error.title);
+      toast.error(error.message);
     }
   };
 
@@ -92,7 +92,7 @@ export default function Page() {
       setTorneoSeleccionado({});
       getTorneos();
     } catch (error) {
-      toast.error(error.title);
+      toast.error(error.message);
     }
   };
 
