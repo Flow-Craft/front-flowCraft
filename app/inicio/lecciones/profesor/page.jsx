@@ -121,6 +121,8 @@ function Page() {
       return false;
     };
     const fecha = new Date(); // Fecha actual
+    const offset = -3; // UTC-3
+    fecha.setHours(fecha.getHours() + offset);
     const diaSemana = diasSemana[fecha.getDay()];
     const esDiaDeLeccion = leccion.dias.findIndex((dia) => dia === diaSemana);
     const [horaInicio, horaFin] = leccion.horarios[0].split('-');
@@ -132,15 +134,18 @@ function Page() {
     const objetoConIdMasGrande = leccion.leccionHistoriales.reduce(
       (max, obj) => (obj.id > max.id ? obj : max),
     );
-
+    
     const fechaActual = fecha.toISOString().split('T')[0];
     // Extraer la fecha de inicio del objeto
     const fechaInicio = objetoConIdMasGrande.fechaInicio.split('T')[0];
-
     // Verificar si el detalle y la fecha coinciden
     const esFinalizadoHoy =
       objetoConIdMasGrande.detalleCambioEstado == 'Se finalizó la leccion' &&
       fechaInicio == fechaActual;
+      console.log('mostrarPlay(estaEnRango, esDiaDeLeccion, esFinalizadoHoy)', mostrarPlay(estaEnRango, esDiaDeLeccion, esFinalizadoHoy))
+      console.log('esFinalizadoHoy', esFinalizadoHoy)
+      console.log('esDiaDeLeccion', esDiaDeLeccion)
+      console.log('estaEnRango', estaEnRango)
 
     return (
       <div className="flex flex-row gap-4">
