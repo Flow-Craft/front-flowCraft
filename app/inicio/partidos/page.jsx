@@ -5,6 +5,7 @@ import { InputWithLabel } from '@/app/ui/components/InputWithLabel/InputWithLabe
 import { SelectWithLabel } from '@/app/ui/components/SelectWithLabel/SelectWithLabel';
 import {
   createTimer,
+  getAignacionPartido,
   getEventosActivos,
   getEventosAdmin,
   getInstalacionesActionAdmin,
@@ -51,16 +52,27 @@ function Page() {
   const [permisosUsuarios, setPermisosUsuarios] = useState([]);
   const [disabled, setDisabled] = useState(false);
   const router = useRouter();
-
   const handleGetMatchDetails = async (partido) => {
     const partidoSeleccionado = partidos.find((part) => partido.id === part.id);
     setEventosSeleccionado(partidoSeleccionado);
     const result = await getPlanilleroYArbritroByPartidoId(partido.id);
     if (result.length !== 2) {
       setDisabled(true);
-    } else {
-      setDisabled(estaHabilitadoElEvento(partidoSeleccionado));
+      setDetallesDelPartido(true);
+      return
+    } 
+    const {planillero,arbitro} = await getAignacionPartido(partido.id)
+    
+    if (
+      (perfilUsuario === "Arbitro" && !arbitro) || 
+      (perfilUsuario === "Planillero" && !planillero)
+    ) {
+      setDisabled(true);
+      setDetallesDelPartido(true);
+      return;
     }
+
+    setDisabled(estaHabilitadoElEvento(partidoSeleccionado));
     setDetallesDelPartido(true);
   };
   const getInstalaciones = async () => {

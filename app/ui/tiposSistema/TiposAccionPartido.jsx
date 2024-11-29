@@ -81,6 +81,7 @@ export const TiposAccionPartido = () => {
 
   const editTipoAccionPartido = async (e) => {
     try {
+      setErrors([])
       const tipoAccionPartido = {
         Id: tipoAccionPartidoToDelte.id,
         NombreTipoAccion: e.target.nombre.value,
@@ -90,7 +91,11 @@ export const TiposAccionPartido = () => {
         IdDisciplina: e.target.disciplina?.value?.toString(),
         EsPartido: e.target.esPartido?.value?.toString(),
       };
-      await editarTipoAccionPartidoAdmin(tipoAccionPartido);
+      const result = await editarTipoAccionPartidoAdmin(tipoAccionPartido);
+      if (result?.errors) {
+        setErrors(result?.errors);
+        return;
+      } 
       toast.success('Tipo editado exitosamente');
       TipoAccionPartidoToTab();
       setTipoAccionPartidoToDelte(null);

@@ -664,6 +664,10 @@ export async function crearTipoAccionPartidosAdmin(eventoAcrear: any) {
 }
 
 export async function editarTipoAccionPartidoAdmin(eventoAcrear: any) {
+  const result = tipoAccionPartidoSchema.safeParse(eventoAcrear);
+  if (!result.success) {
+    return { error: true, errors: result.error.errors };
+  }
   return await FlowCraftAPI.post(
     `Partidos/ActualizarTipoAccionPartido`,
     eventoAcrear,
@@ -1379,6 +1383,16 @@ export async function getEquiposByDisciplinaCategoriaYUsuario(
     `Partidos/GetEquiposByCategoriaAndDisciplinaActivos?IdCategoria=${idCategoria}&IdDisciplina=${idDisciplina}`,
   );
 }
+
+export async function getAignacionPartido(
+  idPartido: any,
+) {
+  return await FlowCraftAPI.get(
+    `Partidos/AsignacionPartido?PartidoId=${idPartido}`,
+  );
+}
+
+
 
 export async function inscribirmeATorneoAdmin(idEquipo: any, idTorneo: any) {
   return await FlowCraftAPI.post(
