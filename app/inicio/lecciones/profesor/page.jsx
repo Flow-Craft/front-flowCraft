@@ -106,7 +106,7 @@ function Page() {
   }, []);
 
   const ActionTab = (leccion) => {
-    console.log('leccion', leccion);
+    console.log('leccion', leccion)
     const obtenerMinutos = (hora) => {
       const [horas, minutos] = hora.split(':').map(Number);
       return horas * 60 + minutos;
@@ -121,8 +121,6 @@ function Page() {
       return false;
     };
     const fecha = new Date(); // Fecha actual
-    const offset = -3; // UTC-3
-    fecha.setHours(fecha.getHours() + offset);
     const diaSemana = diasSemana[fecha.getDay()];
     const esDiaDeLeccion = leccion.dias.findIndex((dia) => dia === diaSemana);
     const [horaInicio, horaFin] = leccion.horarios[0].split('-');
@@ -142,10 +140,6 @@ function Page() {
     const esFinalizadoHoy =
       objetoConIdMasGrande.detalleCambioEstado == 'Se finalizó la leccion' &&
       fechaInicio == fechaActual;
-      console.log('mostrarPlay(estaEnRango, esDiaDeLeccion, esFinalizadoHoy)', mostrarPlay(estaEnRango, esDiaDeLeccion, esFinalizadoHoy))
-      console.log('esFinalizadoHoy', esFinalizadoHoy)
-      console.log('esDiaDeLeccion', esDiaDeLeccion)
-      console.log('estaEnRango', estaEnRango)
 
     return (
       <div className="flex flex-row gap-4">
