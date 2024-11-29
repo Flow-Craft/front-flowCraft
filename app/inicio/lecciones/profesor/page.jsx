@@ -132,10 +132,12 @@ function Page() {
     const objetoConIdMasGrande = leccion.leccionHistoriales.reduce(
       (max, obj) => (obj.id > max.id ? obj : max),
     );
+
     
-    const fechaActual = fecha.toISOString().split('T')[0];
+    const fechaActual = fecha.toLocaleDateString('en-CA'); 
     // Extraer la fecha de inicio del objeto
-    const fechaInicio = objetoConIdMasGrande.fechaInicio.split('T')[0];
+    const fechaInicio = new Date(objetoConIdMasGrande.fechaInicio).toLocaleDateString('en-CA')
+    
     // Verificar si el detalle y la fecha coinciden
     const esFinalizadoHoy =
       objetoConIdMasGrande.detalleCambioEstado == 'Se finalizó la leccion' &&
