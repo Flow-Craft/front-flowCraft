@@ -1384,6 +1384,17 @@ export async function getEquiposByDisciplinaCategoriaYUsuario(
   );
 }
 
+export async function getEquiposByDisciplinaCategoriaYUsuarioNumeroDos(
+  idCategoria: any,
+  idDisciplina: any,
+) {
+  return await FlowCraftAPI.get(
+    `Partidos/GetEquiposByUsuarioDiscCat?IdCategoria=${idCategoria}&IdDisciplina=${idDisciplina}`,
+  );
+}
+
+
+
 export async function getAignacionPartido(idPartido: any) {
   return await FlowCraftAPI.get(
     `Partidos/AsignacionPartido?PartidoId=${idPartido}`,

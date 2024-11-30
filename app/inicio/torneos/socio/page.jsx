@@ -2,6 +2,7 @@
 import {
   desinscribirmeATorneoAdmin,
   getEquiposByDisciplinaCategoriaYUsuario,
+  getEquiposByDisciplinaCategoriaYUsuarioNumeroDos,
   getTorneoByUsuario,
   getTorneosAdmin,
   inscribirmeATorneoAdmin,
@@ -45,7 +46,7 @@ export default function Page() {
   const handleSeleccionarTorneo = async (torneo) => {
     setOpenDetallesDelTorneo(true);
     setTorneoSeleccionado(torneo);
-    const result = await getEquiposByDisciplinaCategoriaYUsuario(
+    const result = await getEquiposByDisciplinaCategoriaYUsuarioNumeroDos(
       torneo.categoria.id,
       torneo.disciplina.id,
     );
