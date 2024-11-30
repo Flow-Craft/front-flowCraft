@@ -1384,15 +1384,11 @@ export async function getEquiposByDisciplinaCategoriaYUsuario(
   );
 }
 
-export async function getAignacionPartido(
-  idPartido: any,
-) {
+export async function getAignacionPartido(idPartido: any) {
   return await FlowCraftAPI.get(
     `Partidos/AsignacionPartido?PartidoId=${idPartido}`,
   );
 }
-
-
 
 export async function inscribirmeATorneoAdmin(idEquipo: any, idTorneo: any) {
   return await FlowCraftAPI.post(

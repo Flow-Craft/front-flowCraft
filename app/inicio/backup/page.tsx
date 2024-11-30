@@ -79,8 +79,7 @@ export default function Page() {
         <Tooltip label="Descargar">
           <ArrowDownTrayIcon
             onClick={() => {
-              
-              console.log('backup', backup)
+              console.log('backup', backup);
               openPdfInNewTab(backup.pdf);
               console.log('backup', backup);
             }}
@@ -105,7 +104,7 @@ export default function Page() {
             isClosable: true,
             position: 'top',
           });
-          event.target.value = ''; 
+          event.target.value = '';
           return;
         }
 
@@ -120,7 +119,7 @@ export default function Page() {
             isClosable: true,
             position: 'top',
           });
-          event.target.value = ''; 
+          event.target.value = '';
           return;
         }
 
@@ -133,7 +132,7 @@ export default function Page() {
             isClosable: true,
             position: 'top',
           });
-          event.target.value = ''; 
+          event.target.value = '';
           return;
         }
 
@@ -160,7 +159,7 @@ export default function Page() {
             isClosable: true,
             position: 'top',
           });
-          event.target.value = ''; 
+          event.target.value = '';
         } catch (error) {
           console.error('Error al subir el archivo:', error);
         }
@@ -232,7 +231,6 @@ export default function Page() {
               Guía restauración del sistema
             </div>
             <FlowTable Header={HEADER_TABLE} dataToShow={recuperacion} />
-            
           </section>
           <section>
             <div className="mt-6 self-start px-9 pb-9 text-2xl font-bold">

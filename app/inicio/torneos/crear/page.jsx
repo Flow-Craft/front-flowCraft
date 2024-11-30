@@ -68,6 +68,13 @@ function Page() {
         );
         return;
       }
+      if (
+        e.target.BannerNo64.files[0].type !== 'image/jpeg' &&
+        e.target.BannerNo64.files[0].type !== 'image/jpg'
+      ) {
+        toast.error('El archivo debe ser una imagen en formato JPG o JPEG');
+        return;
+      }
       await AltaDeTorneo(torneoACrear);
       toast.success('torneo creado correctamente');
       router.back();

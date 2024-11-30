@@ -81,7 +81,7 @@ export const TiposAccionPartido = () => {
 
   const editTipoAccionPartido = async (e) => {
     try {
-      setErrors([])
+      setErrors([]);
       const tipoAccionPartido = {
         Id: tipoAccionPartidoToDelte.id,
         NombreTipoAccion: e.target.nombre.value,
@@ -95,7 +95,7 @@ export const TiposAccionPartido = () => {
       if (result?.errors) {
         setErrors(result?.errors);
         return;
-      } 
+      }
       toast.success('Tipo editado exitosamente');
       TipoAccionPartidoToTab();
       setTipoAccionPartidoToDelte(null);

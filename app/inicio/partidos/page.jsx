@@ -59,13 +59,13 @@ function Page() {
     if (result.length !== 2) {
       setDisabled(true);
       setDetallesDelPartido(true);
-      return
-    } 
-    const {planillero,arbitro} = await getAignacionPartido(partido.id)
-    
+      return;
+    }
+    const { planillero, arbitro } = await getAignacionPartido(partido.id);
+
     if (
-      (perfilUsuario === "Arbitro" && !arbitro) || 
-      (perfilUsuario === "Planillero" && !planillero)
+      (perfilUsuario === 'Arbitro' && !arbitro) ||
+      (perfilUsuario === 'Planillero' && !planillero)
     ) {
       setDisabled(true);
       setDetallesDelPartido(true);

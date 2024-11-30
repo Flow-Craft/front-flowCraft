@@ -75,6 +75,14 @@ function Page() {
         );
         return;
       }
+      if (
+        e.target.BannerNo64.files[0] &&
+        e.target.BannerNo64.files[0].type !== 'image/jpeg' &&
+        e.target.BannerNo64.files[0].type !== 'image/jpg'
+      ) {
+        toast.error('El archivo debe ser una imagen en formato JPG o JPEG');
+        return;
+      }
       await EditarTorneo(torneoACrear);
       toast.success('torneo editado correctamente');
       router.back();
@@ -228,20 +236,6 @@ function Page() {
               className={`w-full resize-none rounded-lg border border-gray-300 p-2 focus:border-gray-500 focus:outline-none`}
             />
           </label>
-        </div>
-        <div className="flex flex-col space-y-4">
-          {cantidadDeEquipos && (
-            <Fases
-              cantidadDeFases={cantidadDeEquipos?.value}
-              categoria={categoriaSeleccionada}
-              disciplina={disciplinaSeleccinada}
-              onChangeFase={handleFase}
-              equiposDefault={torneo?.equipos?.map((eq) => ({
-                value: eq.id,
-                label: eq.nombre,
-              }))}
-            />
-          )}
           <div className="flex w-full flex-row justify-end gap-4">
             <button
               className="rounded-lg bg-blue-600 p-2 text-center text-xl text-white"
@@ -259,6 +253,20 @@ function Page() {
               Volver
             </button>
           </div>
+        </div>
+        <div className="flex flex-col space-y-4">
+          {cantidadDeEquipos && (
+            <Fases
+              cantidadDeFases={cantidadDeEquipos?.value}
+              categoria={categoriaSeleccionada}
+              disciplina={disciplinaSeleccinada}
+              onChangeFase={handleFase}
+              equiposDefault={torneo?.equipos?.map((eq) => ({
+                value: eq.id,
+                label: eq.nombre,
+              }))}
+            />
+          )}
         </div>
       </form>
     </section>

@@ -67,19 +67,22 @@ function Page() {
   const handleStartLesson = async (id) => {
     try {
       const result = await getInscripcionesALecciones(id);
-      const alumnos = result &&
-      result
-        .filter((alumno) => alumno.fechaBaja === null)
-        .map((alumno) => (alumno.usuarioId))
-      const {usuarios} = await getUsersAdmin();  
-      const usuariosParaLaClase = usuarios.filter(usuario => alumnos.includes(usuario.id)).map((alumno)=>({
+      const alumnos =
+        result &&
+        result
+          .filter((alumno) => alumno.fechaBaja === null)
+          .map((alumno) => alumno.usuarioId);
+      const { usuarios } = await getUsersAdmin();
+      const usuariosParaLaClase = usuarios
+        .filter((usuario) => alumnos.includes(usuario.id))
+        .map((alumno) => ({
           value: alumno.id,
           label: `${alumno.dni} - ${alumno.apellido} ${alumno.nombre}`,
-      }))
-      setAlumnos(usuariosParaLaClase)
+        }));
+      setAlumnos(usuariosParaLaClase);
       setModalInicioDeClase(true);
     } catch (error) {
-      toast.error(error.message)
+      toast.error(error.message);
     }
   };
 
@@ -106,7 +109,7 @@ function Page() {
   }, []);
 
   const ActionTab = (leccion) => {
-    console.log('leccion', leccion)
+    console.log('leccion', leccion);
     const obtenerMinutos = (hora) => {
       const [horas, minutos] = hora.split(':').map(Number);
       return horas * 60 + minutos;
@@ -133,11 +136,12 @@ function Page() {
       (max, obj) => (obj.id > max.id ? obj : max),
     );
 
-    
-    const fechaActual = fecha.toLocaleDateString('en-CA'); 
+    const fechaActual = fecha.toLocaleDateString('en-CA');
     // Extraer la fecha de inicio del objeto
-    const fechaInicio = new Date(objetoConIdMasGrande.fechaInicio).toLocaleDateString('en-CA')
-    
+    const fechaInicio = new Date(
+      objetoConIdMasGrande.fechaInicio,
+    ).toLocaleDateString('en-CA');
+
     // Verificar si el detalle y la fecha coinciden
     const esFinalizadoHoy =
       objetoConIdMasGrande.detalleCambioEstado == 'Se finalizó la leccion' &&
